@@ -1,0 +1,68 @@
+@font-face {
+	font-family: Inter;
+	src: url(../dist/Inter/Inter-VariableFont_slnt,wght.ttf) format("truetype");
+	font-weight: 100 900;
+}
+
+:root {
+	--white: #FFFFFF;
+	--black: #000000;
+
+	--gray25: #FCFCFD;
+	--gray50: #F9FAFB;
+	--gray100: #F2F4F7;
+	--gray200: #EAECF0;
+	--gray300: #D0D5DD;
+	--gray400: #98A2B3;
+	--gray500: #667085;
+	--gray600: #475467;
+	--gray700: #344054;
+	--gray800: #1D2939;
+	--gray900: #101828;
+
+	--divider: 1px solid var(--gray200);
+
+	--displaySm: 30px/38px Inter;
+}
+
+html, body {
+	height: 100%;
+	font-family: Inter;
+}
+
+body {
+	display: flex;
+}
+
+aside, main {
+	padding: 32px;
+}
+
+h1 {
+	font: var(--displaySm);
+	font-weight: 500;
+	margin: 0;
+}
+
+aside {
+	width: 300px;
+	max-width: 400px;
+	min-width: 200px;
+	border-right: var(--divider);
+	position: relative;
+}
+
+#resizer {
+	position: absolute;
+	top: 0;
+	width: 5px;
+	bottom: 0;
+	right: -2px;
+	cursor: e-resize;
+	user-select: none;
+}
+
+main {
+	flex: 1;
+	background: var(--gray25);
+}

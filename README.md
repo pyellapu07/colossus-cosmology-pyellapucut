@@ -10,9 +10,9 @@ py -3 -m venv venv
 venv\Scripts\activate
 ```
 
-### Install Flask
+### Install dependencies
 ```python
-pip install Flask
+pip install -r requirements.txt
 ```
 
 ### Tailwind CLI build
