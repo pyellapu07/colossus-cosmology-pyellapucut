@@ -67,6 +67,14 @@ h1 {
 	font: var(--displaySm);
 	font-weight: 500;
 	margin: 24px 16px;
+	color: var(--gray900);
+}
+
+h2 {
+	font: var(--textMd);
+	font-weight: 500;
+	margin: 0;
+	color: var(--gray700);
 }
 
 #sidebar {
@@ -75,6 +83,7 @@ h1 {
 	min-width: 200px;
 	border-right: var(--divider);
 	position: relative;
+	overflow: auto;
 }
 
 #resizer {
@@ -129,6 +138,7 @@ button {
 
 	font: var(--textMd);
 	font-weight: 600;
+	transition: .3s;
 
 	margin: 16px;
 }
@@ -152,7 +162,7 @@ button {
 	display: flex;
 	flex-direction: row;
 	align-items: flex-start;
-	padding: 16px;
+	padding: 4px;
 	gap: 4px;
 
 	/* White */
@@ -168,4 +178,67 @@ button {
 	order: 1;
 	align-self: stretch;
 	flex-grow: 0;
+}
+
+.sidebar-header {
+	display: flex;
+	flex-direction: row;
+	gap: 4px;
+	align-items: center;
+}
+
+.sidebar-header h2 {
+	margin-left: 4px;
+}
+
+.sidebar-icon {
+	/* Gray/500 */
+	filter: brightness(0) saturate(100%) invert(44%) sepia(29%) saturate(275%) hue-rotate(182deg) brightness(92%) contrast(92%);
+}
+
+
+input[type="checkbox"] {
+	position: relative;
+	appearance: none;
+	margin: 0;
+	cursor: pointer;
+}
+
+input[type="checkbox"]::before {
+	position: relative;
+	display: block;
+	width: 16px;
+	height: 16px;
+	content: "";
+	border: 1px solid var(--gray300);
+	border-radius: 4px;
+	transition: background-color .3s;
+	transition: border .3s;
+	transition: box-shadow .3s;
+}
+
+input[type="checkbox"]:checked::before {
+	background-image: url(../../dist/check.svg);
+	background-position: 50% 50%;
+	background-size: .875rem .875rem;
+	background-repeat: no-repeat;
+	background-attachment: scroll;
+}
+
+input[type="checkbox"]:hover::before, input[type="checkbox"]:checked::before  {
+	background-color: var(--primary50);
+	border-color: var(--primary600);
+}
+
+input[type="checkbox"]:focus::before  {
+	border-color: var(--primary300);
+	box-shadow: 0px 0px 0px 4px var(--primary100);
+	outline: 0px transparent !important;
+}
+
+input[type="checkbox"]:focus:checked::before  {
+	border-color: var(--primary600);
+	background-color: var(--primary50);
+	box-shadow: 0px 0px 0px 4px var(--primary100);
+	outline: 0px transparent !important;
 }

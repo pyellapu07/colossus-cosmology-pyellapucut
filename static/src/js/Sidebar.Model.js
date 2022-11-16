@@ -1,18 +1,27 @@
 function SidebarModel() {
 
+    let open = true;
+
     const dom = document.createElement('div');
     dom.classList.add('sidebar-model');
 
-    // const xhr = new XMLHttpRequest();
-    // xhr.open("GET","/static/dist/plus.svg",false);
-    // // Following line is just to be on the safe side;
-    // // not needed if your server delivers SVG with correct MIME type
-    // xhr.overrideMimeType("image/svg+xml");
-    // xhr.onload = function(e) {
-    //   // You might also want to check for xhr.readyState/xhr.status here
-    //   addButton.prepend(xhr.responseXML.documentElement);
-    // };
-    // xhr.send();
+    const header = document.createElement('div');
+    header.classList.add('sidebar-header');
+
+    const headerOpen = document.createElement('img');
+    headerOpen.classList.add('sidebar-icon');
+    headerOpen.src = 'static/dist/chevron-down.svg';
+    header.appendChild(headerOpen);
+
+    const headerEnabled = document.createElement('input');
+    headerEnabled.type="checkbox";
+    header.appendChild(headerEnabled);
+
+    const headerTitle = document.createElement('h2');
+    headerTitle.innerText = "Model 1";
+    header.appendChild(headerTitle);
+
+    dom.appendChild(header);
 
     return dom;
 }

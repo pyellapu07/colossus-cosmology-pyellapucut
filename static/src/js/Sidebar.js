@@ -16,15 +16,13 @@ function Sidebar() {
     addButton.id = "test";
     addButton.classList.add("add-model");
 
-    function onPointerDown( event ) {
-        if ( event.isPrimary === false ) return;
-
+    function onClick( event ) {
         const sidebarModel = new SidebarModel();
 
         modelContainer.appendChild( sidebarModel);
     }
 
-    addButton.addEventListener("pointerdown", onPointerDown)
+    addButton.addEventListener("click", onClick)
 
     addButton.innerText = "Add model";
     dom.appendChild(addButton);
