@@ -1,21 +1,35 @@
 This is the repo containing the web interface for Colossus.
 
 ### Create an envrionment
-```python
-py -3 -m venv venv
+
+#### macOS/Linux
+```
+$ python3 -m venv venv
+```
+
+#### Windows
+```
+> py -3 -m venv venv
 ```
 
 ### Activate the environment
-```console
-venv\Scripts\activate
+
+#### macOS/Linux
+```
+$ . venv/bin/activate
+```
+
+#### Windows
+```
+> venv\Scripts\activate
 ```
 
 ### Install dependencies
-```python
-pip install -r requirements.txt
+```
+$ pip install -r requirements.txt
 ```
 
-### Tailwind CLI build
-```console
-npx tailwindcss -i ./static/src/input.css -o ./static/dist/output.css --watch
+### Run the app
+```
+$ flask --debug run
 ```

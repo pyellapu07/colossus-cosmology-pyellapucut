@@ -1,4 +1,15 @@
-import './resizer.js';
+import { Sidebar } from './Sidebar.js';
+import { Resizer } from './Resizer.js';
+import { Output } from './Output.js';
+
+const sidebar = new Sidebar();
+document.body.appendChild( sidebar );
+
+const resizer = new Resizer();
+document.body.appendChild( resizer );
+
+const output = new Output();
+document.body.appendChild( output );
 
 function request(url, func){
     const request = new XMLHttpRequest();

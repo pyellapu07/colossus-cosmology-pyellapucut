@@ -5,18 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Colossus Web</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dist/normalize.css') }}"/>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='src/main.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='src/css/main.css') }}"/>
 </head>
 <body>
-    <aside id='sidebar'>
-        <h1>Models</h1>
-        <button id="test">Click here!</button>
-        <div id="resizer"></div>
-    </aside>
-    <main>
-        <h1>Output</h1>
-        <div id="output"></div>
-    </main>
-    <script type="module" src="{{ url_for('static', filename='src/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='src/js/libs/signals.min.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='src/js/main.js') }}"></script>
 </body>
 </html>
