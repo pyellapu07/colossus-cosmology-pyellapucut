@@ -22,8 +22,8 @@ function request(url, func){
     request.send();
 }
 
-document.getElementById("test").addEventListener('click', () => {
-    request('test', (request) => {
-        document.getElementById('output').innerHTML = request.response
-    });
-});
+// document.getElementById("test").addEventListener('click', () => {
+//     request('test', (request) => {
+//         document.getElementById('output').innerHTML = request.response
+//     });
+// });

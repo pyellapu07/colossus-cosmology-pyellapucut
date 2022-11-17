@@ -1,21 +1,27 @@
 function SidebarModel() {
 
-    let open = true;
-
     const dom = document.createElement('div');
     dom.classList.add('sidebar-model');
 
     const header = document.createElement('div');
     header.classList.add('sidebar-header');
 
-    const headerOpen = document.createElement('img');
-    headerOpen.classList.add('sidebar-icon');
-    headerOpen.src = 'static/dist/chevron-down.svg';
-    header.appendChild(headerOpen);
+    const expandToggle = document.createElement('input');
+    expandToggle.type="checkbox";
+    expandToggle.classList.add('sidebar-expand');
+    header.appendChild(expandToggle);
 
-    const headerEnabled = document.createElement('input');
-    headerEnabled.type="checkbox";
-    header.appendChild(headerEnabled);
+    let open = true;
+
+    function onClick( event ) {
+        open = !open;
+    }
+
+    const enabledToggle = document.createElement('input');
+    enabledToggle.type="checkbox";
+    enabledToggle.classList.add("sidebar-enabled")
+    enabledToggle.checked = true;
+    header.appendChild(enabledToggle);
 
     const headerTitle = document.createElement('h2');
     headerTitle.innerText = "Model 1";
