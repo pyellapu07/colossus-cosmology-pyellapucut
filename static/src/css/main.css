@@ -48,6 +48,7 @@
 
 	--displaySm: 30px/38px Inter;
 	--textMd: 16px/24px Inter;
+	--textSm: 14px/20px Inter;
 }
 
 * {
@@ -160,9 +161,9 @@ button {
 	/* Auto layout */
 
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	align-items: flex-start;
-	padding: 4px;
+	padding: 4px 8px 12px;
 	gap: 4px;
 
 	/* White */
@@ -185,22 +186,26 @@ button {
 	flex-direction: row;
 	gap: 4px;
 	align-items: center;
+	width: 100%;
 }
 
 .sidebar-header h2 {
 	margin-left: 4px;
 }
 
-.sidebar-expand {
+.expand-toggle {
 	width: 20px;
 	height: 20px;
 	position: relative;
 	appearance: none;
-	margin: 0;
+	margin-right: 0;
 	cursor: pointer;
+	border-radius: 6px;
+	transition: background-color .3s, border .3s, box-shadow .3s;
+	flex-grow: 1;
 }
 
-.sidebar-expand::before {
+.expand-toggle::before {
 	position: relative;
 	display: block;
 	width: 20px;
@@ -210,18 +215,17 @@ button {
 	background-position: 50% 50%;
 	background-repeat: no-repeat;
 	background-attachment: scroll;
-	transition: .1s;
+	margin-left:auto;
 
 	/* Gray/500 */
 	filter: brightness(0) saturate(100%) invert(44%) sepia(29%) saturate(275%) hue-rotate(182deg) brightness(92%) contrast(92%);
 }
 
-.sidebar-expand:checked::before {
-/*	background-image: url(../../dist/chevron-right.svg);*/
-	transform: rotateZ(-90deg);
+.expand-toggle:checked::before {
+	transform: rotateZ(180deg);
 }
 
-.sidebar-enabled {
+.checkbox {
 	width: 20px;
 	height: 20px;
 	position: relative;
@@ -231,7 +235,7 @@ button {
 	outline: none;
 }
 
-.sidebar-enabled::before {
+.checkbox::before {
 	position: relative;
 	display: block;
 	width: 20px;
@@ -240,12 +244,10 @@ button {
 	content: "";
 	border: 1px solid var(--gray300);
 	border-radius: 6px;
-	transition: background-color .3s;
-	transition: border .3s;
-	transition: box-shadow .3s;
+	transition: background-color .3s, border .3s, box-shadow .3s;
 }
 
-.sidebar-enabled:checked::before {
+.checkbox:checked::before {
 	background-image: url(../../dist/check.svg);
 	background-position: 50% 50%;
 	background-size: .875rem .875rem;
@@ -253,20 +255,40 @@ button {
 	background-attachment: scroll;
 }
 
-.sidebar-enabled:hover::before, .sidebar-enabled:checked::before  {
+.checkbox:hover::before, .checkbox:checked::before  {
 	background-color: var(--primary50);
 	border-color: var(--primary600);
 }
 
-.sidebar-enabled:focus::before  {
+.checkbox:focus::before  {
 	border-color: var(--primary300);
 	box-shadow: 0px 0px 0px 4px var(--primary100);
 	outline: 0px transparent !important;
 }
 
-.sidebar-enabled:focus:checked::before  {
+.checkbox:focus:checked::before  {
 	border-color: var(--primary600);
 	background-color: var(--primary50);
 	box-shadow: 0px 0px 0px 4px var(--primary100);
 	outline: 0px transparent !important;
+}
+
+.sidebar-body {
+	padding: 4px 32px 0;
+	width: 100%;
+	transition: max-height 1s linear;
+	overflow: hidden;
+}
+
+.sidebar-option {
+	display: flex;
+	align-items: center;
+	margin-bottom: 4px;
+}
+
+.sidebar-option > span {
+	display: inline-block;
+	width: 80px;
+	font: var(--textSm);
+	font-weight: 500;
 }
