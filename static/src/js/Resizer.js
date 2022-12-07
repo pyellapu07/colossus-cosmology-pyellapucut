@@ -12,6 +12,8 @@ function Resizer() {
         dom.ownerDocument.addEventListener( 'pointermove', onPointerMove );
         dom.ownerDocument.addEventListener( 'pointerup', onPointerUp );
 
+        document.body.style.cursor = "col-resize";
+
     }
 
     function onPointerUp( event ) {
@@ -21,6 +23,7 @@ function Resizer() {
         dom.ownerDocument.removeEventListener( 'pointermove', onPointerMove );
         dom.ownerDocument.removeEventListener( 'pointerup', onPointerUp );
 
+        document.body.style.removeProperty("cursor");
     }
 
     function onPointerMove( event ) {
@@ -32,7 +35,12 @@ function Resizer() {
         const offsetWidth = dom.offsetWidth;
         const clientX = event.clientX;
 
-        const x = offsetWidth + clientX;
+        let x = offsetWidth + clientX;
+
+        if (x <= 200)
+            x = 200;
+        else if (x >= 400)
+            x = 400;
 
         dom.style.left = x + 'px';
 

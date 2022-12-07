@@ -1,3 +1,41 @@
+class Model {
+    constructor(body) {
+        this.body = body;
+        this.params = {};
+    }
+
+    createOption(name, type, val) {
+        this.params[name] = val;
+
+        const container = document.createElement('div');
+        container.classList.add('sidebar-option');
+
+        const title = document.createElement('span');
+        title.innerText = name;
+
+        container.appendChild(title);
+
+        const input = document.createElement('input');
+
+        switch (type) {
+            case 'bool':
+                input.type="checkbox";
+                input.classList.add("checkbox");
+                input.checked = val;
+                break;
+            case 'float':
+                input.type="number";
+                input.classList.add("float");
+                input.value = val;
+                break;
+        }
+
+        container.appendChild(input);
+
+        this.body.appendChild(container);
+    }
+}
+
 function SidebarModel() {
 
     const dom = document.createElement('div');
@@ -7,25 +45,28 @@ function SidebarModel() {
     const header = document.createElement('div');
     header.classList.add('sidebar-header');
 
-    // header enable toggle
-    const enabledToggle = document.createElement('input');
-    enabledToggle.type="checkbox";
-    enabledToggle.classList.add("checkbox")
-    enabledToggle.checked = true;
-    header.appendChild(enabledToggle);
-
-    // header title
-    const headerTitle = document.createElement('h2');
-    headerTitle.innerText = "Model 1";
-    header.appendChild(headerTitle);
-
     // header expand toggle
-    const expandToggle = document.createElement('input');
-    expandToggle.type="checkbox";
+    const expandToggle = document.createElement('div');
     expandToggle.classList.add('expand-toggle');
     header.appendChild(expandToggle);
 
-    dom.appendChild(header);
+    // header title
+    const headerTitle = document.createElement('input');
+    headerTitle.value = "Model 1";
+    headerTitle.classList.add('model-name')
+    header.appendChild(headerTitle);
+
+    // header enable toggle
+    const enabledToggle = document.createElement('input');
+    enabledToggle.type = "checkbox";
+    enabledToggle.classList.add("checkbox", "enable-toggle")
+    enabledToggle.checked = true;
+    header.appendChild(enabledToggle);
+
+    // header delete
+    const trash = document.createElement('button');
+    trash.classList.add('trash');
+    header.appendChild(trash);
 
     // body
     const body = document.createElement('div');
@@ -34,52 +75,52 @@ function SidebarModel() {
     // body expand toggle
     let open = true;
 
-    function onClick( event ) {
-        open = !open;
+    header.addEventListener('click', ( event ) => {
 
-        if (open)
-            body.style.maxHeight = "100%";
-        else
-            body.style.maxHeight = "0%";
-    }
+        if (event.target == header || event.target == expandToggle) {
+            open = !open;
 
-    expandToggle.addEventListener('click', onClick);
+            if (open) {
+                body.style.removeProperty("display");
+                expandToggle.style.removeProperty("transform");
+            }
+            else {
+                body.style.display = "none";
+                expandToggle.style.transform = "rotateZ(180deg)";
+            }
+
+        }
+
+    })
+
+    trash.addEventListener('click', () => {
+        dom.remove();
+    })
+
+    dom.appendChild(header);
+
+    const model = new Model(body);
 
     // body options
-    body.appendChild(createOption("Flat", "checkbox"));
-    body.appendChild(createOption("Flat", "checkbox"));
-    body.appendChild(createOption("Flat", "checkbox"));
-    body.appendChild(createOption("Flat", "checkbox"));
-    body.appendChild(createOption("Flat", "checkbox"));
-    body.appendChild(createOption("Flat", "checkbox"));
+    // TODO: add de_model and associated params
+    // TODO: add power_law and associated params
+    model.createOption("flat", "bool", true);
+    model.createOption("H0", "float", 67.66);
+    model.createOption("Om0", "float", 0.3111);
+    // model.createOption("Ode0", "float", 0.0490));
+    model.createOption("Ob0", "float", 0.0490);
+    model.createOption("sigma8", "float", 0.8102);
+    model.createOption("ns", "float", 0.9665);
+    model.createOption("relspecies", "bool", true);
+    // model.createOption("Tcmb0", "float", 2.7255);
+    // model.createOption("Neff", "float", 3.046);
+    model.createOption("power_law", "bool", false);
+    // model.createOption("power_law_n", "float", 0.0);
+
 
     dom.appendChild(body);
 
     return dom;
-}
-
-function createOption(name, type) {
-    const container = document.createElement('div');
-    container.classList.add('sidebar-option');
-
-    const title = document.createElement('span');
-    title.innerText = name;
-
-    container.appendChild(title);
-
-    const input = document.createElement('input');
-
-    switch (type) {
-        case 'checkbox':
-            input.type="checkbox";
-            input.classList.add("checkbox");
-            input.checked = true;
-            break;
-    }
-
-    container.appendChild(input);
-
-    return container;
 }
 
 export { SidebarModel };

@@ -9,12 +9,10 @@ function Sidebar() {
     title.innerText = "Models";
     dom.appendChild(title);
 
-    const modelContainer = document.createElement('div');
-    dom.appendChild(modelContainer);
-
     const addButton = document.createElement('button');
     addButton.id = "test";
     addButton.classList.add("add-model");
+    addButton.innerText = "Add model";
 
     function onClick( event ) {
         const sidebarModel = new SidebarModel();
@@ -24,8 +22,11 @@ function Sidebar() {
 
     addButton.addEventListener("click", onClick)
 
-    addButton.innerText = "Add model";
     dom.appendChild(addButton);
+
+    const modelContainer = document.createElement('div');
+    modelContainer.classList.add("model-container")
+    dom.appendChild(modelContainer);
 
     return dom;
 }
