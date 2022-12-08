@@ -1,6 +1,6 @@
 function Resizer() {
 
-    const dom = document.createElement('div');
+    const dom = this.dom = document.createElement('div');
     dom.id = "resizer";
 
     function onPointerDown( event ) {
@@ -49,8 +49,6 @@ function Resizer() {
     }
 
     dom.addEventListener( 'pointerdown', onPointerDown );
-
-    return dom;
 }
 
 export { Resizer };

@@ -11,10 +11,18 @@ def index():
 
     return render_template('index.html')
 
-@app.route('/test', methods=['GET'])
+@app.route('/test', methods=['POST'])
 def test():
-    cosmo = cosmology.setCosmology('planck18')
-    return jsonify({"age": cosmo.age(0.0).tolist()});
+    models = request.json
+    data = []
+
+    for model in models:
+        modelData = {}
+        cosmo = cosmology.setCosmology('myCosmo', **model)
+        modelData["age"] = cosmo.age(0.0).tolist();
+        data.append(modelData)
+
+    return jsonify(data);
 
 if __name__ == '__main__':
     app.run()

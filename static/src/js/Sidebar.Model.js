@@ -22,11 +22,17 @@ class Model {
                 input.type="checkbox";
                 input.classList.add("checkbox");
                 input.checked = val;
+                input.addEventListener( 'change', (event) => {
+                    this.params[name] = event.target.checked;
+                });
                 break;
             case 'float':
                 input.type="number";
                 input.classList.add("float");
                 input.value = val;
+                input.addEventListener( 'change', (event) => {
+                    this.params[name] = parseFloat(event.target.value);
+                });
                 break;
         }
 
@@ -36,9 +42,9 @@ class Model {
     }
 }
 
-function SidebarModel() {
+function SidebarModel( models ) {
 
-    const dom = document.createElement('div');
+    const dom = this.dom = document.createElement('div');
     dom.classList.add('sidebar-model');
 
     // header
@@ -94,12 +100,13 @@ function SidebarModel() {
     })
 
     trash.addEventListener('click', () => {
+        models.splice(models.indexOf(this), 1);
         dom.remove();
     })
 
     dom.appendChild(header);
 
-    const model = new Model(body);
+    const model = this.model = new Model(body);
 
     // body options
     // TODO: add de_model and associated params
@@ -119,8 +126,6 @@ function SidebarModel() {
 
 
     dom.appendChild(body);
-
-    return dom;
 }
 
 export { SidebarModel };
