@@ -8,5 +8,5 @@ document.body.appendChild( sidebar.dom );
 const resizer = new Resizer();
 document.body.appendChild( resizer.dom );
 
-const output = new Output( sidebar );
+const output = new Output();
 document.body.appendChild( output.dom );

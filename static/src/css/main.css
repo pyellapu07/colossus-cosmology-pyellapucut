@@ -187,7 +187,7 @@ button {
 	font-weight: 600;
 	transition: .3s;
 
-	margin: 0 16px 0 auto;
+	margin: auto 16px 16px;
 }
 
 .run-model:hover {
@@ -230,16 +230,31 @@ button {
 	padding: 4px 8px;
 	cursor: pointer;
 	user-select: none;
+	background: var(--white);
+	transition: 0.2s;
+}
+
+.sidebar-header:hover {
+	background: var(--gray100);
 }
 
 .model-name {
 	margin: 0 32px 0 4px;
 	font: var(--textMd);
 	font-weight: 500;
-	color: var(--gray700);
+	color: var(--gray900);
 	border: none;
-	width: 100%;
-	flex-grow: 1;
+	max-width: 100px;
+	padding: 0 4px;
+	border-radius: 2px;
+}
+
+.textbox {
+	border: 1px solid var(--gray300);
+	padding: 0 4px;
+	border-radius: 2px;
+	color: var(--gray900);
+	max-width: 100px;
 }
 
 .enable-toggle {
@@ -266,6 +281,10 @@ button {
 
 	/* Gray/500 */
 	filter: brightness(0) saturate(100%) invert(44%) sepia(29%) saturate(275%) hue-rotate(182deg) brightness(92%) contrast(92%);
+}
+
+.expand-toggle:hover::before {
+	filter: brightness(0) saturate(100%) invert(13%) sepia(9%) saturate(2617%) hue-rotate(175deg) brightness(92%) contrast(91%);;
 }
 
 .trash {
@@ -373,6 +392,7 @@ button {
 .model-container {
 	overflow: auto;
 	border-top: 1px solid var(--gray300);
+	margin-bottom: 16px;
 }
 
 /* width */
@@ -438,10 +458,4 @@ button {
 	flex: none;
 	order: 0;
 	flex-grow: 1;
-}
-
-.title-wrapper {
-	display: flex;
-	width: 100%;
-	align-items: center;
 }

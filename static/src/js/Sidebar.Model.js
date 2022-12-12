@@ -28,7 +28,7 @@ class Model {
                 break;
             case 'float':
                 input.type="number";
-                input.classList.add("float");
+                input.classList.add("textbox");
                 input.value = val;
                 input.addEventListener( 'change', (event) => {
                     this.params[name] = parseFloat(event.target.value);
@@ -59,7 +59,7 @@ function SidebarModel( models ) {
     // header title
     const headerTitle = document.createElement('input');
     headerTitle.value = "Model 1";
-    headerTitle.classList.add('model-name')
+    headerTitle.classList.add('model-name');
     header.appendChild(headerTitle);
 
     // header enable toggle
@@ -123,7 +123,6 @@ function SidebarModel( models ) {
     // model.createOption("Neff", "float", 3.046);
     model.createOption("power_law", "bool", false);
     // model.createOption("power_law_n", "float", 0.0);
-
 
     dom.appendChild(body);
 }
