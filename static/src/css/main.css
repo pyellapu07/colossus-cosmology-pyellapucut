@@ -142,6 +142,7 @@ button {
 	transition: .3s;
 
 	margin: 0 16px 16px;
+	outline: none;
 }
 
 .add-model:hover {
@@ -150,7 +151,6 @@ button {
 
 .add-model:focus {
 	box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05), 0px 0px 0px 4px var(--gray100);
-	outline: 0px transparent !important;
 }
 
 .run-model {
@@ -188,6 +188,7 @@ button {
 	transition: .3s;
 
 	margin: auto 16px 16px;
+	outline: none;
 }
 
 .run-model:hover {
@@ -196,7 +197,6 @@ button {
 
 .run-model:focus {
 	box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05), 0px 0px 0px 4px var(--primary100);
-	outline: 0px transparent !important;
 }
 
 .sidebar-model {
@@ -265,26 +265,14 @@ button {
 	width: 20px;
 	height: 20px;
 	position: relative;
-}
-
-.expand-toggle::before {
-	position: relative;
-	display: block;
-	width: 20px;
-	height: 20px;
-	content: "";
 	background-image: url(../../dist/chevron-down.svg);
 	background-position: 50% 50%;
 	background-repeat: no-repeat;
 	background-attachment: scroll;
-	margin-left:auto;
-
-	/* Gray/500 */
-	filter: brightness(0) saturate(100%) invert(44%) sepia(29%) saturate(275%) hue-rotate(182deg) brightness(92%) contrast(92%);
 }
 
-.expand-toggle:hover::before {
-	filter: brightness(0) saturate(100%) invert(13%) sepia(9%) saturate(2617%) hue-rotate(175deg) brightness(92%) contrast(91%);;
+.expand-toggle:hover {
+	filter: brightness(0) saturate(100%);
 }
 
 .trash {
@@ -296,26 +284,14 @@ button {
 	margin-left: 4px;
 	border: none;
 	background: none;
-}
-
-.trash::before {
-	position: relative;
-	display: block;
-	width: 20px;
-	height: 20px;
-	content: "";
 	background-image: url(../../dist/x.svg);
 	background-position: 50% 50%;
 	background-repeat: no-repeat;
 	background-attachment: scroll;
-	margin-left:auto;
-
-	/* Gray/500 */
-	filter: brightness(0) saturate(100%) invert(44%) sepia(29%) saturate(275%) hue-rotate(182deg) brightness(92%) contrast(92%);
 }
 
-.trash:hover::before {
-	filter: brightness(0) saturate(100%) invert(13%) sepia(9%) saturate(2617%) hue-rotate(175deg) brightness(92%) contrast(91%);;
+.trash:hover {
+	filter: brightness(0) saturate(100%);
 }
 
 .checkbox {
@@ -365,9 +341,30 @@ button {
 	outline: 0px transparent !important;
 }
 
+.select {
+	border-radius: 8px;
+	border: 1px solid var(--gray300);
+	padding: 10px 14px;
+	font: var(--textMd);
+	appearance: none;
+	background: transparent;
+	background-image: url(../../dist/chevron-down.svg);
+	background-repeat: no-repeat;
+	background-position-x: calc(100% - 14px);
+	background-position-y: 50%;
+	outline: none;
+	margin: 0 16px 8px;
+	transition: box-shadow .3s, border .3s;
+}
+
+.select:focus {
+	border: 1px solid var(--primary300);
+	box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05), 0px 0px 0px 4px var(--primary100);
+	background-image: url(../../dist/chevron-up.svg);
+}
+
 .sidebar-body {
-	padding-left: 16px;
-	padding-bottom: 8px;
+	padding: 4px 0 4px 16px;
 	width: 100%;
 	overflow: hidden;
 }
