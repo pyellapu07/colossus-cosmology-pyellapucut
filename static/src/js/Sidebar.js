@@ -8,9 +8,9 @@ function Sidebar() {
 
     const models = this.models = [];
 
-    // const title = document.createElement('h1');
-    // title.innerText = "Models";
-    // dom.appendChild(title);
+    const title = document.createElement('h1');
+    title.innerText = "Models";
+    dom.appendChild(title);
 
     const selectModel = document.createElement('select');
     selectModel.classList.add('select');
