@@ -1,6 +1,7 @@
 import { Model } from './Model.js';
+import { Cosmology } from './Cosmology.js';
 
-function SidebarModel( models ) {
+function SidebarModel( models, type ) {
 
     const dom = this.dom = document.createElement('div');
     dom.classList.add('sidebar-model');
@@ -16,8 +17,23 @@ function SidebarModel( models ) {
 
     // header title
     const headerTitle = document.createElement('input');
-    headerTitle.value = "Model 1";
+    headerTitle.value = addName(type);
     headerTitle.classList.add('model-name');
+
+    function resizetitle() {
+        this.style.width = this.value.length + "ch";
+    }
+
+    headerTitle.addEventListener('input', resizetitle);
+    headerTitle.addEventListener('change', function() {
+        if (this.value == '')
+            this.value = addName("Model")
+        else
+            this.value = addName(this.value, headerTitle);
+    });
+
+    resizetitle.call(headerTitle);
+
     header.appendChild(headerTitle);
 
     // header enable toggle
@@ -39,9 +55,8 @@ function SidebarModel( models ) {
     // body expand toggle
     let open = true;
 
-    header.addEventListener('click', ( event ) => {
-
-        if (event.target == header || event.target == expandToggle) {
+    header.addEventListener('click', function() {
+        if (this == header || this == expandToggle) {
             open = !open;
 
             if (open) {
@@ -57,32 +72,40 @@ function SidebarModel( models ) {
 
     })
 
-    trash.addEventListener('click', () => {
+    trash.addEventListener('click', function() {
         models.splice(models.indexOf(this), 1);
         dom.remove();
     })
 
     dom.appendChild(header);
 
-    const model = this.model = new Model(body);
-
-    // body options
-    // TODO: add de_model and associated params
-    // TODO: add power_law and associated params
-    model.createOption("flat", "bool", true);
-    model.createOption("H0", "float", 67.66);
-    model.createOption("Om0", "float", 0.3111);
-    // model.createOption("Ode0", "float", 0.0490));
-    model.createOption("Ob0", "float", 0.0490);
-    model.createOption("sigma8", "float", 0.8102);
-    model.createOption("ns", "float", 0.9665);
-    model.createOption("relspecies", "bool", true);
-    // model.createOption("Tcmb0", "float", 2.7255);
-    // model.createOption("Neff", "float", 3.046);
-    model.createOption("power_law", "bool", false);
-    // model.createOption("power_law_n", "float", 0.0);
+    const model = this.model = new Model(body, Cosmology[type]);
 
     dom.appendChild(body);
+}
+
+function addName( name, instance ) {
+    let uniqueName;
+
+    const names = [];
+    const modelNames = document.getElementsByClassName("model-name");
+    for (let i = 0; i < modelNames.length; i++) {
+        if (instance != modelNames[i] )
+            names.push(modelNames[i].value);
+    }
+
+    if (names.includes(name)) {
+        let i = 1;
+        while (names.includes(name + " (" + i + ")"))
+            i++;
+        uniqueName = name + " (" + i + ")";
+    } else {
+        uniqueName = name;
+    }
+
+    names.push(uniqueName);
+
+    return uniqueName;
 }
 
 export { SidebarModel };

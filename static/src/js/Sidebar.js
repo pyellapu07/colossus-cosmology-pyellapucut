@@ -8,9 +8,9 @@ function Sidebar() {
 
     const models = this.models = [];
 
-    const title = document.createElement('h1');
-    title.innerText = "Models";
-    dom.appendChild(title);
+    // const title = document.createElement('h1');
+    // title.innerText = "Models";
+    // dom.appendChild(title);
 
     const selectModel = document.createElement('select');
     selectModel.classList.add('select');
@@ -35,19 +35,17 @@ function Sidebar() {
     dom.appendChild(modelContainer);
 
     // add sidebar model
-    function onClick( event ) {
-        const sidebarModel = new SidebarModel(models);
+    addButton.addEventListener("click", () => {
+        const sidebarModel = new SidebarModel(models, selectModel.value);
         models.push(sidebarModel.model.params);
 
         modelContainer.appendChild(sidebarModel.dom);
-    }
-
-    addButton.addEventListener("click", onClick);
+    });
 
     const runButton = document.createElement('button');
     runButton.classList.add("run-model");
     runButton.innerText = "Run model";
-    runButton.addEventListener('click', (event) => {
+    runButton.addEventListener('click', () => {
         request('test', models, (data) => {
             document.getElementById('table').innerHTML = JSON.stringify(data);
         });

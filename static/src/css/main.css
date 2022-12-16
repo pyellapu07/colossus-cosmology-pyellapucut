@@ -239,12 +239,12 @@ button {
 }
 
 .model-name {
-	margin: 0 32px 0 4px;
+	margin-left: 4px;
 	font: var(--textMd);
 	font-weight: 500;
 	color: var(--gray900);
 	border: none;
-	max-width: 100px;
+	min-width: 100px;
 	padding: 0 4px;
 	border-radius: 2px;
 }
@@ -262,7 +262,7 @@ button {
 }
 
 .expand-toggle {
-	width: 20px;
+	min-width: 20px;
 	height: 20px;
 	position: relative;
 	background-image: url(../../dist/chevron-down.svg);
@@ -276,7 +276,7 @@ button {
 }
 
 .trash {
-	width: 20px;
+	min-width: 20px;
 	height: 20px;
 	position: relative;
 	cursor: pointer;
