@@ -86,6 +86,7 @@ h2 {
 	position: relative;
 	display: flex;
 	flex-direction: column;
+	margin-top: 32px;
 }
 
 #resizer {
@@ -100,6 +101,7 @@ h2 {
 #output {
 	flex: 1;
 	background: var(--gray25);
+	margin-top: 32px;
 }
 
 button {
@@ -353,7 +355,7 @@ button {
 	background-position-x: calc(100% - 14px);
 	background-position-y: 50%;
 	outline: none;
-	margin: 0 16px 8px;
+	margin: 16px 16px 8px;
 	transition: box-shadow .3s, border .3s;
 }
 
@@ -455,4 +457,45 @@ button {
 	flex: none;
 	order: 0;
 	flex-grow: 1;
+}
+
+.header {
+	position: absolute;
+	height: 32px;
+	width: 100%;
+	border-bottom: var(--divider);
+	background: var(--primary700);
+	display: flex;
+	align-items: center;
+	justify-content: left;
+	padding-left: 8px;
+}
+
+.header h2 {
+	color: var(--white);
+	font-size: 14px;
+}
+
+.header span {
+	color: var(--primary100);
+}
+
+.info {
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+	padding: 0;
+	right: 8px;
+	border: none;
+	background: none;
+	background-image: url(../../dist/info.svg);
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-attachment: scroll;
+	position: absolute;
+}
+
+.info:hover {
+	filter: brightness(0) invert(1);
 }
