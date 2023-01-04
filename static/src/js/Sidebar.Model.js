@@ -55,8 +55,8 @@ function SidebarModel( models, type ) {
     // body expand toggle
     let open = true;
 
-    header.addEventListener('click', function() {
-        if (this == header || this == expandToggle) {
+    header.addEventListener('click', function(e) {
+        if (e.target == header || e.target == expandToggle) {
             open = !open;
 
             if (open) {

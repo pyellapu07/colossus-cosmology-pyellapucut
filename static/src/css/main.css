@@ -49,6 +49,8 @@
 	--displaySm: 30px/38px Inter;
 	--textMd: 16px/24px Inter;
 	--textSm: 14px/20px Inter;
+
+	--shadowMd: 0px 4px 8px -2px rgba(16, 24, 40, 0.1), 0px 2px 4px -2px rgba(16, 24, 40, 0.06);
 }
 
 * {
@@ -459,7 +461,7 @@ button {
 	flex-grow: 1;
 }
 
-.header {
+#header {
 	position: absolute;
 	height: 32px;
 	width: 100%;
@@ -471,31 +473,57 @@ button {
 	padding-left: 8px;
 }
 
-.header h2 {
+#header h2 {
 	color: var(--white);
 	font-size: 14px;
 }
 
-.header span {
-	color: var(--primary100);
+#header img {
+	height: 20px;
+	margin-right: 4px;
 }
 
-.info {
+.dropdown {
+	padding: 0;
+	right: 8px;
+	position: absolute;
+}
+
+#info {
 	width: 16px;
 	height: 16px;
 	cursor: pointer;
-	padding: 0;
-	right: 8px;
-	border: none;
 	background: none;
 	background-image: url(../../dist/info.svg);
 	background-position: 50% 50%;
 	background-repeat: no-repeat;
 	background-size: 100%;
 	background-attachment: scroll;
-	position: absolute;
 }
 
-.info:hover {
+#info:hover, .dropdown:focus #info {
 	filter: brightness(0) invert(1);
+}
+
+.options {
+	position: fixed;
+	display: none;
+	top: 32px;
+	right: 0;
+	flex-direction: column;
+	color: var(--gray700);
+	background: var(--white);
+	padding: 16px 0;
+	box-shadow: var(--shadowMd);
+	border: 1px solid var(--gray300);
+	border-radius: 4px;
+	font: var(--textMd);
+}
+
+.dropdown:focus .options {
+	display: flex;
+}
+
+.option {
+	padding: 4px 16px;
 }
