@@ -41,28 +41,6 @@ function Sidebar() {
 
         modelContainer.appendChild(sidebarModel.dom);
     });
-
-    const runButton = document.createElement('button');
-    runButton.classList.add("run-model");
-    runButton.innerText = "Run model";
-    runButton.addEventListener('click', () => {
-        request('test', models, (data) => {
-            document.getElementById('table').innerHTML = JSON.stringify(data);
-        });
-    });
-    dom.appendChild(runButton)
-}
-
-function request(url, data, func){
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/" + url, true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.addEventListener('readystatechange', () => {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-           func(JSON.parse(xhr.responseText));
-        }
-    });
-    xhr.send(JSON.stringify(data));
 }
 
 export { Sidebar };

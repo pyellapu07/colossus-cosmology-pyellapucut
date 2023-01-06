@@ -520,7 +520,7 @@ button {
 	font: var(--textMd);
 }
 
-.dropdown:focus .options {
+.dropdown:focus-within .options {
 	display: flex;
 }
 

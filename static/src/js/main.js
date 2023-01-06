@@ -14,5 +14,5 @@ dom.appendChild( sidebar.dom );
 const resizer = new Resizer();
 dom.appendChild( resizer.dom );
 
-const output = new Output();
+const output = new Output( sidebar );
 dom.appendChild( output.dom );
