@@ -1,3 +1,5 @@
+import { OutputTab } from './Output.Tab.js';
+
 function Output( sidebar ) {
 
     const models = sidebar.models;
@@ -5,15 +7,18 @@ function Output( sidebar ) {
     const dom = this.dom = document.createElement('div');
     dom.id = "output";
 
-    const runButton = document.createElement('button');
-    runButton.classList.add("run-model");
-    runButton.innerText = "Run model";
-    runButton.addEventListener('click', () => {
-        request('test', models, (data) => {
-            document.getElementById('table').innerHTML = JSON.stringify(data);
-        });
-    });
+    // const runButton = document.createElement('button');
+    // runButton.classList.add("run-model");
+    // runButton.innerText = "Run model";
+    // runButton.addEventListener('click', () => {
+    //     request('test', models, (data) => {
+    //         document.getElementById('table').innerHTML = JSON.stringify(data);
+    //     });
+    // });
     // dom.appendChild(runButton);
+
+    const tab = new OutputTab();
+    dom.appendChild(tab.dom);
 
     const table = document.createElement("div");
     table.id = "table";

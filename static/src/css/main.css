@@ -216,13 +216,6 @@ button {
 	/* Gray/200 */
 
 	border-bottom: 1px solid var(--gray300);
-
-	/* Inside auto layout */
-
-	flex: none;
-	order: 1;
-	align-self: stretch;
-	flex-grow: 0;
 }
 
 .sidebar-header {
@@ -370,7 +363,6 @@ button {
 .sidebar-body {
 	padding: 4px 0 4px 16px;
 	width: 100%;
-	overflow: hidden;
 }
 
 .sidebar-option {
@@ -379,11 +371,47 @@ button {
 	margin-bottom: 4px;
 }
 
-.sidebar-option > span {
-	display: inline-block;
+.option-title {
+	cursor: default;
 	width: 100px;
 	font: var(--textSm);
 	font-weight: 500;
+	position: relative;
+}
+
+.option-title span:hover, .option-title span:focus {
+	text-decoration: underline dotted var(--gray500);
+	text-underline-offset: 4px;
+}
+
+.option-tooltip {
+	opacity: 0;
+	position: absolute;
+	padding: 16px;
+	background: var(--gray900);
+	z-index: 1;
+	color: var(--gray100);
+	border-radius: 4px;
+	bottom: 24px;
+	width: 600px;
+	box-shadow: var(--shadowMd);
+	transition: opacity 0s linear .3s;
+	pointer-events: none
+}
+
+.option-tooltip:before {
+	content: "";
+	position: absolute;
+	top: calc(100% - 4px);
+	left: 4px;
+	height: 12px;
+	width: 24px;
+	background: inherit;
+	clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+.option-title span:hover + .option-tooltip, .option-title span:focus + .option-tooltip {
+	opacity: 1;
 }
 
 .sidebar-option .float {
@@ -391,7 +419,6 @@ button {
 }
 
 .model-container {
-	overflow: auto;
 	border-top: 1px solid var(--gray300);
 	margin-bottom: 16px;
 }
