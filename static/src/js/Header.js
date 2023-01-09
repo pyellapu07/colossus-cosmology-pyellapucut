@@ -20,12 +20,16 @@ function Header() {
     dom.appendChild(title);
 
     const info = document.createElement('div');
-    info.classList.add("dropdown");
+    info.classList.add("dropdown", "tooltip");
     info.tabIndex = 0;
+
+    const infoTooltip = document.createElement('div');
+    infoTooltip.classList.add('tooltip-content', 'left', 'bottom');
+    infoTooltip.innerText = "Information"
+    info.appendChild(infoTooltip);
 
     const infoTitle = document.createElement('div');
     infoTitle.id = "info";
-    infoTitle.title = "Information";
     info.appendChild(infoTitle);
 
     const dropdown = document.createElement('div');

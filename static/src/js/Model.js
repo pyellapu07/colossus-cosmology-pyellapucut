@@ -8,17 +8,16 @@ class Model {
         this.elems = {};
 
         this.createOption("flat", "bool", {"Ode0": false});
-        this.createOption("Ode0", "float");
         this.createOption("H0", "float");
         this.createOption("Om0", "float");
         this.createOption("Ob0", "float");
+        this.createOption("Ode0", "float");
         this.createOption("sigma8", "float");
         this.createOption("ns", "float");
         this.createOption("relspecies", "bool");
 
-        for (const elem in this.elems) {
+        for (const elem in this.elems)
             this.updateParams(elem, this.params[elem], this.elems[elem][1]);
-        }
     }
 
     createOption(name, type, dependencies) {
@@ -31,14 +30,15 @@ class Model {
         titleContainer.classList.add('option-title');
 
         const title = document.createElement('span');
+        title.classList.add('tooltip');
         title.innerHTML = CosmologyFormat[name].text;
         title.tabIndex = 0;
         titleContainer.appendChild(title);
 
         const tooltip = document.createElement('div');
-        tooltip.classList.add('option-tooltip');
+        tooltip.classList.add('tooltip-content');
         tooltip.innerHTML = CosmologyFormat[name].def;
-        titleContainer.appendChild(tooltip);
+        title.appendChild(tooltip);
 
         container.appendChild(titleContainer);
 

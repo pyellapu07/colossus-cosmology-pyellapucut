@@ -259,21 +259,32 @@ button {
 }
 
 .expand-toggle {
-	min-width: 20px;
+	width: 20px;
 	height: 20px;
 	position: relative;
+}
+
+.expand-toggle::before {
+	content: "";
+	display: block;
+	height: 20px;
+	width: 20px;
 	background-image: url(../../dist/chevron-down.svg);
 	background-position: 50% 50%;
 	background-repeat: no-repeat;
 	background-attachment: scroll;
 }
 
-.expand-toggle:hover {
+.expand-toggle[data-collapse]::before {
+	transform: rotateZ(180deg);
+}
+
+.expand-toggle:hover::before {
 	filter: brightness(0) saturate(100%);
 }
 
 .trash {
-	min-width: 20px;
+	width: 20px;
 	height: 20px;
 	position: relative;
 	cursor: pointer;
@@ -281,13 +292,20 @@ button {
 	margin-left: 4px;
 	border: none;
 	background: none;
+}
+
+.trash::before {
+	content: "";
+	display: block;
+	height: 20px;
+	width: 20px;
 	background-image: url(../../dist/x.svg);
 	background-position: 50% 50%;
 	background-repeat: no-repeat;
 	background-attachment: scroll;
 }
 
-.trash:hover {
+.trash:hover::before {
 	filter: brightness(0) saturate(100%);
 }
 
@@ -312,7 +330,7 @@ button {
 	transition: background-color .3s, border .3s, box-shadow .3s;
 }
 
-.checkbox:checked::before {
+.checkbox:checked::before, .checkbox[data-checked]::before {
 	background-image: url(../../dist/check.svg);
 	background-position: 50% 50%;
 	background-size: .875rem .875rem;
@@ -320,7 +338,7 @@ button {
 	background-attachment: scroll;
 }
 
-.checkbox:hover::before, .checkbox:checked::before  {
+.checkbox:hover::before, .checkbox:checked::before, .checkbox[data-checked]::before  {
 	background-color: var(--primary50);
 	border-color: var(--primary600);
 }
@@ -331,7 +349,7 @@ button {
 	outline: 0px transparent !important;
 }
 
-.checkbox:focus:checked::before  {
+.checkbox:focus:checked::before, .checkbox:focus[data-checked]::before  {
 	border-color: var(--primary600);
 	background-color: var(--primary50);
 	box-shadow: 0px 0px 0px 4px var(--primary100);
@@ -375,8 +393,6 @@ button {
 	cursor: default;
 	width: 100px;
 	font: var(--textSm);
-	font-weight: 500;
-	position: relative;
 }
 
 .option-title span:hover, .option-title span:focus {
@@ -384,34 +400,58 @@ button {
 	text-underline-offset: 4px;
 }
 
-.option-tooltip {
+.tooltip {
+	position: relative;
+}
+
+.tooltip:hover .tooltip-content {
+	opacity: 1;
+}
+
+.tooltip-content {
 	opacity: 0;
 	position: absolute;
-	padding: 16px;
+	padding: 12px;
 	background: var(--gray900);
 	z-index: 1;
 	color: var(--gray100);
 	border-radius: 4px;
-	bottom: 24px;
-	width: 600px;
+	bottom: 28px;
+	width: max-content;
+	max-width: 600px;
 	box-shadow: var(--shadowMd);
-	transition: opacity 0s linear .3s;
-	pointer-events: none
+	transition: opacity 0s linear .5s;
+	pointer-events: none;
+	font: var(--textSm);
 }
 
-.option-tooltip:before {
+.tooltip-content:before {
 	content: "";
 	position: absolute;
-	top: calc(100% - 4px);
+	top: calc(100% + 1px);
 	left: 4px;
-	height: 12px;
-	width: 24px;
+	height: 6px;
+	width: 12px;
 	background: inherit;
 	clip-path: polygon(0 0, 100% 0, 50% 100%);
+	filter: brightness(1) saturate(0);
 }
 
-.option-title span:hover + .option-tooltip, .option-title span:focus + .option-tooltip {
-	opacity: 1;
+.tooltip-content.left {
+	right: 0;
+}
+
+.tooltip-content.bottom {
+	top: 28px;
+	bottom: initial;
+}
+
+.tooltip-content.bottom.left:before {
+	top: initial;
+	bottom: calc(100% + 1px);
+	right: 4px;
+	left: initial;
+	clip-path: polygon(100% 100%, 0 100%, 50% 0);
 }
 
 .sidebar-option .float {
