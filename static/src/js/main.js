@@ -1,7 +1,7 @@
-import { Header } from './Header.js';
-import { Sidebar } from './Sidebar.js';
-import { Resizer } from './Resizer.js';
-import { Output } from './Output.js';
+import { Header } from './pages/Header.js';
+import { Sidebar } from './pages/Sidebar.js';
+import { Resizer } from './pages/Resizer.js';
+import { Output } from './pages/Output.js';
 
 const dom = document.body;
 

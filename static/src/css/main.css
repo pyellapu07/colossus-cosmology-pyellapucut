@@ -50,7 +50,7 @@
 	--textMd: 16px/24px Inter;
 	--textSm: 14px/20px Inter;
 
-	--shadowMd: 0px 4px 8px -2px rgba(16, 24, 40, 0.1), 0px 2px 4px -2px rgba(16, 24, 40, 0.06);
+	--shadowMd: 0 4px 8px -2px rgba(16, 24, 40, 0.1), 0 2px 4px -2px rgba(16, 24, 40, 0.06);
 }
 
 * {
@@ -85,7 +85,6 @@ h2 {
 	max-width: 400px;
 	min-width: 200px;
 	border-right: var(--divider);
-	position: relative;
 	display: flex;
 	flex-direction: column;
 	margin-top: 32px;
@@ -96,8 +95,9 @@ h2 {
 	top: 32px;
 	left: 300px;
 	width: 5px;
-	bottom: 0px;
+	bottom: 0;
 	cursor: col-resize;
+	z-index: 1;
 }
 
 #output {
@@ -131,7 +131,7 @@ button {
 	border: 1px solid var(--gray300);
 	/* Shadow/xs */
 
-	box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+	box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
 	border-radius: 8px;
 
 	/* Inside auto layout */
@@ -154,7 +154,7 @@ button {
 }
 
 .add-model:focus {
-	box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05), 0px 0px 0px 4px var(--gray100);
+	box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 0 0 4px var(--gray100);
 }
 
 .run-model {
@@ -177,7 +177,7 @@ button {
 	border: 1px solid var(--primary600);
 	/* Shadow/xs */
 
-	box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+	box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
 	border-radius: 8px;
 
 	/* Inside auto layout */
@@ -200,7 +200,7 @@ button {
 }
 
 .run-model:focus {
-	box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05), 0px 0px 0px 4px var(--primary100);
+	box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 0 0 4px var(--primary100);
 }
 
 .sidebar-model {
@@ -261,7 +261,6 @@ button {
 .expand-toggle {
 	width: 20px;
 	height: 20px;
-	position: relative;
 }
 
 .expand-toggle::before {
@@ -286,7 +285,6 @@ button {
 .trash {
 	width: 20px;
 	height: 20px;
-	position: relative;
 	cursor: pointer;
 	padding: 0;
 	margin-left: 4px;
@@ -312,18 +310,15 @@ button {
 .checkbox {
 	width: 20px;
 	height: 20px;
-	position: relative;
 	appearance: none;
 	cursor: pointer;
 	outline: none;
 }
 
 .checkbox::before {
-	position: relative;
 	display: block;
 	width: 20px;
 	height: 20px;
-	box-sizing: border-box;
 	content: "";
 	border: 1px solid var(--gray300);
 	border-radius: 6px;
@@ -345,15 +340,15 @@ button {
 
 .checkbox:focus::before  {
 	border-color: var(--primary300);
-	box-shadow: 0px 0px 0px 4px var(--primary100);
-	outline: 0px transparent !important;
+	box-shadow: 0 0 0 4px var(--primary100);
+	outline: 0 transparent !important;
 }
 
 .checkbox:focus:checked::before, .checkbox:focus[data-checked]::before  {
 	border-color: var(--primary600);
 	background-color: var(--primary50);
-	box-shadow: 0px 0px 0px 4px var(--primary100);
-	outline: 0px transparent !important;
+	box-shadow: 0 0 0 4px var(--primary100);
+	outline: 0 transparent !important;
 }
 
 .select {
@@ -374,7 +369,7 @@ button {
 
 .select:focus {
 	border: 1px solid var(--primary300);
-	box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05), 0px 0px 0px 4px var(--primary100);
+	box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 0 0 4px var(--primary100);
 	background-image: url(../../dist/chevron-up.svg);
 }
 
@@ -383,19 +378,18 @@ button {
 	width: 100%;
 }
 
-.sidebar-option {
+.input-container {
 	display: flex;
-	align-items: center;
 	margin-bottom: 4px;
+	gap: 8px;
 }
 
-.option-title {
-	cursor: default;
-	width: 100px;
+.input-container label {
+	min-width: 100px;
 	font: var(--textSm);
 }
 
-.option-title span:hover, .option-title span:focus {
+label.tooltip:hover, label.tooltip:focus {
 	text-decoration: underline dotted var(--gray500);
 	text-underline-offset: 4px;
 }
@@ -404,19 +398,19 @@ button {
 	position: relative;
 }
 
-.tooltip:hover .tooltip-content {
+.tooltip:hover .tooltip-content, label.tooltip:focus .tooltip-content {
 	opacity: 1;
 }
 
 .tooltip-content {
 	opacity: 0;
-	position: absolute;
+	position: fixed;
 	padding: 12px;
 	background: var(--gray900);
 	z-index: 1;
+	transform: translateY(calc(-1 * (100% + 26px)));
 	color: var(--gray100);
 	border-radius: 4px;
-	bottom: 28px;
 	width: max-content;
 	max-width: 600px;
 	box-shadow: var(--shadowMd);
@@ -434,15 +428,11 @@ button {
 	width: 12px;
 	background: inherit;
 	clip-path: polygon(0 0, 100% 0, 50% 100%);
-	filter: brightness(1) saturate(0);
 }
 
-.tooltip-content.left {
-	right: 0;
-}
-
-.tooltip-content.bottom {
-	top: 28px;
+.tooltip-content.bottom.left {
+	transform-origin: right;
+	transform: translate(calc(18px - 100%), 10px);
 	bottom: initial;
 }
 
@@ -454,13 +444,13 @@ button {
 	clip-path: polygon(100% 100%, 0 100%, 50% 0);
 }
 
-.sidebar-option .float {
+.input-container .float {
 	width: 120px;
 }
 
 .model-container {
 	border-top: 1px solid var(--gray300);
-	margin-bottom: 16px;
+	overflow: auto;
 }
 
 /* width */
@@ -495,7 +485,7 @@ button {
 	display: flex;
 	flex-direction: row;
 	align-items: flex-start;
-	padding: 0px;
+	padding: 0;
 	margin: 0 16px;
 
 	/* White */
@@ -519,7 +509,7 @@ button {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	padding: 0px;
+	padding: 0;
 
 	/* Inside auto layout */
 
@@ -560,7 +550,13 @@ button {
 	width: 16px;
 	height: 16px;
 	cursor: pointer;
-	background: none;
+}
+
+#info:before {
+	display: block;
+	width: 16px;
+	height: 16px;
+	content: "";
 	background-image: url(../../dist/info.svg);
 	background-position: 50% 50%;
 	background-repeat: no-repeat;
@@ -568,7 +564,7 @@ button {
 	background-attachment: scroll;
 }
 
-#info:hover, .dropdown:focus #info {
+#info:hover:before, .dropdown:focus #info:before {
 	filter: brightness(0) invert(1);
 }
 
@@ -593,4 +589,62 @@ button {
 
 .option {
 	padding: 4px 16px;
+}
+
+#tab {
+	margin: 0 auto;
+}
+
+#tab .header {
+	display: flex;
+	white-space: nowrap;
+	background: var(--gray100);
+}
+
+#tab .content {
+	background: var(--gray50);
+	padding: 16px;
+}
+
+#tab .content .input-container {
+	display: none;
+	margin-bottom: 8px;
+}
+
+#tab .content .input-container[data-selected] {
+	display: flex;
+}
+
+#tab button {
+	border: 1px solid transparent;
+	border-bottom: 1px solid var(--gray200);
+	flex: 1;
+	color: var(--gray700);
+	font: var(--textMd);
+	padding: 10px 16px;
+	font-weight: 500;
+	background: none;
+}
+
+#tab button[data-selected] {
+	border: 1px solid var(--gray200);
+	border-bottom: none;
+	background: var(--gray25);
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	color: var(--gray900);
+}
+
+#tab button[data-selected]:first-child {
+	border-top-left-radius: 0;
+	border-left: 1px solid transparent;
+}
+
+#tab button[data-selected]:last-child {
+	border-top-right-radius: 0;
+	border-left: 1px solid transparent;
+}
+
+.radio-container label {
+	margin-left: 4px;
 }
