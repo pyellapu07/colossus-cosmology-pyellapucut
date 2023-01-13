@@ -35,7 +35,7 @@ const Tabs = {
 	'Power Spectrum': {
 		input: {
 			'model': [ 'radio', [ 'eisentein_98', 'eisenstein98_zb', 'sugiyama95', 'camb' ]],
-			'wavenumber (k)': [ 'range' ]
+			'wavenumber (k)': [ 'range', [ 0.25, 0, 0.75, 1 ]] // [minDefault, min, maxDefault, max]
 		},
 		output: {
 
@@ -44,7 +44,7 @@ const Tabs = {
 	'Correlation': {
 		input: {
 			'model': [ 'radio', [ 'eisentein_98', 'eisenstein98_zb', 'sugiyama95', 'camb' ]],
-			'radius (R)': [ 'range' ]
+			'radius (R)': [ 'range', [ 0.25, 0, 0.75, 1 ]]
 		},
 		output: {
 
@@ -53,7 +53,7 @@ const Tabs = {
 	'Peak Height': {
 		input: {
 			'model': [ 'radio', [ 'eisentein_98', 'eisenstein98_zb', 'sugiyama95', 'camb' ]],
-			'halo mass (M)': [ 'range' ],
+			'halo mass (M)': [ 'range', [ 0.25, 0, 0.75, 1 ]],
 		},
 		output: {
 

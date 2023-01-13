@@ -13,7 +13,7 @@ function SidebarModel( models, type ) {
 
 	// header expand toggle
 	const expandToggle = document.createElement( 'div' );
-	expandToggle.classList.add( 'expand-toggle' );
+	expandToggle.classList.add( 'expand-toggle', 'icon-button' );
 	header.appendChild( expandToggle );
 
 	const expandTooltip = new Tooltip( expandToggle, 'Expand model' );
@@ -63,13 +63,13 @@ function SidebarModel( models, type ) {
 
 	// header delete
 	const trash = document.createElement( 'button' );
-	trash.classList.add( 'trash' );
+	trash.classList.add( 'trash', 'icon-button' );
 	header.appendChild( trash );
 
 	const trashTooltip = new Tooltip( trash, 'Delete model' );
 
 	// body
-	const body = document.createElement( 'div' );
+	const body = document.createElement( 'table' );
 	body.classList.add( 'sidebar-body' );
 
 	// body expand toggle

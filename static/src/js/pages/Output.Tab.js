@@ -10,7 +10,7 @@ function OutputTab() {
 	header.classList.add( 'header' );
 	tab.appendChild( header );
 
-	const content = document.createElement( 'div' );
+	const content = document.createElement( 'table' );
 	content.classList.add( 'content' );
 	tab.appendChild( content );
 

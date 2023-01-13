@@ -7,6 +7,10 @@ class Model {
 
 		this.body = body;
 		this.cosmo = cosmo;
+
+		this.cosmo[ 'relspecies' ] = true;
+		this.cosmo[ 'Ode0' ] = 0;
+
 		this.params = {};
 		this.elems = {};
 

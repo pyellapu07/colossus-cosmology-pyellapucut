@@ -66,24 +66,10 @@ body {
 	display: flex;
 }
 
-h1 {
-	font: var(--displaySm);
-	font-weight: 500;
-	margin: 24px 16px;
-	color: var(--gray900);
-}
-
-h2 {
-	font: var(--textMd);
-	font-weight: 500;
-	margin: 0;
-	color: var(--gray700);
-}
-
 #sidebar {
-	width: 300px;
-	max-width: 400px;
-	min-width: 200px;
+	width: 250px;
+	max-width: 350px;
+	min-width: 0;
 	border-right: var(--divider);
 	display: flex;
 	flex-direction: column;
@@ -104,6 +90,7 @@ h2 {
 	flex: 1;
 	background: var(--gray25);
 	margin-top: 32px;
+	overflow: auto;
 }
 
 button {
@@ -204,18 +191,11 @@ button {
 }
 
 .sidebar-model {
-	/* Auto layout */
-
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-
-	/* White */
-
 	background: var(--white);
-	/* Gray/200 */
-
-	border-bottom: 1px solid var(--gray300);
+	border-bottom: var(--divider);
 }
 
 .sidebar-header {
@@ -241,15 +221,16 @@ button {
 	font-weight: 500;
 	color: var(--gray900);
 	border: none;
-	min-width: 100px;
 	padding: 0 4px;
 	border-radius: 2px;
+	max-width: 200px;
 }
 
 .textbox {
+	font: var(--textSm);
 	border: 1px solid var(--gray300);
 	padding: 0 4px;
-	border-radius: 2px;
+	border-radius: 4px;
 	color: var(--gray900);
 	max-width: 100px;
 }
@@ -258,20 +239,8 @@ button {
 	margin-left: auto;
 }
 
-.expand-toggle {
-	width: 20px;
-	height: 20px;
-}
-
 .expand-toggle::before {
-	content: "";
-	display: block;
-	height: 20px;
-	width: 20px;
 	background-image: url(../../dist/chevron-down.svg);
-	background-position: 50% 50%;
-	background-repeat: no-repeat;
-	background-attachment: scroll;
 }
 
 .expand-toggle[data-collapse]::before {
@@ -282,29 +251,35 @@ button {
 	filter: brightness(0) saturate(100%);
 }
 
-.trash {
+.icon-button {
 	width: 20px;
 	height: 20px;
 	cursor: pointer;
 	padding: 0;
-	margin-left: 4px;
 	border: none;
-	background: none;
+	background: none;	
 }
 
-.trash::before {
+.icon-button:before {
 	content: "";
 	display: block;
 	height: 20px;
 	width: 20px;
-	background-image: url(../../dist/x.svg);
 	background-position: 50% 50%;
 	background-repeat: no-repeat;
 	background-attachment: scroll;
 }
 
-.trash:hover::before {
-	filter: brightness(0) saturate(100%);
+.icon-button:hover::before {
+	filter: brightness(0) saturate(100%) invert(22%) sepia(11%) saturate(1273%) hue-rotate(179deg) brightness(101%) contrast(95%);
+}
+
+.trash {
+	margin-left: 4px;
+}
+
+.trash::before {
+	background-image: url(../../dist/x.svg);
 }
 
 .checkbox {
@@ -313,10 +288,12 @@ button {
 	appearance: none;
 	cursor: pointer;
 	outline: none;
+	display: block;
 }
 
 .checkbox::before {
 	display: block;
+	box-sizing: border-box;
 	width: 20px;
 	height: 20px;
 	content: "";
@@ -371,34 +348,52 @@ button {
 	border: 1px solid var(--primary300);
 	box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 0 0 4px var(--primary100);
 	background-image: url(../../dist/chevron-up.svg);
+	backdrop-filter: filter: brightness(0) saturate(100%) invert(32%) sepia(16%) saturate(666%) hue-rotate(176deg) brightness(93%) contrast(92%);;
 }
 
 .sidebar-body {
-	padding: 4px 0 4px 16px;
+	padding: 0 0 0 16px;
 	width: 100%;
 }
 
-.input-container {
-	display: flex;
-	margin-bottom: 4px;
-	gap: 8px;
+.sidebar-body .input-wrapper, .sidebar-body .title-wrapper {
+	padding-bottom: 4px;
 }
 
-.input-container label {
-	min-width: 100px;
+.content .input-wrapper, .content .title-wrapper {
+	padding-bottom: 8px;
+}
+
+.sidebar-body .input-container:last-child .input-wrapper, .sidebar-body .input-container:last-child .title-wrapper {
+	padding-bottom: 0;
+}
+
+.content .input-container:last-child .input-wrapper, .content .input-container:last-child .title-wrapper {
+	padding-bottom: 0;
+}
+
+.input-container .title-wrapper {
+	padding-right: 8px;
+	vertical-align: top;
+}
+
+.input-container .title {
 	font: var(--textSm);
+	font-weight: 500;
+	color: var(--gray700);
 }
 
-label.tooltip:hover, label.tooltip:focus {
+label.tooltip:hover, label.tooltip:focus-visible {
 	text-decoration: underline dotted var(--gray500);
 	text-underline-offset: 4px;
+	outline: none;
 }
 
 .tooltip {
 	position: relative;
 }
 
-.tooltip:hover .tooltip-content, label.tooltip:focus .tooltip-content {
+.tooltip:hover .tooltip-content, label.tooltip:focus-visible .tooltip-content {
 	opacity: 1;
 }
 
@@ -449,7 +444,7 @@ label.tooltip:hover, label.tooltip:focus {
 }
 
 .model-container {
-	border-top: 1px solid var(--gray300);
+	border-top: var(--divider);;
 	overflow: auto;
 }
 
@@ -532,7 +527,9 @@ label.tooltip:hover, label.tooltip:focus {
 
 #header h2 {
 	color: var(--white);
-	font-size: 14px;
+	font: var(--textSm);
+	font-weight: 500;
+	margin: 0;
 }
 
 #header img {
@@ -596,23 +593,23 @@ label.tooltip:hover, label.tooltip:focus {
 }
 
 #tab .header {
-	display: flex;
+	display: inline-flex;
 	white-space: nowrap;
 	background: var(--gray100);
+	min-width: 100%;
 }
 
 #tab .content {
-	background: var(--gray50);
+	background: var(--gray25);
 	padding: 16px;
 }
 
 #tab .content .input-container {
-	display: none;
-	margin-bottom: 8px;
+	visibility: collapse;
 }
 
 #tab .content .input-container[data-selected] {
-	display: flex;
+	visibility: visible;
 }
 
 #tab button {
@@ -624,15 +621,19 @@ label.tooltip:hover, label.tooltip:focus {
 	padding: 10px 16px;
 	font-weight: 500;
 	background: none;
+	transition: .1s background;
+}
+
+#tab button:hover {
+	background: var(--gray200);
 }
 
 #tab button[data-selected] {
 	border: 1px solid var(--gray200);
 	border-bottom: none;
 	background: var(--gray25);
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
-	color: var(--gray900);
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
 }
 
 #tab button[data-selected]:first-child {
@@ -645,6 +646,70 @@ label.tooltip:hover, label.tooltip:focus {
 	border-left: 1px solid transparent;
 }
 
-.radio-container label {
-	margin-left: 4px;
+.fieldset {
+	margin: 0 0 4px 0;
+	border: none;
+	padding: 0;
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.fieldset:last-child {
+	margin: 0;
+}
+
+.radio {
+	padding-left: 4px;
+}
+
+#tab .fieldset label {
+	font: var(--textSm);
+	font-weight: 500;
+	color: var(--gray700);
+	min-width: 40px;
+}
+
+.radio {
+	vertical-align: middle;
+
+	width: 16px;
+	height: 16px;
+	transition: .3s box-shadow, .3s border, .3s background;
+	outline: none;
+
+	/* The native appearance is hidden */
+	appearance: none;
+
+	/* For a circular appearance we need a border-radius. */
+	border-radius: 50%;
+
+	/* The border will be the spacing between the dot and the outer circle */
+	border: 4px solid var(--white);
+
+	/* And by creating a box-shadow with no offset and no blur, we have an outer circle */
+	box-shadow: 0 0 0 1px var(--gray300);
+
+}
+
+.radio:hover {
+	background: var(--primary50);
+	border: 4px solid var(--primary50);
+	box-shadow: 0 0 0 1px var(--primary600);
+}
+
+.radio:focus {
+	box-shadow: 0 0 0 1px var(--primary300), 0px 0px 0px 4px var(--primary100);
+}
+
+.radio:checked {
+	background: var(--primary600);
+	border: 4px solid var(--primary50);
+	box-shadow: 0 0 0 1px var(--primary600);
+}
+
+.radio:checked:focus {
+	background: var(--primary600);
+	border: 4px solid var(--primary50);
+	box-shadow: 0 0 0 1px var(--primary600), 0px 0px 0px 4px var(--primary100);
 }

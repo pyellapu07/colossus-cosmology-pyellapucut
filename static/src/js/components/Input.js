@@ -6,41 +6,81 @@ class Input {
 
 	constructor( label, type, value, def, onChange ) {
 
-		const dom = this.dom = document.createElement( 'div' );
+		const dom = this.dom = document.createElement( 'tr' );
 		dom.classList.add( 'input-container' );
 
+		const titleWrapper = document.createElement( 'td' );
+		titleWrapper.classList.add( 'title-wrapper' );
+		dom.appendChild( titleWrapper );
+
 		const title = document.createElement( 'label' );
+		title.classList.add( 'title' );
 		title.innerHTML = label;
-		dom.appendChild( title );
+		titleWrapper.appendChild( title );
 
 		const tooltip = new Tooltip( title, def );
 
-		const input = type == 'radio' ? [] : document.createElement( 'input' );
-		const inputContainer = document.createElement( 'div' );
+		const input = type == 'radio' || type == 'range' ? [] : document.createElement( 'input' );
+		const inputWrapper = document.createElement( 'td' );
+		inputWrapper.classList.add( 'input-wrapper' );
 
 		const groupId = label + counter ++;
 
 		switch ( type ) {
 
 			case 'bool':
-				if ( value == undefined )
-					value = true;
 				input.type = 'checkbox';
 				input.classList.add( 'checkbox' );
 				input.checked = value;
 				break;
 			case 'float':
-				if ( value == undefined )
-					value = 0;
 				input.type = 'number';
 				input.classList.add( 'textbox' );
 				input.value = value;
+				input.min = 0;
+				break;
+			case 'range':
+				const minFieldset = document.createElement( 'fieldset' );
+				minFieldset.classList.add( 'fieldset' );
+
+				const maxFieldset = document.createElement( 'fieldset' );
+				maxFieldset.classList.add( 'fieldset' );
+
+				const minLabel = document.createElement( 'label' );
+				minLabel.innerText = 'min';
+
+				const maxLabel = document.createElement( 'label' );
+				maxLabel.innerText = 'max';
+
+				const minBox = document.createElement( 'input' );
+				minBox.type = 'number';
+				minBox.classList.add( 'textbox' );
+				minBox.value = value[ 0 ];
+				minBox.min = value[ 1 ];
+
+				const maxBox = document.createElement( 'input' );
+				maxBox.type = 'number';
+				maxBox.classList.add( 'textbox' );
+				maxBox.value = value[ 2 ];
+				maxBox.min = value[ 3 ];
+
+				input.push( minBox );
+				input.push( maxBox );
+
+				minFieldset.appendChild( minLabel );
+				minFieldset.appendChild( minBox );
+				maxFieldset.appendChild( maxLabel );
+				maxFieldset.appendChild( maxBox );
+
+				inputWrapper.appendChild( minFieldset );
+				inputWrapper.appendChild( maxFieldset );
+
 				break;
 			case 'radio':
 				for ( const v of value ) {
 
-					const radioContainer = document.createElement( 'div' );
-					radioContainer.classList.add( 'radio-container' );
+					const fieldset = document.createElement( 'fieldset' );
+					fieldset.classList.add( 'fieldset' );
 
 					const uniqueId = label + v + counter ++;
 
@@ -56,36 +96,34 @@ class Input {
 
 					input.push( radio );
 
-					radioContainer.appendChild( radio );
-					radioContainer.appendChild( secondaryLabel );
+					fieldset.appendChild( radio );
+					fieldset.appendChild( secondaryLabel );
 
-					inputContainer.appendChild( radioContainer );
+					inputWrapper.appendChild( fieldset );
 
 				}
 
 				input[ 0 ].checked = true;
-				dom.appendChild( inputContainer );
-
 				break;
 
 		}
 
-		if ( type === 'radio' ) {
+		if ( input instanceof Array ) {
 
-			for ( const radio of input ) {
+			for ( const i of input ) {
 
-				radio.addEventListener( 'change', onChange );
+				i.addEventListener( 'change', onChange );
 
 			}
-
-			dom.appendChild( inputContainer );
 
 		} else {
 
 			input.addEventListener( 'change', onChange );
-			dom.appendChild( input );
+			inputWrapper.appendChild( input );
 
 		}
+
+		dom.appendChild( inputWrapper );
 
 	}
 
