@@ -55,14 +55,16 @@ class Input {
 				const minBox = document.createElement( 'input' );
 				minBox.type = 'number';
 				minBox.classList.add( 'textbox' );
+				minBox.dataset.type = 'min';
 				minBox.value = value[ 0 ];
 				minBox.min = value[ 1 ];
 
 				const maxBox = document.createElement( 'input' );
 				maxBox.type = 'number';
 				maxBox.classList.add( 'textbox' );
+				maxBox.dataset.type = 'max';
 				maxBox.value = value[ 2 ];
-				maxBox.min = value[ 3 ];
+				maxBox.max = value[ 3 ];
 
 				input.push( minBox );
 				input.push( maxBox );
@@ -92,6 +94,7 @@ class Input {
 					radio.type = 'radio';
 					radio.id = uniqueId;
 					radio.name = groupId;
+					radio.value = v;
 					radio.classList.add( 'radio' );
 
 					input.push( radio );

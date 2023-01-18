@@ -1,12 +1,13 @@
+import { Cosmology } from './Cosmology.js';
 import { CosmologyFormat } from './Cosmology.js';
 import { Input } from './Input.js';
 
 class Model {
 
-	constructor( body, cosmo ) {
+	constructor( type, data ) {
 
-		this.body = body;
-		this.cosmo = cosmo;
+		this.cosmo = Cosmology[ type ];
+		this.data = data;
 
 		this.cosmo[ 'relspecies' ] = true;
 		this.cosmo[ 'Ode0' ] = 0;
@@ -34,7 +35,7 @@ class Model {
 
 		const onChange = ( event ) => {
 
-			this.updateParams( name, type == 'bool' ? event.target.checked : event.target.value, dependencies );
+			this.updateParams( name, type == 'bool' ? event.target.checked : parseFloat( event.target.value ), dependencies );
 
 		};
 
@@ -43,13 +44,12 @@ class Model {
 		this.params[ name ] = value;
 
 		this.elems[ name ] = [ container, dependencies ];
-		this.body.appendChild( container );
 
 	}
 
 	updateParams( name, value, dependencies ) {
 
-		this.params[ name ] = event.target.checked;
+		this.params[ name ] = value;
 
 		if ( dependencies != undefined ) {
 
@@ -60,6 +60,8 @@ class Model {
 			}
 
 		}
+
+		this.data.needsUpdate();
 
 	}
 

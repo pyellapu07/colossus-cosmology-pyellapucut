@@ -8,13 +8,14 @@ const infoContent = [
 	[ '© 2014-2022 Benedikt Diemer', null ]
 ];
 
-function Header() {
+function Header( main ) {
 
 	const dom = this.dom = document.createElement( 'div' );
 	dom.id = 'header';
 
 	const logo = document.createElement( 'img' );
 	logo.src = 'static/dist/logo.svg';
+	logo.id = 'logo';
 	dom.appendChild( logo );
 
 	const title = document.createElement( 'h2' );
@@ -53,7 +54,25 @@ function Header() {
 	}
 
 	infoContainer.appendChild( dropdown );
+
 	dom.appendChild( infoContainer );
+
+	// right side
+	const rightAlign = document.createElement( 'div' );
+	rightAlign.classList.add( 'right-align' );
+
+	const runModel = document.createElement( 'button' );
+	runModel.innerText = 'Run model';
+	runModel.classList.add( 'run-model' );
+	runModel.addEventListener( 'click', () => {
+
+		main.output.runModel();
+
+	} );
+
+	rightAlign.appendChild( runModel );
+
+	dom.appendChild( rightAlign );
 
 }
 

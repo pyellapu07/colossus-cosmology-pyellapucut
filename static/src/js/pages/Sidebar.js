@@ -1,16 +1,12 @@
 import { SidebarModel } from './Sidebar.Model.js';
 import { Cosmology } from '../components/Cosmology.js';
 
-function Sidebar() {
+function Sidebar( main ) {
 
 	const dom = this.dom = document.createElement( 'div' );
 	dom.id = 'sidebar';
 
-	const models = this.models = [];
-
-	// const title = document.createElement('h1');
-	// title.innerText = 'Cosmologies';
-	// dom.appendChild(title);
+	const data = main.data;
 
 	const selectModel = document.createElement( 'select' );
 	selectModel.classList.add( 'select' );
@@ -39,8 +35,11 @@ function Sidebar() {
 	// add sidebar model
 	addButton.addEventListener( 'click', () => {
 
-		const sidebarModel = new SidebarModel( models, selectModel.value );
-		models.push( sidebarModel.model.params );
+		const sidebarModel = new SidebarModel( data, selectModel.value );
+		const params = sidebarModel.model.params;
+
+		data.models.push( params );
+		data.needsUpdate();
 
 		modelContainer.appendChild( sidebarModel.dom );
 

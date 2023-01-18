@@ -1,7 +1,7 @@
 const Tabs = {
 	'Basic': {
 		input: {
-			'redshift (z)': [ 'float', 0 ],
+			'Redshift (z)': [ 'float', 0 ],
 		},
 		output: {
 
@@ -9,7 +9,7 @@ const Tabs = {
 	},
 	'Time': {
 		input: {
-			'function': [ 'radio', [ 'redshift (z)', 'time (t)', 'scale factor (a)' ]],
+			'Function': [ 'radio', [ 'redshift (z)', 'time (t)', 'scale factor (a)' ]],
 		},
 		output: {
 
@@ -25,8 +25,8 @@ const Tabs = {
 	},
 	'Content': {
 		input: {
-			'function': [ 'radio', [ 'redshift (z)', 'time (t)', 'scale factor (a)' ]],
-			'plot layout': [ 'radio', [ 'combined', 'seperate' ]]
+			'Function': [ 'radio', [ 'redshift (z)', 'time (t)', 'scale factor (a)' ]],
+			'Plot layout': [ 'radio', [ 'combined', 'seperate' ]]
 		},
 		output: {
 
@@ -34,8 +34,8 @@ const Tabs = {
 	},
 	'Power Spectrum': {
 		input: {
-			'model': [ 'radio', [ 'eisentein_98', 'eisenstein98_zb', 'sugiyama95', 'camb' ]],
-			'wavenumber (k)': [ 'range', [ 0.25, 0, 0.75, 1 ]] // [minDefault, min, maxDefault, max]
+			'Model': [ 'radio', [ 'eisentein_98', 'eisenstein98_zb', 'sugiyama95', 'camb' ]],
+			'Wavenumber (k)': [ 'range', [ 0.25, 0, 0.75, 1 ]] // [minDefault, min, maxDefault, max]
 		},
 		output: {
 
@@ -43,8 +43,8 @@ const Tabs = {
 	},
 	'Correlation': {
 		input: {
-			'model': [ 'radio', [ 'eisentein_98', 'eisenstein98_zb', 'sugiyama95', 'camb' ]],
-			'radius (R)': [ 'range', [ 0.25, 0, 0.75, 1 ]]
+			'Model': [ 'radio', [ 'eisentein_98', 'eisenstein98_zb', 'sugiyama95', 'camb' ]],
+			'Radius (R)': [ 'range', [ 0.25, 0, 0.75, 1 ]]
 		},
 		output: {
 
@@ -52,8 +52,8 @@ const Tabs = {
 	},
 	'Peak Height': {
 		input: {
-			'model': [ 'radio', [ 'eisentein_98', 'eisenstein98_zb', 'sugiyama95', 'camb' ]],
-			'halo mass (M)': [ 'range', [ 0.25, 0, 0.75, 1 ]],
+			'Model': [ 'radio', [ 'eisentein_98', 'eisenstein98_zb', 'sugiyama95', 'camb' ]],
+			'Halo mass (M)': [ 'range', [ 0.25, 0, 0.75, 1 ]],
 		},
 		output: {
 
