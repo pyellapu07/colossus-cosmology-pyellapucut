@@ -1,116 +1,122 @@
 import { Tabs } from '../components/Tabs.js';
 import { Input } from '../components/Input.js';
 
-function OutputTab( data ) {
+class OutputTab {
 
-	const tab = this.dom = document.createElement( 'div' );
-	tab.id = 'tab';
 
-	const header = document.createElement( 'div' );
-	header.classList.add( 'header' );
-	tab.appendChild( header );
+	constructor( data ) {
 
-	const content = document.createElement( 'table' );
-	content.classList.add( 'content' );
-	tab.appendChild( content );
+		const tab = this.dom = document.createElement( 'div' );
+		tab.id = 'tab';
 
-	let activeTab;
+		const header = document.createElement( 'div' );
+		header.classList.add( 'header' );
+		tab.appendChild( header );
 
-	for ( const name in Tabs ) {
+		const content = document.createElement( 'table' );
+		content.classList.add( 'content' );
+		tab.appendChild( content );
 
-		const tabContainer = {
-			button: undefined,
-			inputs: [],
-			data: {}
-		};
+		let activeTab;
 
-		// header tabs
-		const button = document.createElement( 'button' );
-		button.innerText = name;
-		tabContainer.button = button;
-		header.appendChild( button );
+		for ( const name in Tabs ) {
 
-		// content
-		const inputs = Tabs[ name ].input;
+			const tabContainer = {
+				button: undefined,
+				inputs: [],
+				data: {}
+			};
 
-		for ( const label in inputs ) {
+			// header tabs
+			const button = document.createElement( 'button' );
+			button.innerText = name;
+			tabContainer.button = button;
+			header.appendChild( button );
 
-			const type = inputs[ label ][ 0 ];
-			const value = inputs[ label ][ 1 ];
+			// content
+			for ( const input of Tabs[ name ] ) {
 
-			switch ( type ) {
-
-				case 'float':
-					tabContainer.data[ label ] = value;
-					break;
-				case 'radio':
-					tabContainer.data[ label ] = value[ 0 ];
-					break;
-				case 'range':
-					tabContainer.data[ label ] = [ value[ 0 ], value[ 2 ] ];
-					break;
-
-			}
-
-			const elem = new Input( label, type, value, 'UNDEFINED', ( event ) => {
+				const label = input.label;
+				const type = input.type;
+				const value = input.value;
 
 				switch ( type ) {
 
 					case 'float':
-						tabContainer.data[ label ] = parseFloat( event.target.value );
+						tabContainer.data[ label ] = value.default;
+						break;
 					case 'radio':
-						tabContainer.data[ label ] = event.target.value;
+						tabContainer.data[ label ] = value[ 0 ];
 						break;
 					case 'range':
-						tabContainer.data[ label ][ event.target.dataset.type == 'min' ? 0 : 1 ] = parseFloat( event.target.value );
+						tabContainer.data[ label ] = [ value.default[ 0 ], value.default[ 1 ] ];
+						break;
 
 				}
 
+				const elem = new Input( label, type, value, 'UNDEFINED', ( event ) => {
+
+					switch ( type ) {
+
+						case 'float':
+							tabContainer.data[ label ] = parseFloat( event.target.value );
+							break;
+						case 'radio':
+							tabContainer.data[ label ] = event.target.value;
+							break;
+						case 'range':
+							tabContainer.data[ label ][ event.target.dataset.type == 'min' ? 0 : 1 ] = parseFloat( event.target.value );
+							break;
+
+					}
+
+					data.needsUpdate();
+
+				} );
+
+				content.appendChild( elem.dom );
+				tabContainer.inputs.push( elem.dom );
+
+			}
+
+			function onTabSwitch() {
+
+				if ( activeTab != undefined ) {
+
+					delete activeTab.button.dataset.selected;
+
+					for ( const input of activeTab.inputs ) {
+
+						delete input.dataset.selected;
+
+					}
+
+				}
+
+				button.dataset.selected = '';
+				activeTab = tabContainer;
+
+				for ( const input of tabContainer.inputs ) {
+
+					input.dataset.selected = '';
+
+				}
+
+				data.tab = {
+					'name': name,
+					'inputs': tabContainer.data,
+				};
 				data.needsUpdate();
 
-			} );
-
-			content.appendChild( elem.dom );
-			tabContainer.inputs.push( elem.dom );
-
-		}
-
-		function onTabSwitch() {
-
-			if ( activeTab != undefined ) {
-
-				delete activeTab.button.dataset.selected;
-
-				for ( const input of activeTab.inputs ) {
-
-					delete input.dataset.selected;
-
-				}
-
 			}
 
-			button.dataset.selected = '';
-			activeTab = tabContainer;
+			// switching tabs
+			button.addEventListener( 'click', onTabSwitch );
 
-			for ( const input of tabContainer.inputs ) {
-
-				input.dataset.selected = '';
-
-			}
-
-			data.tab = {
-				'name': name,
-				'inputs': tabContainer.data,
-			};
-			data.needsUpdate();
+			if ( name == 'Basic' )
+				onTabSwitch();
 
 		}
-
-		// switching tabs
-		button.addEventListener( 'click', onTabSwitch );
-
-		if ( name == 'Basic' )
-			onTabSwitch();
 
 	}
 

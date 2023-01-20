@@ -49,6 +49,7 @@
 	--displaySm: 30px/38px Inter;
 	--textMd: 16px/24px Inter;
 	--textSm: 14px/20px Inter;
+	--textXs: 12px/18px Inter;
 
 	--shadowMd: 0 4px 8px -2px rgba(16, 24, 40, 0.1), 0 2px 4px -2px rgba(16, 24, 40, 0.06);
 }
@@ -91,8 +92,8 @@ td {
 
 #output {
 	flex: 1;
-	background: var(--gray25);
 	overflow: auto;
+	background: var(--gray25);
 }
 
 button {
@@ -453,48 +454,6 @@ label.tooltip:hover, label.tooltip:focus-visible {
 	background: var(--gray400);
 }
 
-#table {
-	/* Content */
-
-
-	/* Auto layout */
-
-	display: flex;
-	flex-direction: row;
-	align-items: flex-start;
-	padding: 0;
-	margin: 0 16px;
-
-	/* White */
-
-	background: var(--white);
-
-	/* Inside auto layout */
-
-	flex: none;
-	order: 0;
-	align-self: stretch;
-	flex-grow: 0;
-}
-
-.column {
-	/* Column */
-
-
-	/* Auto layout */
-
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	padding: 0;
-
-	/* Inside auto layout */
-
-	flex: none;
-	order: 0;
-	flex-grow: 1;
-}
-
 #header {
 	display: flex;
 	position: absolute;
@@ -602,6 +561,8 @@ label.tooltip:hover, label.tooltip:focus-visible {
 
 #tab {
 	margin: 0 auto;
+	display: block;
+	border-bottom: var(--divider);
 }
 
 #tab .header {
@@ -612,15 +573,15 @@ label.tooltip:hover, label.tooltip:focus-visible {
 }
 
 #tab .content {
-	background: var(--gray25);
-	padding: 16px;
+	padding: 16px 16px 8px;
+	display: block;
 }
 
-#tab .content .input-container {
+#tab .input-container {
 	visibility: collapse;
 }
 
-#tab .content .input-container[data-selected] {
+#tab .input-container[data-selected] {
 	visibility: visible;
 }
 
@@ -724,4 +685,46 @@ label.tooltip:hover, label.tooltip:focus-visible {
 	background: var(--primary600);
 	border: 4px solid var(--primary50);
 	box-shadow: 0 0 0 1px var(--primary600), 0px 0px 0px 4px var(--primary100);
+}
+
+#result {
+	overflow: auto;
+	padding: 16px;
+}
+
+#result table {
+
+	border-spacing:0;
+	border-collapse: collapse;
+	font: var(--textSm);
+
+}
+
+#result tr td {
+	
+}
+
+#result td, #result th {
+	padding: 8px;
+	border: var(--divider);
+}
+
+#result tr:first-child td, #result th {
+	text-align: left;
+	color: var(--gray700);
+	font-weight: 500;
+}
+
+#result th {
+	background: var(--gray100);
+	text-transform: uppercase;
+	font: var(--textXs);
+}
+
+#result tr:first-child td {
+	border-top: none;
+	border: none;
+	font: var(--textSm);
+	font-weight: 500;
+/*	background: var(--gray200);*/
 }

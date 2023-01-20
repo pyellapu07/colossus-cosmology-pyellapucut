@@ -1,64 +1,83 @@
 const Tabs = {
-	'Basic': {
-		input: {
-			'Redshift (z)': [ 'float', 0 ],
+	'Basic': [
+		{
+			label: 'Redshift (z)',
+			type: 'float',
+			value: {
+				default: 0,
+				min: 0,
+				max: 200
+			}
 		},
-		output: {
-
-		}
-	},
-	'Time': {
-		input: {
-			'Function': [ 'radio', [ 'redshift (z)', 'time (t)', 'scale factor (a)' ]],
+	],
+	'Time': [
+		{
+			label: 'Function',
+			type: 'radio',
+			value: [ 'Redshift (z)', 'Time (t)', 'Scale factor (a)' ]
 		},
-		output: {
-
-		}
-	},
-	'Distance': {
-		input: {
-
+	],
+	'Distance': [],
+	'Content': [
+		{
+			label: 'Function',
+			type: 'radio',
+			value: [ 'Redshift (z)', 'Time (t)', 'Scale factor (a)' ]
 		},
-		output: {
-
-		}
-	},
-	'Content': {
-		input: {
-			'Function': [ 'radio', [ 'redshift (z)', 'time (t)', 'scale factor (a)' ]],
-			'Plot layout': [ 'radio', [ 'combined', 'seperate' ]]
+		{
+			label: 'Plot layout',
+			type: 'radio',
+			value: [ 'Combined', 'Seperate' ]
 		},
-		output: {
-
-		}
-	},
-	'Power Spectrum': {
-		input: {
-			'Model': [ 'radio', [ 'eisentein_98', 'eisenstein98_zb', 'sugiyama95', 'camb' ]],
-			'Wavenumber (k)': [ 'range', [ 0.25, 0, 0.75, 1 ]] // [minDefault, min, maxDefault, max]
+	],
+	'Power Spectrum': [
+		{
+			label: 'Model',
+			type: 'radio',
+			value: [ 'eisentein_98', 'eisenstein98_zb', 'sugiyama95', 'camb' ]
 		},
-		output: {
-
+		{
+			label: 'Wavenumber (k)',
+			type: 'range',
+			value: {
+				default: [ 0.25, 0.75 ],
+				min: 0,
+				max: 1
+			},
 		}
-	},
-	'Correlation': {
-		input: {
-			'Model': [ 'radio', [ 'eisentein_98', 'eisenstein98_zb', 'sugiyama95', 'camb' ]],
-			'Radius (R)': [ 'range', [ 0.25, 0, 0.75, 1 ]]
+	],
+	'Correlation': [
+		{
+			label: 'Model',
+			type: 'radio',
+			value: [ 'eisentein_98', 'eisenstein98_zb', 'sugiyama95', 'camb' ]
 		},
-		output: {
-
+		{
+			label: 'Radius (R)',
+			type: 'range',
+			value: {
+				default: [ 0.25, 0.75 ],
+				min: 0,
+				max: 1
+			},
 		}
-	},
-	'Peak Height': {
-		input: {
-			'Model': [ 'radio', [ 'eisentein_98', 'eisenstein98_zb', 'sugiyama95', 'camb' ]],
-			'Halo mass (M)': [ 'range', [ 0.25, 0, 0.75, 1 ]],
+	],
+	'Peak Height': [
+		{
+			label: 'Model',
+			type: 'radio',
+			value: [ 'eisentein_98', 'eisenstein98_zb', 'sugiyama95', 'camb' ]
 		},
-		output: {
-
-		}
-	},
+		{
+			label: 'Halo mass (M)',
+			type: 'range',
+			value: {
+				default: [ 0.25, 0.75 ],
+				min: 0,
+				max: 1
+			},
+		},
+	],
 };
 
 export { Tabs };

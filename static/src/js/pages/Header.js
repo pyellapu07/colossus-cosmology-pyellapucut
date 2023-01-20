@@ -8,71 +8,77 @@ const infoContent = [
 	[ '© 2014-2022 Benedikt Diemer', null ]
 ];
 
-function Header( main ) {
+class Header {
 
-	const dom = this.dom = document.createElement( 'div' );
-	dom.id = 'header';
+	constructor( main ) {
 
-	const logo = document.createElement( 'img' );
-	logo.src = 'static/dist/logo.svg';
-	logo.id = 'logo';
-	dom.appendChild( logo );
+		const dom = this.dom = document.createElement( 'div' );
+		dom.id = 'header';
 
-	const title = document.createElement( 'h2' );
-	title.innerText = 'Colossus Web Calculator';
-	dom.appendChild( title );
+		const logo = document.createElement( 'img' );
+		logo.src = 'static/dist/logo.svg';
+		logo.id = 'logo';
+		dom.appendChild( logo );
 
-	const infoContainer = document.createElement( 'div' );
-	infoContainer.classList.add( 'dropdown' );
+		const title = document.createElement( 'h2' );
+		title.innerText = 'Colossus Web Calculator';
+		dom.appendChild( title );
 
-	const info = document.createElement( 'div' );
-	info.id = 'info';
-	infoContainer.appendChild( info );
+		// info button
 
-	const infoTooltip = new Tooltip( info, 'Information', true, true );
+		const infoContainer = document.createElement( 'div' );
+		infoContainer.classList.add( 'dropdown' );
 
-	const dropdown = document.createElement( 'div' );
-	dropdown.classList.add( 'options' );
+		const info = document.createElement( 'div' );
+		info.id = 'info';
+		infoContainer.appendChild( info );
 
-	for ( const content of infoContent ) {
+		const infoTooltip = new Tooltip( info, 'Information', true, true );
 
-		const isLink = content[ 1 ] != null;
-		const elem = document.createElement( isLink ? 'a' : 'span' );
-		elem.classList.add( 'option' );
-		elem.innerText = content[ 0 ];
-		elem.tabIndex = 0;
+		const dropdown = document.createElement( 'div' );
+		dropdown.classList.add( 'options' );
 
-		if ( isLink ) {
+		for ( const content of infoContent ) {
 
-			elem.href = content[ 1 ];
-			elem.target = '_blank';
+			const isLink = content[ 1 ] != null;
+			const elem = document.createElement( isLink ? 'a' : 'span' );
+			elem.classList.add( 'option' );
+			elem.innerText = content[ 0 ];
+			elem.tabIndex = 0;
+
+			if ( isLink ) {
+
+				elem.href = content[ 1 ];
+				elem.target = '_blank';
+
+			}
+
+			dropdown.appendChild( elem );
 
 		}
 
-		dropdown.appendChild( elem );
+		infoContainer.appendChild( dropdown );
+
+		dom.appendChild( infoContainer );
+
+		// right side
+		const rightAlign = document.createElement( 'div' );
+		rightAlign.classList.add( 'right-align' );
+
+		const runModel = document.createElement( 'button' );
+		runModel.innerText = 'Run model';
+		runModel.classList.add( 'run-model' );
+		runModel.addEventListener( 'click', () => {
+
+			main.output.runModel();
+
+		} );
+
+		rightAlign.appendChild( runModel );
+
+		dom.appendChild( rightAlign );
 
 	}
-
-	infoContainer.appendChild( dropdown );
-
-	dom.appendChild( infoContainer );
-
-	// right side
-	const rightAlign = document.createElement( 'div' );
-	rightAlign.classList.add( 'right-align' );
-
-	const runModel = document.createElement( 'button' );
-	runModel.innerText = 'Run model';
-	runModel.classList.add( 'run-model' );
-	runModel.addEventListener( 'click', () => {
-
-		main.output.runModel();
-
-	} );
-
-	rightAlign.appendChild( runModel );
-
-	dom.appendChild( rightAlign );
 
 }
 

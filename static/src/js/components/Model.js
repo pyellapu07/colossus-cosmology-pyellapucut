@@ -31,15 +31,20 @@ class Model {
 
 	createOption( name, type, dependencies ) {
 
-		let value = this.cosmo[ name ];
-
 		const onChange = ( event ) => {
 
 			this.updateParams( name, type == 'bool' ? event.target.checked : parseFloat( event.target.value ), dependencies );
 
 		};
 
-		const container = new Input( CosmologyFormat[ name ].text, type, value, CosmologyFormat[ name ].def, onChange ).dom;
+		const value = this.cosmo[ name ];
+		const formattedValue = {
+			default: value,
+			min: 0,
+			max: Infinity
+		};
+
+		const container = new Input( CosmologyFormat[ name ].text, type, formattedValue, CosmologyFormat[ name ].def, onChange ).dom;
 
 		this.params[ name ] = value;
 

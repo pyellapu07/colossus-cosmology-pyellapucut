@@ -1,4 +1,5 @@
 import { OutputTab } from './Output.Tab.js';
+import { OutputResult } from './Output.Result.js';
 
 class Output {
 
@@ -12,23 +13,20 @@ class Output {
 		const tab = new OutputTab( main.data );
 		dom.appendChild( tab.dom );
 
-		const table = document.createElement( 'div' );
-		table.id = 'table';
-		dom.appendChild( table );
+		const result = this.result = new OutputResult();
+		dom.appendChild( result.dom );
 
 	}
 
 	runModel() {
 
-		this.request( 'output', this.data, ( responseData ) => {
-
-			console.log( responseData );
-
-		} );
+		this.request( this.data, ( response ) => this.result.visualize( response ) );
 
 	}
 
-	request( url, data, func ) {
+	request( data, func ) {
+
+		const url = data.tab.name;
 
 		const xhr = new XMLHttpRequest();
 		xhr.open( 'POST', '/' + url, true );
@@ -37,7 +35,10 @@ class Output {
 
 			if ( xhr.readyState == 4 && xhr.status == 200 ) {
 
-				func( JSON.parse( xhr.responseText ) );
+				let response = xhr.responseText;
+				response = response.replace( /\bNaN\b/g, "null" );
+
+				func( JSON.parse( response ) );
 
 			}
 

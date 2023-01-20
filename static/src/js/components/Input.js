@@ -36,8 +36,9 @@ class Input {
 			case 'float':
 				input.type = 'number';
 				input.classList.add( 'textbox' );
-				input.value = value;
-				input.min = 0;
+				input.value = value.default;
+				input.min = value.min;
+				input.max = value.max;
 				break;
 			case 'range':
 				const minFieldset = document.createElement( 'fieldset' );
@@ -56,15 +57,15 @@ class Input {
 				minBox.type = 'number';
 				minBox.classList.add( 'textbox' );
 				minBox.dataset.type = 'min';
-				minBox.value = value[ 0 ];
-				minBox.min = value[ 1 ];
+				minBox.value = value.default[ 0 ];
+				minBox.min = value.min;
 
 				const maxBox = document.createElement( 'input' );
 				maxBox.type = 'number';
 				maxBox.classList.add( 'textbox' );
 				maxBox.dataset.type = 'max';
-				maxBox.value = value[ 2 ];
-				maxBox.max = value[ 3 ];
+				maxBox.value = value.default[ 1 ];
+				maxBox.max = value.max;
 
 				input.push( minBox );
 				input.push( maxBox );
