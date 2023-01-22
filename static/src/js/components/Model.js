@@ -1,12 +1,12 @@
-import { Cosmology } from './Cosmology.js';
-import { CosmologyFormat } from './Cosmology.js';
+import cosmology from '../../config/cosmology.json' assert { type: "json" };
+import cosmologyFormat from '../../config/cosmologyFormat.json' assert { type: "json" };
 import { Input } from './Input.js';
 
 class Model {
 
 	constructor( type, data ) {
 
-		this.cosmo = Cosmology[ type ];
+		this.cosmo = cosmology[ type ];
 		this.data = data;
 
 		this.cosmo[ 'relspecies' ] = true;
@@ -34,6 +34,7 @@ class Model {
 		const onChange = ( event ) => {
 
 			this.updateParams( name, type == 'bool' ? event.target.checked : parseFloat( event.target.value ), dependencies );
+			this.data.needsUpdate();
 
 		};
 
@@ -44,7 +45,7 @@ class Model {
 			max: Infinity
 		};
 
-		const container = new Input( CosmologyFormat[ name ].text, type, formattedValue, CosmologyFormat[ name ].def, onChange ).dom;
+		const container = new Input( cosmologyFormat[ name ].text, type, formattedValue, cosmologyFormat[ name ].def, onChange ).dom;
 
 		this.params[ name ] = value;
 
@@ -65,8 +66,6 @@ class Model {
 			}
 
 		}
-
-		this.data.needsUpdate();
 
 	}
 

@@ -1,5 +1,5 @@
 import { SidebarModel } from './Sidebar.Model.js';
-import { Cosmology } from '../components/Cosmology.js';
+import cosmology from '../../config/cosmology.json' assert { type: "json" }
 
 class Sidebar {
 
@@ -12,7 +12,7 @@ class Sidebar {
 
 		const selectModel = document.createElement( 'select' );
 		selectModel.classList.add( 'select' );
-		for ( const model in Cosmology ) {
+		for ( const model in cosmology ) {
 
 			const option = document.createElement( 'option' );
 			option.value = model;

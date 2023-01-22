@@ -65,16 +65,16 @@ class Header {
 		const rightAlign = document.createElement( 'div' );
 		rightAlign.classList.add( 'right-align' );
 
-		const runModel = document.createElement( 'button' );
-		runModel.innerText = 'Run model';
-		runModel.classList.add( 'run-model' );
-		runModel.addEventListener( 'click', () => {
+		// const runModel = document.createElement( 'button' );
+		// runModel.innerText = 'Update';
+		// runModel.classList.add( 'run-model' );
+		// runModel.addEventListener( 'click', () => {
 
-			main.output.runModel();
+		// 	main.output.runModel();
 
-		} );
+		// } );
 
-		rightAlign.appendChild( runModel );
+		// rightAlign.appendChild( runModel );
 
 		dom.appendChild( rightAlign );
 

@@ -1,4 +1,4 @@
-import { Tabs } from '../components/Tabs.js';
+import tabs from '../../config/tabs.json' assert { type: "json" }
 import { Input } from '../components/Input.js';
 
 class OutputTab {
@@ -19,7 +19,7 @@ class OutputTab {
 
 		let activeTab;
 
-		for ( const name in Tabs ) {
+		for ( const name in tabs ) {
 
 			const tabContainer = {
 				button: undefined,
@@ -34,7 +34,7 @@ class OutputTab {
 			header.appendChild( button );
 
 			// content
-			for ( const input of Tabs[ name ] ) {
+			for ( const input of tabs[ name ] ) {
 
 				const label = input.label;
 				const type = input.type;
@@ -106,12 +106,14 @@ class OutputTab {
 					'name': name,
 					'inputs': tabContainer.data,
 				};
-				data.needsUpdate();
 
 			}
 
 			// switching tabs
-			button.addEventListener( 'click', onTabSwitch );
+			button.addEventListener( 'click', () => {
+				onTabSwitch();
+				data.needsUpdate();
+			} );
 
 			if ( name == 'Basic' )
 				onTabSwitch();

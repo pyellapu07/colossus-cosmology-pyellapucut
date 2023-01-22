@@ -1,7 +1,8 @@
 class Data {
 
-	constructor() {
+	constructor( main ) {
 
+		this.main = main;
 		this.models = [];
 		this.tab = undefined;
 
@@ -10,6 +11,18 @@ class Data {
 	needsUpdate() {
 
 		console.log( 'Data updated!', this );
+
+		if ( this.main.output != undefined )
+			this.main.output.runModel();
+
+	}
+
+	toJSON() {
+
+		return {
+			models: this.models,
+			tab: this.tab
+		};
 
 	}
 

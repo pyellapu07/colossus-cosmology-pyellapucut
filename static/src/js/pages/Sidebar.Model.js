@@ -37,6 +37,8 @@ class SidebarModel {
 
 			this.resizeTitle.call( headerTitle );
 
+			this.data.needsUpdate();
+
 		} );
 
 		this.resizeTitle.call( headerTitle );
@@ -97,9 +99,9 @@ class SidebarModel {
 
 		} );
 
-		trash.addEventListener( 'click', function () {
+		trash.addEventListener( 'click', () => {
 
-			data.models.splice( data.models.indexOf( this ), 1 );
+			data.models.splice( data.models.indexOf( this.model.params ), 1 );
 			data.needsUpdate();
 
 			dom.remove();
@@ -153,7 +155,6 @@ class SidebarModel {
 		names.push( uniqueName );
 
 		this.model.params.name = uniqueName;
-		this.data.needsUpdate();
 
 		return uniqueName;
 

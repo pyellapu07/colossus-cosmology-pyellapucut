@@ -55,11 +55,12 @@
 }
 
 * {
-     box-sizing: border-box 
+     box-sizing: border-box;
  }
 
 html, body {
-	height: 100%;
+	width: 100vw;
+	height: 100vh;
 	font-family: Inter;
 }
 
@@ -92,8 +93,10 @@ td {
 
 #output {
 	flex: 1;
-	overflow: auto;
 	background: var(--gray25);
+	display: flex;
+	flex-direction: column;
+	overflow: auto;
 }
 
 button {
@@ -381,7 +384,7 @@ label.tooltip:hover, label.tooltip:focus-visible {
 	padding: 12px;
 	background: var(--gray900);
 	z-index: 1;
-	transform: translateY(calc(-1 * (100% + 26px)));
+	transform: translateY(calc(-1 * (100% + 8px)));
 	color: var(--gray100);
 	border-radius: 4px;
 	width: max-content;
@@ -560,7 +563,7 @@ label.tooltip:hover, label.tooltip:focus-visible {
 }
 
 #tab {
-	margin: 0 auto;
+	margin: 0;
 	display: block;
 	border-bottom: var(--divider);
 }
@@ -689,13 +692,14 @@ label.tooltip:hover, label.tooltip:focus-visible {
 
 #result {
 	overflow: auto;
-	padding: 16px;
+	height: 100%;
+	width: 100%;
 }
 
 #result table {
-
+	padding: 16px;
 	border-spacing:0;
-	border-collapse: collapse;
+	border-collapse: separate;
 	font: var(--textSm);
 
 }
@@ -725,6 +729,11 @@ label.tooltip:hover, label.tooltip:focus-visible {
 	border-top: none;
 	border: none;
 	font: var(--textSm);
-	font-weight: 500;
-/*	background: var(--gray200);*/
+	background: var(--gray25);
+}
+
+#result tr:first-child {
+	position: sticky;
+	top: 0;
+	z-index: 1;
 }

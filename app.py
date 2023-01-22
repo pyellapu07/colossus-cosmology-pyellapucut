@@ -1,12 +1,19 @@
+import json
+from math import log10, floor
 from flask import Flask, render_template, request, jsonify
 from colossus.cosmology import cosmology
-from numpy import ndarray
+from numpy import ndarray, isnan
 
 app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
+
+def round_sig(x, sig=4):
+    if x == 0:
+        return x
+    return round(x, sig-int(floor(log10(abs(x))))-1)
 
 '''
 (!) responses are returned as an array of tables or plots
@@ -24,41 +31,8 @@ plot data structure:
 
 '''
 
-basicTable = {
-    'Time and expansion': {
-        'Age': 'age',
-        'Lookback time': 'lookbackTime',
-        'Hubble parameter': 'Hz',
-        'Linear growth factor': 'growthFactor'
-    },
-    'Distances': {
-        'Comoving distance': 'comovingDistance',
-        'Luminosity distance': 'luminosityDistance',
-        'Angular diameter distance': 'angularDiameterDistance',
-        'Distance modulus': 'distanceModulus',
-    },
-    'Contents of the Universe': {
-        'Critical density': 'rho_c',
-        'Matter density': 'rho_m',
-        'Baryon density': 'rho_b',
-        'Dark energy density': 'rho_de',
-        # if relativistic
-        'Relativistic density': 'rho_r',
-        'Neutrino density': 'rho_nu',
-        'Photon density': 'rho_gamma',
-        # end
-        # Fractional
-        'Fractional matter density': 'Om',
-        'Fractional baryon density': 'Ob',
-        'Fractional dark energy density': 'Ode',
-        'Fractional curvature density': 'Ok',
-        # if relativistic
-        'Fractional relativistic density': 'Or',
-        'Fractional neutrinos density': 'Onu',
-        'Fractional photon density': 'Ogamma',
-        #end
-    },
-}
+with open('static/src/config/basicTable.json') as json_data:
+    basicTable = json.load(json_data)
 
 @app.route('/Basic', methods=['POST'])
 def basic():
@@ -91,12 +65,20 @@ def basic():
 
         for func in section:
             row = [func]
-            function = section[func]
+            prop = section[func]
 
             for cosmo in cosmos:
-                result = getattr(cosmo, function)(redshift)
-                if type(result) is ndarray:
-                    result = result.tolist()
+                result = getattr(cosmo, prop["function"])(redshift)
+
+                print(type(result))
+
+                if isnan(result):
+                    result = "null"
+                else:
+                    if type(result) is ndarray:
+                        result = result.tolist()
+                    print(result)
+                    result = round_sig(result,4)
 
                 row.append(result)
 

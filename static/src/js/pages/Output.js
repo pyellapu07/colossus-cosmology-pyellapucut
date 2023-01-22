@@ -20,7 +20,11 @@ class Output {
 
 	runModel() {
 
-		this.request( this.data, ( response ) => this.result.visualize( response ) );
+		this.request( this.data, ( response ) => {
+
+			this.result.visualize( response );
+
+		} );
 
 	}
 
@@ -36,7 +40,6 @@ class Output {
 			if ( xhr.readyState == 4 && xhr.status == 200 ) {
 
 				let response = xhr.responseText;
-				response = response.replace( /\bNaN\b/g, "null" );
 
 				func( JSON.parse( response ) );
 

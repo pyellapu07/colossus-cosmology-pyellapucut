@@ -1,3 +1,6 @@
+import basicTable from '../../config/basicTable.json' assert { type: "json" };
+import { Tooltip } from '../components/Tooltip.js';
+
 class OutputResult {
 
 	constructor() {
@@ -7,9 +10,13 @@ class OutputResult {
 
 	}
 
+	clear() {
+		this.dom.innerHTML = '';
+	}
+
 	visualize( responseData ) {
 
-		this.dom.innerHTML = '';
+		this.clear();
 
 		for ( const data of responseData ) {
 
@@ -28,12 +35,21 @@ class OutputResult {
 	tabulate( csv ) {
 
 		const table = document.createElement( 'table' );
+		let currentSection;
 
 		for ( const row of csv ) {
 
 			const tr = document.createElement( 'tr' );
 
-			if ( row.length > 1 ) {
+			if ( row[0] in basicTable ) {
+
+				const th = document.createElement( 'th' );
+				th.colSpan = 100;
+				th.innerText = currentSection = row[ 0 ];
+
+				tr.appendChild( th );
+
+			} else {
 
 				for ( const cell of row ) {
 
@@ -44,13 +60,24 @@ class OutputResult {
 
 				}
 
-			} else {
+				if (currentSection !== undefined) {
 
-				const th = document.createElement( 'th' );
-				th.colSpan = 100;
-				th.innerText = row[ 0 ];
+					const td = tr.firstChild;
 
-				tr.appendChild( th );
+					const labelInfo = basicTable[currentSection][td.innerText];
+
+					const label = document.createElement('label');
+					label.innerText = td.innerText;
+
+					if (labelInfo.unit !== '')
+						label.innerHTML = label.innerHTML + ' (' + labelInfo.unit + ')';
+
+					td.innerText = '';
+
+					td.appendChild(label);
+
+					const tooltip = new Tooltip( label, labelInfo.def );
+				}
 
 			}
 
@@ -58,7 +85,7 @@ class OutputResult {
 
 		}
 
-		this.dom.appendChild( table );
+		this.dom.appendChild(table);
 
 	}
 

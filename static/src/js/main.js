@@ -5,9 +5,8 @@ import { Sidebar } from './pages/Sidebar.js';
 import { Resizer } from './pages/Resizer.js';
 import { Output } from './pages/Output.js';
 
-const main = {
-	data: new Data(),
-};
+const main = {};
+main.data = new Data( main );
 
 const dom = document.body;
 
