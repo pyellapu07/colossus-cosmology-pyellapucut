@@ -56,21 +56,27 @@ class OutputTab {
 
 				const elem = new Input( label, type, value, 'UNDEFINED', ( event ) => {
 
-					switch ( type ) {
+					let newValue;
+
+					switch (type) {
 
 						case 'float':
-							tabContainer.data[ label ] = parseFloat( event.target.value );
+							newValue = parseFloat( event.target.value );
 							break;
 						case 'radio':
-							tabContainer.data[ label ] = event.target.value;
+							newValue = event.target.value;
 							break;
 						case 'range':
-							tabContainer.data[ label ][ event.target.dataset.type == 'min' ? 0 : 1 ] = parseFloat( event.target.value );
+							newValue = [...tabContainer.data[ label ]];
+							newValue[ event.target.dataset.type == 'min' ? 0 : 1 ] = parseFloat(event.target.value);
 							break;
 
 					}
 
-					data.needsUpdate();
+					if (type === 'range' ? newValue[0] !== tabContainer.data[ label ][0] || newValue[1] !== tabContainer.data[label][1] : newValue !== tabContainer.data[ label ]) {
+						tabContainer.data[ label ] = newValue;
+						data.needsUpdate();
+					}
 
 				} );
 
@@ -119,6 +125,19 @@ class OutputTab {
 				onTabSwitch();
 
 		}
+
+		// collapse
+		const collapse = document.createElement('div');
+		collapse.classList.add('tab-collapse','icon-button');
+		content.appendChild(collapse)
+
+		collapse.addEventListener('click', () => {
+			if ('collapse' in content.dataset) {
+				delete content.dataset.collapse;
+			}
+			else
+				content.dataset.collapse = '';
+		})
 
 	}
 

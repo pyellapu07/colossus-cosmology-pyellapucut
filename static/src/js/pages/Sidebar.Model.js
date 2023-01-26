@@ -37,7 +37,7 @@ class SidebarModel {
 
 			this.resizeTitle.call( headerTitle );
 
-			this.data.needsUpdate();
+			data.needsUpdate();
 
 		} );
 
@@ -52,10 +52,19 @@ class SidebarModel {
 
 		enabledToggle.addEventListener( 'click', () => {
 
-			if ( 'checked' in enabledToggle.dataset )
+			if ( 'checked' in enabledToggle.dataset ) {
+
 				delete enabledToggle.dataset.checked;
-			else
+				data.disabled.push( this.model.params );
+
+			} else {
+
 				enabledToggle.dataset.checked = '';
+				data.disabled.splice( data.disabled.indexOf( this.model.params ), 1 );
+
+			}
+
+			data.needsUpdate();
 
 		} );
 
@@ -102,6 +111,8 @@ class SidebarModel {
 		trash.addEventListener( 'click', () => {
 
 			data.models.splice( data.models.indexOf( this.model.params ), 1 );
+			if ( data.disabled.indexOf( this.model.params ) !== - 1 )
+				data.disabled.splice( data.disabled.indexOf( this.model.params ), 1 );
 			data.needsUpdate();
 
 			dom.remove();

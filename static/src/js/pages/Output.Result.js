@@ -1,4 +1,5 @@
 import basicTable from '../../config/basicTable.json' assert { type: "json" };
+import '../../../dist/plotly.min.js'; // Plotly
 import { Tooltip } from '../components/Tooltip.js';
 
 class OutputResult {
@@ -14,21 +15,41 @@ class OutputResult {
 		this.dom.innerHTML = '';
 	}
 
-	visualize( responseData ) {
+	visualize( responseData, status ) {
 
 		this.clear();
 
-		for ( const data of responseData ) {
+		if (status === 200) {
+			for ( const data of responseData ) {
 
-			switch ( data.type ) {
+				switch ( data.type ) {
 
-				case 'table':
-					this.tabulate( data.csv );
-					break;
+					case 'table':
+						this.tabulate( data.csv );
+						break;
+					case 'plot':
+						this.plot( data.x, data.y, data.names, data.title, data.xTitle, data.yTitle );
+						break;
+
+				}
 
 			}
-
+		} else if (status === 500) {
+			this.error(responseData);
 		}
+
+	}
+
+	error(responseData) {
+		const frame = document.createElement('iframe');
+		frame.srcdoc = responseData;
+
+		frame.addEventListener("load", () => {
+			const style = getComputedStyle(frame);
+			frame.style.height = frame.contentWindow.document.documentElement.offsetHeight + 100 + 'px';
+		});
+
+		this.dom.appendChild(frame);
 
 	}
 
@@ -89,7 +110,39 @@ class OutputResult {
 
 	}
 
-	plot() {
+	plot(x, y, names, title, xTitle, yTitle) {
+
+		const plot = document.createElement('div');
+		plot.classList.add('plot');
+
+		// x is an array where y is a 2d array
+
+		const lines = []
+
+		for (let i = 0; i < y.length; i++)
+
+			lines.push({
+				'x': x,
+				'y': y[i],
+				'name': names[i]
+			})
+
+		Plotly.newPlot( plot,
+			lines,
+			{
+				title: title,
+				xaxis: {
+					title: xTitle,
+					rangemode: 'tozero'
+				},
+				yaxis: {
+					title: yTitle,
+					rangemode: 'tozero'
+				}
+			}
+		);
+
+		this.dom.appendChild(plot);
 
 	}
 

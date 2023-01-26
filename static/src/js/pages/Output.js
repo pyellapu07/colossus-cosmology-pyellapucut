@@ -6,6 +6,7 @@ class Output {
 	constructor( main ) {
 
 		this.data = main.data;
+		this.status = main.header.status;
 
 		const dom = this.dom = document.createElement( 'div' );
 		dom.id = 'output';
@@ -20,9 +21,13 @@ class Output {
 
 	runModel() {
 
-		this.request( this.data, ( response ) => {
+		this.request( this.data, ( response, status ) => {
 
-			this.result.visualize( response );
+			this.result.visualize( response, status );
+
+			this.status.classList.remove( 'loading' );
+			this.status.classList.add( 'up-to-date' );
+			this.status.innerText = 'Up to date';
 
 		} );
 
@@ -30,24 +35,39 @@ class Output {
 
 	request( data, func ) {
 
-		const url = data.tab.name;
+		if ( data.models.length > 0 ) {
 
-		const xhr = new XMLHttpRequest();
-		xhr.open( 'POST', '/' + url, true );
-		xhr.setRequestHeader( 'Content-Type', 'application/json' );
-		xhr.addEventListener( 'readystatechange', () => {
+			const url = data.tab.name;
 
-			if ( xhr.readyState == 4 && xhr.status == 200 ) {
+			const xhr = new XMLHttpRequest();
+			xhr.open( 'POST', '/' + url, true );
+			xhr.setRequestHeader( 'Content-Type', 'application/json' );
+			xhr.addEventListener( 'readystatechange', () => {
 
-				let response = xhr.responseText;
+				if ( xhr.readyState == 4 ) {
 
-				func( JSON.parse( response ) );
+					let response = xhr.responseText;
 
-			}
+					if ( xhr.status == 200 )
+						response = JSON.parse( response );
 
-		} );
+					func( response, xhr.status );
 
-		xhr.send( JSON.stringify( data ) );
+				}
+
+			} );
+
+			xhr.send( JSON.stringify( data ) );
+
+			this.status.classList.remove( 'up-to-date' );
+			this.status.classList.add( 'loading' );
+			this.status.innerText = 'Loading...';
+
+		} else {
+
+			this.result.clear();
+
+		}
 
 	}
 

@@ -9,43 +9,43 @@ class Model {
 		this.cosmo = cosmology[ type ];
 		this.data = data;
 
-		this.cosmo[ 'relspecies' ] = true;
-		this.cosmo[ 'Ode0' ] = 0;
-
 		this.params = {};
 		this.elems = {};
 
-		this.createOption( 'flat', 'bool', { 'Ode0': false } );
-		this.createOption( 'H0', 'float' );
-		this.createOption( 'Om0', 'float' );
-		this.createOption( 'Ob0', 'float' );
-		this.createOption( 'Ode0', 'float' );
-		this.createOption( 'sigma8', 'float' );
-		this.createOption( 'ns', 'float' );
-		this.createOption( 'relspecies', 'bool' );
+		for ( const option in cosmologyFormat ) {
+			this.createOption(option, cosmologyFormat[option])
+		}
 
 		for ( const elem in this.elems )
 			this.updateParams( elem, this.params[ elem ], this.elems[ elem ][ 1 ] );
 
 	}
 
-	createOption( name, type, dependencies ) {
+	createOption( name, format ) {
+
+		const type = format.type;
+		const dependencies = format.dependencies;
 
 		const onChange = ( event ) => {
 
-			this.updateParams( name, type == 'bool' ? event.target.checked : parseFloat( event.target.value ), dependencies );
-			this.data.needsUpdate();
+			let newValue = type == 'bool' ? event.target.checked : parseFloat( event.target.value );
+
+			if (newValue !== this.params[ name ]) {
+				this.updateParams( name, newValue, dependencies );
+				this.data.needsUpdate();
+			}
 
 		};
 
 		const value = this.cosmo[ name ];
 		const formattedValue = {
 			default: value,
-			min: 0,
-			max: Infinity
+			min: format.min !== undefined ? format.min : 0,
+			max: format.max !== undefined ? format.max : Infinity,
+			step: format.step !== undefined ? format.step : 0.1,
 		};
 
-		const container = new Input( cosmologyFormat[ name ].text, type, formattedValue, cosmologyFormat[ name ].def, onChange ).dom;
+		const container = new Input( cosmologyFormat[ name ].text, type, type == 'bool' ? value : formattedValue, cosmologyFormat[ name ].def, onChange ).dom;
 
 		this.params[ name ] = value;
 

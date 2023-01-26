@@ -39,6 +39,7 @@ class Input {
 				input.value = value.default;
 				input.min = value.min;
 				input.max = value.max;
+				input.step = value.step;
 				break;
 			case 'range':
 				const minFieldset = document.createElement( 'fieldset' );
@@ -112,17 +113,46 @@ class Input {
 
 		}
 
+		function onChangeWrapper( e ) {
+
+			let newValue;
+
+			if ( type == 'bool' ) {
+
+				newValue = event.target.checked;
+
+			} else if ( type === 'float' || type === 'range' ) {
+
+				newValue = parseFloat( event.target.value );
+
+				if ( event.target.min !== undefined && newValue < parseFloat( event.target.min ) )
+					newValue = parseFloat( event.target.min );
+				if ( event.target.max !== undefined && newValue > parseFloat( event.target.max ) )
+					newValue = parseFloat( event.target.max );
+
+			} else {
+
+				newValue = event.target.value;
+
+			}
+
+			event.target.value = newValue;
+
+			onChange( e );
+
+		}
+
 		if ( input instanceof Array ) {
 
 			for ( const i of input ) {
 
-				i.addEventListener( 'change', onChange );
+				i.addEventListener( 'change', onChangeWrapper );
 
 			}
 
 		} else {
 
-			input.addEventListener( 'change', onChange );
+			input.addEventListener( 'change', onChangeWrapper );
 			inputWrapper.appendChild( input );
 
 		}

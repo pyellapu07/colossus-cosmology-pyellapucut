@@ -138,6 +138,8 @@ button {
 
 	margin: 0 16px 16px;
 	outline: none;
+
+	user-select: none;
 }
 
 .add-model:hover {
@@ -146,37 +148,6 @@ button {
 
 .add-model:focus {
 	box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 0 0 4px var(--gray100);
-}
-
-.run-model {
-	padding: 4px 12px;
-	/* White */
-
-	background: var(--primary600);
-	/* Gray/300 */
-
-	border: 1px solid var(--primary600);
-	/* Shadow/xs */
-
-	box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
-	border-radius: 6px;
-
-	color: var(--white);
-
-	font: var(--textSm);
-	font-weight: 600;
-	transition: .3s;
-
-	outline: none;
-}
-
-.run-model:hover {
-	background-color: var(--primary700);
-	border: 1px solid var(--primary700);
-}
-
-.run-model:focus {
-	box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 0 0 4px var(--primary900);
 }
 
 .sidebar-model {
@@ -221,7 +192,7 @@ button {
 	padding: 0 4px;
 	border-radius: 4px;
 	color: var(--gray900);
-	max-width: 100px;
+	width: 100px;
 }
 
 .enable-toggle {
@@ -233,7 +204,7 @@ button {
 }
 
 .expand-toggle[data-collapse]::before {
-	transform: rotateZ(180deg);
+	background-image: url(../../dist/chevron-up.svg);
 }
 
 .expand-toggle:hover::before {
@@ -383,7 +354,7 @@ label.tooltip:hover, label.tooltip:focus-visible {
 	position: fixed;
 	padding: 12px;
 	background: var(--gray900);
-	z-index: 1;
+	z-index: 2;
 	transform: translateY(calc(-1 * (100% + 8px)));
 	color: var(--gray100);
 	border-radius: 4px;
@@ -393,6 +364,7 @@ label.tooltip:hover, label.tooltip:focus-visible {
 	transition: opacity 0s linear .5s;
 	pointer-events: none;
 	font: var(--textSm);
+	user-select: none;
 }
 
 .tooltip-content:before {
@@ -565,7 +537,6 @@ label.tooltip:hover, label.tooltip:focus-visible {
 #tab {
 	margin: 0;
 	display: block;
-	border-bottom: var(--divider);
 }
 
 #tab .header {
@@ -578,9 +549,23 @@ label.tooltip:hover, label.tooltip:focus-visible {
 #tab .content {
 	padding: 16px 16px 8px;
 	display: block;
+	position: relative;
+	border-bottom: var(--divider);
+}
+
+#tab .content[data-collapse] {
+	visibility: hidden;
+	padding: 0;
+	border: none;
+	margin: 0;
+	height: 0;
 }
 
 #tab .input-container {
+	visibility: collapse;
+}
+
+#tab .content[data-collapse] .input-container {
 	visibility: collapse;
 }
 
@@ -736,4 +721,73 @@ label.tooltip:hover, label.tooltip:focus-visible {
 	position: sticky;
 	top: 0;
 	z-index: 1;
+}
+
+#result iframe {
+	border: none;
+	width: 100%;
+}
+
+.status {
+	font: var(--textXs);
+	color: var(--gray300);
+	margin-right: 8px;
+}
+
+.up-to-date:before {
+	vertical-align: middle;
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-right: 4px;
+	content: "";
+	background-image: url(../../dist/check.svg);
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-attachment: scroll;
+	filter: brightness(0) saturate(100%) invert(86%) sepia(4%) saturate(384%) hue-rotate(177deg) brightness(103%) contrast(85%);
+}
+
+.loading:before {
+	vertical-align: middle;
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-right: 4px;
+	content: "";
+	background-image: url(../../dist/loader.svg);
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-attachment: scroll;
+}
+
+#result .plot {
+	padding: 16px;
+}
+
+.plot-container.plotly .main-svg {
+	border: var(--divider);
+}
+
+.tab-collapse {
+	position: absolute;
+	right: 16px;
+	top: 16px;
+	visibility: visible;
+}
+
+.content[data-collapse] .tab-collapse {
+	visibility: visible;
+	top: 4px;
+}
+
+.tab-collapse::before {
+	background-image: url(../../dist/chevron-up.svg);
+}
+
+
+.content[data-collapse] .tab-collapse::before {
+	background-image: url(../../dist/chevron-down.svg);
 }

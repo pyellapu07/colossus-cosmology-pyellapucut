@@ -5,6 +5,7 @@ class Data {
 		this.main = main;
 		this.models = [];
 		this.tab = undefined;
+		this.disabled = [];
 
 	}
 
@@ -19,8 +20,10 @@ class Data {
 
 	toJSON() {
 
+		const models = this.models.filter( x => ! this.disabled.includes( x ) );
+
 		return {
-			models: this.models,
+			models: models,
 			tab: this.tab
 		};
 
