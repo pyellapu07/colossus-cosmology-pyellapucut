@@ -51,6 +51,8 @@ class OutputTab {
 					case 'range':
 						tabContainer.data[ label ] = [ value.default[ 0 ], value.default[ 1 ] ];
 						break;
+					case 'bool':
+						tabContainer.data[ label ] = value
 
 				}
 
@@ -70,6 +72,8 @@ class OutputTab {
 							newValue = [...tabContainer.data[ label ]];
 							newValue[ event.target.dataset.type == 'min' ? 0 : 1 ] = parseFloat(event.target.value);
 							break;
+						case 'bool':
+							newValue = event.target.checked;
 
 					}
 

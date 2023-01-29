@@ -1,4 +1,4 @@
-import basicTable from '../../config/basicTable.json' assert { type: "json" };
+import cosmoModule from '../../config/cosmoModule.json' assert { type: "json" };
 import '../../../dist/plotly.min.js'; // Plotly
 import { Tooltip } from '../components/Tooltip.js';
 
@@ -62,7 +62,7 @@ class OutputResult {
 
 			const tr = document.createElement( 'tr' );
 
-			if ( row[0] in basicTable ) {
+			if ( row[0] in cosmoModule ) {
 
 				const th = document.createElement( 'th' );
 				th.colSpan = 100;
@@ -85,7 +85,7 @@ class OutputResult {
 
 					const td = tr.firstChild;
 
-					const labelInfo = basicTable[currentSection][td.innerText];
+					const labelInfo = cosmoModule[currentSection][td.innerText];
 
 					const label = document.createElement('label');
 					label.innerText = td.innerText;

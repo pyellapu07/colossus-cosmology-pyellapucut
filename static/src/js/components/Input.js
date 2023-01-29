@@ -36,7 +36,7 @@ class Input {
 			case 'float':
 				input.type = 'number';
 				input.classList.add( 'textbox' );
-				input.value = value.default;
+				input.value = value.default >= 10000 ? value.default.toExponential() : value.default;
 				input.min = value.min;
 				input.max = value.max;
 				input.step = value.step;
@@ -58,14 +58,16 @@ class Input {
 				minBox.type = 'number';
 				minBox.classList.add( 'textbox' );
 				minBox.dataset.type = 'min';
-				minBox.value = value.default[ 0 ];
+				minBox.value = value.default[ 0 ] >= 10000 ? value.default[ 0 ].toExponential() : value.default[ 0 ];
 				minBox.min = value.min;
+				minBox.max = value.max;
 
 				const maxBox = document.createElement( 'input' );
 				maxBox.type = 'number';
 				maxBox.classList.add( 'textbox' );
 				maxBox.dataset.type = 'max';
-				maxBox.value = value.default[ 1 ];
+				maxBox.value = value.default[ 1 ] >= 10000 ? value.default[ 1 ].toExponential() : value.default[ 1 ];
+				maxBox.min = value.min;
 				maxBox.max = value.max;
 
 				input.push( minBox );
@@ -124,6 +126,8 @@ class Input {
 			} else if ( type === 'float' || type === 'range' ) {
 
 				newValue = parseFloat( event.target.value );
+				if ( newValue >= 10000 )
+					newValue = newValue.toExponential();
 
 				if ( event.target.min !== undefined && newValue < parseFloat( event.target.min ) )
 					newValue = parseFloat( event.target.min );

@@ -773,18 +773,21 @@ label.tooltip:hover, label.tooltip:focus-visible {
 
 .tab-collapse {
 	position: absolute;
-	right: 16px;
-	top: 16px;
+	right: 8px;
+	top: 0;
 	visibility: visible;
+	width: 32px;
+	height: 32px;
 }
 
 .content[data-collapse] .tab-collapse {
 	visibility: visible;
-	top: 4px;
 }
 
 .tab-collapse::before {
 	background-image: url(../../dist/chevron-up.svg);
+	width: 32px;
+	height: 32px;
 }
 
 
