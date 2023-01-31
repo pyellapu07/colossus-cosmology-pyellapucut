@@ -5,6 +5,7 @@ const infoContent = [
 	[ 'Repository', 'https://bitbucket.org/bdiemer/colossus' ],
 	[ 'Documentation', 'https://bdiemer.bitbucket.io/colossus/' ],
 	[ 'Funded by the National Science Foundation', null ],
+	[ 'Designed by Erik Chou', 'https://www.echou.xyz' ],
 	[ '© 2014-2022 Benedikt Diemer', null ]
 ];
 
