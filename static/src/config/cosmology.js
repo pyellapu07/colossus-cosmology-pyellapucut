@@ -1,4 +1,4 @@
-{
+export default {
 	"planck18": { "flat": true, "H0": 67.66, "Om0": 0.3111, "Ob0": 0.0490, "sigma8": 0.8102, "ns": 0.9665, "Ode0": 0, "relspecies": true },
 	"planck15": { "flat": true, "H0": 67.74, "Om0": 0.3089, "Ob0": 0.0486, "sigma8": 0.8159, "ns": 0.9667, "Ode0": 0, "relspecies": true },
 	"planck13": { "flat": true, "H0": 67.77, "Om0": 0.3071, "Ob0": 0.0483, "sigma8": 0.8288, "ns": 0.9611, "Ode0": 0, "relspecies": true },
@@ -13,4 +13,4 @@
 	"millennium": { "flat": true, "H0": 73.00, "Om0": 0.2500, "Ob0": 0.0450, "sigma8": 0.9000, "ns": 1.0000, "Ode0": 0, "relspecies": false },
 	"EdS": { "flat": true, "H0": 70.00, "Om0": 1.0000, "Ob0": 0.0000, "sigma8": 0.8200, "ns": 1.0000, "Ode0": 0, "relspecies": false },
 	"powerlaw": { "flat": true, "H0": 70.00, "Om0": 1.0000, "Ob0": 0.0000, "sigma8": 0.8200, "ns": 1.0000, "Ode0": 0, "relspecies": false }
-}
+};

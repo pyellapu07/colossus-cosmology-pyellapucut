@@ -44,10 +44,12 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-filename = os.path.join(app.static_folder, 'src/config', 'cosmoModule.json')
+filename = os.path.join(app.static_folder, 'src/config', 'cosmoModule.js')
 
-with open(filename, 'r+', encoding="utf-8") as json_data:
-    cosmoModule = json.load(json_data)
+with open(filename) as dataFile:
+    data = dataFile.read()
+    json_data = data[data.find('{') : data.rfind('}')+1]
+    cosmoModule = json.loads(json_data)
 
 @app.route('/Basic', methods=['POST'])
 def basic():

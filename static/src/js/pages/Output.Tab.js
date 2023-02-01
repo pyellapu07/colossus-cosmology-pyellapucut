@@ -1,4 +1,4 @@
-import tabs from '../../config/tabs.json' assert { type: "json" }
+import tabs from '../../config/tabs.js';
 import { Input } from '../components/Input.js';
 
 class OutputTab {
@@ -52,7 +52,7 @@ class OutputTab {
 						tabContainer.data[ label ] = [ value.default[ 0 ], value.default[ 1 ] ];
 						break;
 					case 'bool':
-						tabContainer.data[ label ] = value
+						tabContainer.data[ label ] = value;
 
 				}
 
@@ -60,7 +60,7 @@ class OutputTab {
 
 					let newValue;
 
-					switch (type) {
+					switch ( type ) {
 
 						case 'float':
 							newValue = parseFloat( event.target.value );
@@ -69,17 +69,19 @@ class OutputTab {
 							newValue = event.target.value;
 							break;
 						case 'range':
-							newValue = [...tabContainer.data[ label ]];
-							newValue[ event.target.dataset.type == 'min' ? 0 : 1 ] = parseFloat(event.target.value);
+							newValue = [ ...tabContainer.data[ label ] ];
+							newValue[ event.target.dataset.type == 'min' ? 0 : 1 ] = parseFloat( event.target.value );
 							break;
 						case 'bool':
 							newValue = event.target.checked;
 
 					}
 
-					if (type === 'range' ? newValue[0] !== tabContainer.data[ label ][0] || newValue[1] !== tabContainer.data[label][1] : newValue !== tabContainer.data[ label ]) {
+					if ( type === 'range' ? newValue[ 0 ] !== tabContainer.data[ label ][ 0 ] || newValue[ 1 ] !== tabContainer.data[ label ][ 1 ] : newValue !== tabContainer.data[ label ] ) {
+
 						tabContainer.data[ label ] = newValue;
 						data.needsUpdate();
+
 					}
 
 				} );
@@ -121,8 +123,10 @@ class OutputTab {
 
 			// switching tabs
 			button.addEventListener( 'click', () => {
+
 				onTabSwitch();
 				data.needsUpdate();
+
 			} );
 
 			if ( name == 'Basic' )
@@ -131,17 +135,20 @@ class OutputTab {
 		}
 
 		// collapse
-		const collapse = document.createElement('div');
-		collapse.classList.add('tab-collapse','icon-button');
-		content.appendChild(collapse)
+		const collapse = document.createElement( 'div' );
+		collapse.classList.add( 'tab-collapse', 'icon-button' );
+		content.appendChild( collapse );
 
-		collapse.addEventListener('click', () => {
-			if ('collapse' in content.dataset) {
+		collapse.addEventListener( 'click', () => {
+
+			if ( 'collapse' in content.dataset ) {
+
 				delete content.dataset.collapse;
-			}
-			else
+
+			} else
 				content.dataset.collapse = '';
-		})
+
+		} );
 
 	}
 

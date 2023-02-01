@@ -1,4 +1,4 @@
-{
+export default {
 	"flat": {
 		"text": "flat",
 		"def": "If flat, there is no curvature, Ω<sub>k</sub> = 0, and the dark energy content of the universe is computed as Ω<sub>de</sub> = 1 − Ω<sub>m</sub> − Ω<sub>γ</sub> − Ω<sub>ν</sub> where Ω<sub>m</sub> is the density of matter (dark matter and baryons) in units of the critical density, Ω<sub>γ</sub> is the density of photons, and Ω<sub>ν</sub> the density of neutrinos.",
@@ -55,4 +55,4 @@
 		"def": "If relspecies == False, all relativistic contributions to the energy density of the universe (such as photons and neutrinos) are ignored.",
 		"type": "bool"
 	}
-}
+};

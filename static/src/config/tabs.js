@@ -1,4 +1,4 @@
-{
+export default {
 	"Basic": [
 		{
 			"label": "Redshift (z)",
@@ -21,7 +21,7 @@
 			"type": "range",
 			"value": {
 				"default": [ 0, 10 ],
-				"min": -0.995,
+				"min": - 0.995,
 				"max": 200
 			}
 		},
@@ -37,7 +37,7 @@
 			"type": "range",
 			"value": {
 				"default": [ 0, 10 ],
-				"min": -0.995,
+				"min": - 0.995,
 				"max": 200
 			}
 		}
@@ -53,7 +53,7 @@
 			"type": "range",
 			"value": {
 				"default": [ 0, 10 ],
-				"min": -0.995,
+				"min": - 0.995,
 				"max": 200
 			}
 		},
@@ -125,4 +125,4 @@
 			"value": true
 		}
 	]
-}
+};

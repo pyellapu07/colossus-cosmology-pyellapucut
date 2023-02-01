@@ -1,5 +1,5 @@
-import cosmology from '../../config/cosmology.json' assert { type: "json" };
-import cosmologyFormat from '../../config/cosmologyFormat.json' assert { type: "json" };
+import cosmology from '../../config/cosmology.js';
+import cosmologyFormat from '../../config/cosmologyFormat.js';
 import { Input } from './Input.js';
 
 class Model {
@@ -13,7 +13,9 @@ class Model {
 		this.elems = {};
 
 		for ( const option in cosmologyFormat ) {
-			this.createOption(option, cosmologyFormat[option])
+
+			this.createOption( option, cosmologyFormat[ option ] );
+
 		}
 
 		for ( const elem in this.elems )
@@ -30,9 +32,11 @@ class Model {
 
 			let newValue = type == 'bool' ? event.target.checked : parseFloat( event.target.value );
 
-			if (newValue !== this.params[ name ]) {
+			if ( newValue !== this.params[ name ] ) {
+
 				this.updateParams( name, newValue, dependencies );
 				this.data.needsUpdate();
+
 			}
 
 		};

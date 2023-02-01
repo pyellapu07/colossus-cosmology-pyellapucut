@@ -1,5 +1,5 @@
 import { SidebarModel } from './Sidebar.Model.js';
-import cosmology from '../../config/cosmology.json' assert { type: "json" }
+import cosmology from '../../config/cosmology.js';
 
 class Sidebar {
 
