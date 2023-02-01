@@ -4,8 +4,8 @@ const infoContent = [
 	[ 'Code paper', 'https://ui.adsabs.harvard.edu/abs/2018ApJS..239...35D/abstract' ],
 	[ 'Repository', 'https://bitbucket.org/bdiemer/colossus' ],
 	[ 'Documentation', 'https://bdiemer.bitbucket.io/colossus/' ],
+	[ 'Designed by <a href="https://www.echou.xyz" target="_blank">Erik Chou</a>', null ],
 	[ 'Funded by the National Science Foundation', null ],
-	[ 'Designed by Erik Chou', 'https://www.echou.xyz' ],
 	[ '© 2014-2022 Benedikt Diemer', null ]
 ];
 
@@ -44,7 +44,7 @@ class Header {
 			const isLink = content[ 1 ] != null;
 			const elem = document.createElement( isLink ? 'a' : 'span' );
 			elem.classList.add( 'option' );
-			elem.innerText = content[ 0 ];
+			elem.innerHTML = content[ 0 ];
 			elem.tabIndex = 0;
 
 			if ( isLink ) {
