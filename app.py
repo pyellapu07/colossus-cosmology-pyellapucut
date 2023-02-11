@@ -46,7 +46,7 @@ def index():
 
 filename = os.path.join(app.static_folder, 'src/config', 'cosmoModule.js')
 
-with open(filename) as dataFile:
+with open(filename, 'r+', encoding="utf-8") as dataFile:
     data = dataFile.read()
     json_data = data[data.find('{') : data.rfind('}')+1]
     cosmoModule = json.loads(json_data)
