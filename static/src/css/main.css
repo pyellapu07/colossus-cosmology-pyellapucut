@@ -715,6 +715,8 @@ label.tooltip:hover, label.tooltip:focus-visible {
 	border: none;
 	font: var(--textSm);
 	background: var(--gray25);
+	color: var(--primary700);
+	font-weight: 600;
 }
 
 #result tr:first-child {

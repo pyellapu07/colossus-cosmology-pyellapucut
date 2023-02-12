@@ -6,11 +6,6 @@ from numpy import ndarray, isnan, linspace, array
 from colossus.cosmology import cosmology
 from colossus.lss import peaks
 
-def round_sig(x, sig=4):
-    if x == 0:
-        return x
-    return round(x, sig-int(floor(log10(abs(x))))-1)
-
 '''
 (!) responses are returned as an array of tables or plots
 
@@ -28,6 +23,13 @@ plot data structure:
 }
 
 '''
+
+def logify( plots ):
+    for plot in plots:
+        plot['x'] = [log10(i) for i in plot['x'] if i > 0]
+        plot['y'] = [[log10(i) for i in j if i > 0] for j in plot['y']]
+        plot['xTitle'] = 'log<sub>10</sub> ' + plot['xTitle']
+        plot['yTitle'] = 'log<sub>10</sub> ' + plot['yTitle']
 
 def createCosmos( models ):
     cosmos = []
@@ -86,7 +88,9 @@ def basic():
                     if result in [float("-inf"),float("inf")]:
                         result = str(result)
                     else:
-                        result = round_sig(result,4)
+                        result = round(result,4)
+                    if result < 0 and prop["function"] == "distanceModulus":
+                        result = "---"
 
                 row.append(result)
 
@@ -152,13 +156,7 @@ def time():
         plots[0]['y'].append(line)
 
     if (log_plot):
-        x = [log10(i) for i in x if i > 0]
-        for plot in plots:
-            plot['x'] = x
-            plot['y'] = [[log10(i) for i in j if i > 0] for j in plot['y']]
-            plot['title'] += ' (log10)'
-            plot['xTitle'] = 'Log ' + plot['xTitle']
-            plot['yTitle'] = 'Log ' + plot['yTitle']
+        logify(plots)
 
     return jsonify(plots)
 
@@ -169,6 +167,7 @@ def distance():
     data = request.json
     cosmos, names = createCosmos(data['models'])
     domain = data['tab']['inputs']['Redshift domain']
+    log_plot = data['tab']['inputs']['Log scale']
 
     num = 200
     x = linspace(domain[0],domain[1],num).tolist()
@@ -198,6 +197,9 @@ def distance():
         }
         plots.append(plot)
 
+    if (log_plot):
+        logify(plots)
+
     return jsonify(plots)
 
 @app.route('/Content', methods=['POST'])
@@ -209,6 +211,7 @@ def content():
     contents = cosmoModule["Contents of the Universe"]
     contentKeys = list(contents.keys())
     combined = data['tab']['inputs']['Combined plotting']
+    log_plot = data['tab']['inputs']['Log scale']
 
     num = 200
     x = linspace(domain[0],domain[1],num).tolist()
@@ -227,7 +230,7 @@ def content():
                 'type': 'plot',
                 'x': x,
                 'y': [],
-                'title': 'Densities of ' + names[i],
+                'title': 'Densities (' + names[i] + ' cosmology)',
                 'xTitle': function,
                 'yTitle': 'Density (M<sub>⊙</sub>h<sup>2</sup>/kpc<sup>3</sup>)',
                 'names': rho_names
@@ -236,7 +239,7 @@ def content():
                 'type': 'plot',
                 'x': x,
                 'y': [],
-                'title': 'Fractional densities of ' + names[i],
+                'title': 'Fractional densities (' + names[i] + ' cosmology)',
                 'xTitle': function,
                 'yTitle': 'Fractional density',
                 'names': omega_names
@@ -288,14 +291,18 @@ def content():
 
             plots.append(plot)
 
+    if (log_plot):
+        logify(plots)
+
     return jsonify(plots)
 
 @app.route('/Power Spectrum', methods=['POST'])
 def powerSpectrum():
     data = request.json
     cosmos, names = createCosmos(data['models'])
-    model = data['tab']['inputs']['Model']
+    model = data['tab']['inputs']['Power spectrum model']
     wave = data['tab']['inputs']['Wavenumber (k)']
+    log_plot = data['tab']['inputs']['Log scale']
 
     num = 200
     x = linspace(wave[0],wave[1],num).tolist()
@@ -306,7 +313,7 @@ def powerSpectrum():
         'x': x,
         'y': y,
         'title': 'Matter power spectrum',
-        'xTitle': 'Wavenumber (h/Mpc)',
+        'xTitle': 'Wavenumber (Mpc/h)^3',
         'yTitle': 'Matter power spectrum',
         'names': names
     }
@@ -317,18 +324,21 @@ def powerSpectrum():
         line = cosmo.matterPowerSpectrum(np_x, model=model).tolist()
         y.append(line)
 
+    if (log_plot):
+        logify(plots)
+
     return jsonify(plots)
 
 correlationPlots = [
 {
     'title': 'Correlation function',
-    'yTitle': 'Correlation (Mpc/h)',
+    'yTitle': 'Correlation',
     'xTitle': 'Radius (Mpc/h)',
     'function': 'correlationFunction'
 },
 {
     'title': 'RMS variance',
-    'yTitle': 'Variance (Mpc/h)',
+    'yTitle': 'Variance',
     'xTitle': 'Radius (Mpc/h)',
     'function': 'sigma'
 }]
@@ -337,8 +347,9 @@ correlationPlots = [
 def correlation():
     data = request.json
     cosmos, names = createCosmos(data['models'])
-    model = data['tab']['inputs']['Model']
+    model = data['tab']['inputs']['Correlation model']
     wave = data['tab']['inputs']['Radius (R)']
+    log_plot = data['tab']['inputs']['Log scale']
 
     num = 200
     x = linspace(wave[0],wave[1],num).tolist()
@@ -363,13 +374,17 @@ def correlation():
 
     for plot in plots:
         del plot['function']
+
+    if (log_plot):
+        logify(plots)
+
     return jsonify(plots)
 
 @app.route('/Peak Height', methods=['POST'])
 def peakHeight():
     data = request.json
     cosmos, names = createCosmos(data['models'])
-    model = data['tab']['inputs']['Model']
+    model = data['tab']['inputs']['Peak height model']
     halo = data['tab']['inputs']['Halo mass (M)']
     redshift = data['tab']['inputs']['Redshift (z)']
     combined = data['tab']['inputs']['Combined plotting']
@@ -383,8 +398,8 @@ def peakHeight():
         'x': x,
         'y': y,
         'title': 'Peak height',
-        'xTitle': 'Halo mass (M<sub>⊙</sub>/h)',
-        'yTitle': 'Peak height (M<sub>⊙</sub>/h)',
+        'xTitle': 'log<sub>10</sub> Halo mass (M<sub>⊙</sub>/h)',
+        'yTitle': 'log<sub>10</sub> Peak height',
         'names': names
     }
 
@@ -394,6 +409,11 @@ def peakHeight():
         cosmology.setCurrent(cosmo)
         line = peaks.peakHeight(np_x, redshift).tolist()
         y.append(line)
+
+    x = [log10(i) for i in x if i > 0]
+    for plot in plots:
+        plot['x'] = x
+        plot['y'] = [[log10(i) for i in j if i > 0] for j in plot['y']]
 
     return jsonify(plots)
 

@@ -40,6 +40,11 @@ export default {
 				"min": - 0.995,
 				"max": 200
 			}
+		},
+		{
+			"label": "Log scale",
+			"type": "bool",
+			"value": false
 		}
 	],
 	"Content": [
@@ -61,11 +66,16 @@ export default {
 			"label": "Combined plotting",
 			"type": "bool",
 			"value": true
+		},
+		{
+			"label": "Log scale",
+			"type": "bool",
+			"value": false
 		}
 	],
 	"Power Spectrum": [
 		{
-			"label": "Model",
+			"label": "Power spectrum model",
 			"type": "radio",
 			"value": [ "eisenstein98", "eisenstein98_zb", "sugiyama95", "camb" ]
 		},
@@ -74,14 +84,19 @@ export default {
 			"type": "range",
 			"value": {
 				"default": [ 0.001, 0.01 ],
-				"min": 0,
+				"min": 0.001,
 				"max": "Infinity"
 			}
+		},
+		{
+			"label": "Log scale",
+			"type": "bool",
+			"value": true
 		}
 	],
 	"Correlation": [
 		{
-			"label": "Model",
+			"label": "Correlation model",
 			"type": "radio",
 			"value": [ "eisenstein98", "eisenstein98_zb", "sugiyama95", "camb" ]
 		},
@@ -90,14 +105,19 @@ export default {
 			"type": "range",
 			"value": {
 				"default": [ 0.1, 100 ],
-				"min": 0,
+				"min": 1.00e-03,
 				"max": 5.00e+02
 			}
+		},
+		{
+			"label": "Log scale",
+			"type": "bool",
+			"value": true
 		}
 	],
 	"Peak Height": [
 		{
-			"label": "Model",
+			"label": "Peak height model",
 			"type": "radio",
 			"value": [ "eisenstein98", "eisenstein98_zb", "sugiyama95", "camb" ]
 		},

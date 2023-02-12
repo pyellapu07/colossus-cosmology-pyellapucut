@@ -16,7 +16,7 @@ class Sidebar {
 
 			const option = document.createElement( 'option' );
 			option.value = model;
-			option.text = model;
+			option.text = cosmology[model].longname;
 			selectModel.appendChild( option );
 
 		}
@@ -26,7 +26,7 @@ class Sidebar {
 		const addButton = document.createElement( 'button' );
 		addButton.id = 'test';
 		addButton.classList.add( 'add-model' );
-		addButton.innerText = 'Add model';
+		addButton.innerText = 'Add cosmology';
 
 		dom.appendChild( addButton );
 
