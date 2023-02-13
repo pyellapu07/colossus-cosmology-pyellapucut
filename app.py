@@ -410,10 +410,7 @@ def peakHeight():
         line = peaks.peakHeight(np_x, redshift).tolist()
         y.append(line)
 
-    x = [log10(i) for i in x if i > 0]
-    for plot in plots:
-        plot['x'] = x
-        plot['y'] = [[log10(i) for i in j if i > 0] for j in plot['y']]
+    logify(plots)
 
     return jsonify(plots)
 
