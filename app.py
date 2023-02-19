@@ -6,6 +6,11 @@ from numpy import ndarray, isnan, linspace, array
 from colossus.cosmology import cosmology
 from colossus.lss import peaks
 
+def sigfig(x, sig=4):
+    if (x == 0):
+        return 0
+    return round(x, sig-int(floor(log10(abs(x))))-1)
+
 '''
 (!) responses are returned as an array of tables or plots
 
@@ -78,19 +83,24 @@ def basic():
             prop = section[key]
 
             for cosmo in cosmos:
-                result = getattr(cosmo, prop["function"])(redshift)
+                result = "---"
 
-                if isnan(result):
-                    result = "null"
-                else:
-                    if type(result) is ndarray:
-                        result = result.tolist()
-                    if result in [float("-inf"),float("inf")]:
-                        result = str(result)
-                    else:
-                        result = round(result,4)
-                    if result < 0 and prop["function"] == "distanceModulus":
+                if (prop["future"] or redshift >= 0):
+                    result = getattr(cosmo, prop["function"])(redshift)
+
+                    if isnan(result):
                         result = "---"
+                    else:
+                        if type(result) is ndarray:
+                            result = result.tolist()
+                        if result in [float("-inf"),float("inf")]:
+                            result = str(result)
+                        elif result < 0 and prop["function"] == "distanceModulus":
+                            result = "---"
+                        else:
+                            result = sigfig(result)
+                            if (result != 0 and (result > 100 or result < 0.01)):
+                                result = "{:0.3e}".format(result)
 
                 row.append(result)
 
@@ -210,7 +220,7 @@ def content():
     domain = data['tab']['inputs']['Domain']
     contents = cosmoModule["Contents of the Universe"]
     contentKeys = list(contents.keys())
-    combined = data['tab']['inputs']['Combined plotting']
+    combined = data['tab']['inputs']['Compare densities']
     log_plot = data['tab']['inputs']['Log scale']
 
     num = 200
@@ -314,7 +324,7 @@ def powerSpectrum():
         'y': y,
         'title': 'Matter power spectrum',
         'xTitle': 'Wavenumber (Mpc/h)^3',
-        'yTitle': 'Matter power spectrum',
+        'yTitle': 'Matter power spectrum (Mpc/h)^3',
         'names': names
     }
 
@@ -387,7 +397,7 @@ def peakHeight():
     model = data['tab']['inputs']['Peak height model']
     halo = data['tab']['inputs']['Halo mass (M)']
     redshift = data['tab']['inputs']['Redshift (z)']
-    combined = data['tab']['inputs']['Combined plotting']
+    combined = data['tab']['inputs']['Compare densities']
 
     num = 200
     x = linspace(halo[0],halo[1],num).tolist()

@@ -1,5 +1,6 @@
 import { Model } from '../components/Model.js';
 import { Tooltip } from '../components/Tooltip.js';
+import cosmology from '../../config/cosmology.js';
 
 class SidebarModel {
 
@@ -24,7 +25,7 @@ class SidebarModel {
 
 		// header title
 		const headerTitle = document.createElement( 'input' );
-		headerTitle.value = this.addName( type );
+		headerTitle.value = this.addName( cosmology[type].longname );
 		headerTitle.classList.add( 'model-name' );
 
 		headerTitle.addEventListener( 'input', this.resizeTitle );

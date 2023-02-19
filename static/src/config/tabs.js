@@ -5,7 +5,7 @@ export default {
 			"type": "float",
 			"value": {
 				"default": 0,
-				"min": 0,
+				"min": -0.995,
 				"max": 200
 			}
 		}
@@ -37,7 +37,7 @@ export default {
 			"type": "range",
 			"value": {
 				"default": [ 0, 10 ],
-				"min": - 0.995,
+				"min": 0,
 				"max": 200
 			}
 		},
@@ -63,7 +63,7 @@ export default {
 			}
 		},
 		{
-			"label": "Combined plotting",
+			"label": "Compare densities",
 			"type": "bool",
 			"value": true
 		},
@@ -83,7 +83,7 @@ export default {
 			"label": "Wavenumber (k)",
 			"type": "range",
 			"value": {
-				"default": [ 0.001, 0.01 ],
+				"default": [ 0.001, 100 ],
 				"min": 0.001,
 				"max": "Infinity"
 			}
@@ -135,12 +135,12 @@ export default {
 			"type": "float",
 			"value": {
 				"default": 0,
-				"min": 0,
+				"min": -0.995,
 				"max": 200
 			}
 		},
 		{
-			"label": "Combined plotting",
+			"label": "Compare densities",
 			"type": "bool",
 			"value": true
 		}

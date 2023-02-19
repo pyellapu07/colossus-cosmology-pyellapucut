@@ -17,7 +17,7 @@ export default {
 		"def": "Ω<sub>m</sub>, the matter density in units of the critical density at z = 0 (includes all non-relativistic matter, i.e., dark matter and baryons but not neutrinos).",
 		"type": "float",
 		"min": 0,
-		"max": 1,
+		"max": 0.9999,
 		"step": 0.1
 	},
 	"Ob0": {
