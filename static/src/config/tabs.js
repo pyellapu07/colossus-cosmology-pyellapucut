@@ -140,9 +140,14 @@ export default {
 			}
 		},
 		{
-			"label": "Compare densities",
+			"label": "Combine plotting",
 			"type": "bool",
 			"value": true
+		},
+		{
+			"label": "Log scale",
+			"type": "bool",
+			"value": false
 		}
 	]
 };

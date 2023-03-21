@@ -29,12 +29,14 @@ plot data structure:
 
 '''
 
-def logify( plots ):
+def logify( plots, xAxis=True, yAxis=True ):
     for plot in plots:
-        plot['x'] = [log10(i) for i in plot['x'] if i > 0]
-        plot['y'] = [[log10(i) for i in j if i > 0] for j in plot['y']]
-        plot['xTitle'] = 'log<sub>10</sub> ' + plot['xTitle']
-        plot['yTitle'] = 'log<sub>10</sub> ' + plot['yTitle']
+        if (xAxis):
+            plot['x'] = [log10(i) for i in plot['x'] if i > 0]
+            plot['xTitle'] = 'log<sub>10</sub> ' + plot['xTitle']
+        if (yAxis):
+            plot['y'] = [[log10(i) for i in j if i > 0] for j in plot['y']]
+            plot['yTitle'] = 'log<sub>10</sub> ' + plot['yTitle']
 
 def createCosmos( models ):
     cosmos = []
@@ -380,6 +382,8 @@ def correlation():
     for plot in plots:
         for cosmo in cosmos:
             line = getattr(cosmo, plot['function'])(np_x).tolist()
+            if (log_plot):
+                line = [abs(number) for number in line]
             plot['y'].append(line)
 
     for plot in plots:
@@ -397,30 +401,43 @@ def peakHeight():
     model = data['tab']['inputs']['Peak height model']
     halo = data['tab']['inputs']['Halo mass (M)']
     redshift = data['tab']['inputs']['Redshift (z)']
-    combined = data['tab']['inputs']['Compare densities']
+    combined = data['tab']['inputs']['Combine plotting']
+    log_plot = data['tab']['inputs']['Log scale']
 
     num = 200
     x = linspace(halo[0],halo[1],num).tolist()
     np_x = array(x)
-    y = []
-    plot = {
-        'type': 'plot',
-        'x': x,
-        'y': y,
-        'title': 'Peak height',
-        'xTitle': 'log<sub>10</sub> Halo mass (M<sub>⊙</sub>/h)',
-        'yTitle': 'log<sub>10</sub> Peak height',
-        'names': names
-    }
+    plots = []
 
-    plots = [plot]
+    if (combined):
+        plots.append({
+            'type': 'plot',
+            'x': x,
+            'y': [],
+            'title': 'Peak height',
+            'xTitle': 'Halo mass (M<sub>⊙</sub>/h)',
+            'yTitle': 'Peak height',
+            'names': names
+        })
 
-    for cosmo in cosmos:
+    for i, cosmo in enumerate(cosmos):
         cosmology.setCurrent(cosmo)
         line = peaks.peakHeight(np_x, redshift).tolist()
-        y.append(line)
+        if (combined):
+            plots[0]['y'].append(line)
+        else:
+            plot = {
+                'type': 'plot',
+                'x': x,
+                'y': [line],
+                'title': 'Peak height (' + names[i] + ' cosmology)',
+                'xTitle': 'Halo mass (M<sub>⊙</sub>/h)',
+                'yTitle': 'Peak height',
+                'names': names[i]
+            }
+            plots.append(plot)
 
-    logify(plots)
+    logify(plots, True, log_plot)
 
     return jsonify(plots)
 
