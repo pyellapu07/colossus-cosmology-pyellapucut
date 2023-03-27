@@ -77,7 +77,7 @@ export default {
 		{
 			"label": "Power spectrum model",
 			"type": "radio",
-			"value": [ "eisenstein98", "eisenstein98_zb", "sugiyama95", "camb" ]
+			"value": [ "Eisenstein & Hu 1998", "Eisenstein & Hu 1998 (no BAO)", "Sugiyama 1995", "CAMB" ]
 		},
 		{
 			"label": "Wavenumber (k)",
@@ -98,7 +98,7 @@ export default {
 		{
 			"label": "Correlation model",
 			"type": "radio",
-			"value": [ "eisenstein98", "eisenstein98_zb", "sugiyama95", "camb" ]
+			"value": [ "Eisenstein & Hu 1998", "Eisenstein & Hu 1998 (no BAO)", "Sugiyama 1995", "CAMB" ]
 		},
 		{
 			"label": "Radius (R)",
@@ -119,7 +119,7 @@ export default {
 		{
 			"label": "Peak height model",
 			"type": "radio",
-			"value": [ "eisenstein98", "eisenstein98_zb", "sugiyama95", "camb" ]
+			"value": [ "Eisenstein & Hu 1998", "Eisenstein & Hu 1998 (no BAO)", "Sugiyama 1995", "CAMB" ]
 		},
 		{
 			"label": "Halo mass (M)",

@@ -308,11 +308,18 @@ def content():
 
     return jsonify(plots)
 
+power_spectrum_models = {
+    'Sugiyama 1995': 'sugiyama95',
+    'Eisenstein & Hu 1998': 'eisenstein98',
+    'Eisenstein & Hu 1998 (no BAO)': 'eisenstein98_zb',
+    'CAMB': 'camb',
+}
+
 @app.route('/Power Spectrum', methods=['POST'])
 def powerSpectrum():
     data = request.json
     cosmos, names = createCosmos(data['models'])
-    model = data['tab']['inputs']['Power spectrum model']
+    model = power_spectrum_models[data['tab']['inputs']['Power spectrum model']]
     wave = data['tab']['inputs']['Wavenumber (k)']
     log_plot = data['tab']['inputs']['Log scale']
 
@@ -359,7 +366,7 @@ correlationPlots = [
 def correlation():
     data = request.json
     cosmos, names = createCosmos(data['models'])
-    model = data['tab']['inputs']['Correlation model']
+    model = power_spectrum_models[data['tab']['inputs']['Correlation model']]
     wave = data['tab']['inputs']['Radius (R)']
     log_plot = data['tab']['inputs']['Log scale']
 
@@ -381,7 +388,7 @@ def correlation():
 
     for plot in plots:
         for cosmo in cosmos:
-            line = getattr(cosmo, plot['function'])(np_x).tolist()
+            line = getattr(cosmo, plot['function'])(np_x, ps_args={'model': model, 'path': None}).tolist()
             if (log_plot):
                 line = [abs(number) for number in line]
             plot['y'].append(line)
@@ -398,7 +405,7 @@ def correlation():
 def peakHeight():
     data = request.json
     cosmos, names = createCosmos(data['models'])
-    model = data['tab']['inputs']['Peak height model']
+    model = power_spectrum_models[data['tab']['inputs']['Peak height model']]
     halo = data['tab']['inputs']['Halo mass (M)']
     redshift = data['tab']['inputs']['Redshift (z)']
     combined = data['tab']['inputs']['Combine plotting']
@@ -422,7 +429,7 @@ def peakHeight():
 
     for i, cosmo in enumerate(cosmos):
         cosmology.setCurrent(cosmo)
-        line = peaks.peakHeight(np_x, redshift).tolist()
+        line = peaks.peakHeight(np_x, redshift, ps_args={'model': model, 'path': None}).tolist()
         if (combined):
             plots[0]['y'].append(line)
         else:
