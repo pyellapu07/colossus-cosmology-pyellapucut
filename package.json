@@ -1,0 +1,24 @@
+{
+  "name": "colossus_web",
+  "version": "1.0.0",
+  "description": "Cosmology Web Calculator",
+  "main": ".eslintrc.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm run env & npm run activate & npm run flask-run",
+    "env": "python3 -m venv venv",
+    "activate": ". venv/bin/activate",
+    "install": "pip install -r requirements.txt",
+    "flask-run": "flask --debug run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benediktdiemer/colossus_web.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/benediktdiemer/colossus_web/issues"
+  },
+  "homepage": "https://github.com/benediktdiemer/colossus_web#readme"
+}

@@ -152,6 +152,32 @@ class OutputResult {
 			}
 		);
 
+		const modebarGroup = plot.getElementsByClassName("modebar-group")[0];
+
+		const rows = [x, ...y];
+		const columns = rows[0].map((_, colIndex) => rows.map(row => row[colIndex]));
+		columns.unshift([xTitle, ...names]);
+
+		const csvContent = "data:text/csv;charset=utf-8," 
+						+ columns.map(e => e.join(",")).join("\n");
+		const encodedUri = encodeURI(csvContent);
+
+		const downloadCSV = document.createElement('a');
+		downloadCSV.setAttribute('rel', 'tooltip');
+		downloadCSV.setAttribute('download', title + '.csv');
+		downloadCSV.setAttribute('href', encodedUri);
+		downloadCSV.classList.add('modebar-btn');
+		downloadCSV.dataset.title = 'Download plot as a csv';
+		downloadCSV.dataset.toggle = 'false';
+		downloadCSV.dataset.gravity = 'n';
+		downloadCSV.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" class="icon"><path d="M8 9l4-4h-3v-4h-2v4h-3zM11.636 7.364l-1.121 1.121 4.064 1.515-6.579 2.453-6.579-2.453 4.064-1.515-1.121-1.121-4.364 1.636v4l8 3 8-3v-4z"/></svg>';
+
+		downloadCSV.addEventListener('pointerdown', () => {
+			console.log('here');
+		})
+
+		modebarGroup.prepend(downloadCSV);
+
 		this.dom.appendChild( plot );
 
 	}
