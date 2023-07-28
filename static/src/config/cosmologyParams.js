@@ -1,0 +1,119 @@
+export default {
+  flat: {
+    text: "flat",
+    def: "If flat, there is no curvature, Ω<sub>k</sub> = 0, and the dark energy content of the universe is computed as Ω<sub>de</sub> = 1 − Ω<sub>m</sub> − Ω<sub>γ</sub> − Ω<sub>ν</sub> where Ω<sub>m</sub> is the density of matter (dark matter and baryons) in units of the critical density, Ω<sub>γ</sub> is the density of photons, and Ω<sub>ν</sub> the density of neutrinos.",
+    type: "bool",
+    dependencies: { Ode0: false },
+  },
+  H0: {
+    text: "H<sub>0</sub>",
+    def: "The Hubble constant in km/s/Mpc.",
+    type: "float",
+    value: {
+      min: 0,
+      step: 1,
+    },
+  },
+  Om0: {
+    text: "Ω<sub>m</sub>",
+    def: "Ω<sub>m</sub>, the matter density in units of the critical density at z = 0 (includes all non-relativistic matter, i.e., dark matter and baryons but not neutrinos).",
+    type: "float",
+    value: {
+      min: 0,
+      max: 0.9999,
+      step: 0.1,
+    },
+  },
+  Ob0: {
+    text: "Ω<sub>b</sub>",
+    def: "Ω<sub>b</sub>, the baryon density in units of the critical density at z = 0.",
+    type: "float",
+    value: {
+      min: 0,
+      max: 1,
+      step: 0.1,
+    },
+  },
+  Ode0: {
+    text: "Ω<sub>de</sub>",
+    def: "Ω<sub>de</sub>, the dark energy density in units of the critical density at z = 0.",
+    type: "float",
+    value: {
+      min: 0,
+      max: 1,
+      step: 0.1,
+    },
+  },
+  sigma8: {
+    text: "σ<sub>8</sub>",
+    def: "The normalization of the power spectrum, i.e. the variance when the field is filtered with a top hat filter of radius 8 Mpc/h.",
+    type: "float",
+    value: {
+      min: 0,
+      step: 0.1,
+    },
+    advanced: true,
+  },
+  ns: {
+    text: "n<sub>s</sub>",
+    def: "The tilt of the primordial power spectrum.",
+    type: "float",
+    value: {
+      min: 0,
+      step: 0.1,
+    },
+    advanced: true,
+  },
+  relspecies: {
+    text: "relspecies",
+    def: "If relspecies == False, all relativistic contributions to the energy density of the universe (such as photons and neutrinos) are ignored.",
+    type: "bool",
+    advanced: true,
+    dependencies: {
+      Tcmb0: true,
+      Neff: true,
+    },
+  },
+  Tcmb0: {
+    text: "Tcmb0",
+    def: "The temperature of the CMB at z = 0 in Kelvin.",
+    type: "float",
+    advanced: true,
+    value: {
+      default: 2.7255,
+    },
+  },
+  Neff: {
+    text: "Neff",
+    def: "The effective number of neutrino species.",
+    type: "float",
+    advanced: true,
+    value: {
+      default: 3.046,
+    },
+  },
+  de_model: {
+    text: "de_model",
+    def: "An identifier indicating which dark energy equation of state is to be used. The DE equation of state can either be a cosmological constant (de_model = lambda), a constant w (de_model = w0, the w0 parameter must be set), a linear function of the scale factor according to the parameterization of Linder 2003 where (de_model = w0wa, the w0 and wa parameters must be set), or a function supplied by the user (de_model = user). In the latter case, the w(z) function must be passed using the wz_function parameter.",
+    type: "radio",
+    advanced: true,
+    value: [
+      {
+        label: "None",
+        value: "",
+      },
+      {
+        label: "Cosmological Constant",
+        value: "lambda",
+      },
+      {
+        label: "Constant DE EOS",
+        value: "w0",
+      },
+      {
+        label: "Varying DE EOS",
+        value: "w0wa",
+      },
+    ],
+  },
+};

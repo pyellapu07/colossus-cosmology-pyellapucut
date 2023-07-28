@@ -1,10 +1,11 @@
 import cosmology from "../../config/cosmology.js";
-import cosmologyFormat from "../../config/cosmologyFormat.js";
+import cosmologyFormat from "../../config/cosmologyParams.js";
 import { Input } from "./Input.js";
 
 class Model {
   constructor(type, data) {
     this.cosmo = cosmology[type];
+    this.type = type;
     this.data = data;
 
     this.params = {};
@@ -32,23 +33,20 @@ class Model {
       }
     };
 
-    const value = this.cosmo[name];
-    const formattedValue = {
-      default: value,
-      min: format.min !== undefined ? format.min : 0,
-      max: format.max !== undefined ? format.max : Infinity,
-      step: format.step !== undefined ? format.step : 0.1,
-    };
+    const defaultValue = this.cosmo[name];
+    const formattedValue =
+      format.value !== undefined ? structuredClone(format.value) : {};
+    if (defaultValue !== undefined) formattedValue.default = defaultValue;
 
     const container = new Input(
       cosmologyFormat[name].text,
       type,
-      type == "bool" ? value : formattedValue,
+      formattedValue,
       cosmologyFormat[name].def,
       onChange
     ).dom;
 
-    this.params[name] = value;
+    this.params[name] = formattedValue.default;
 
     this.elems[name] = {
       container,

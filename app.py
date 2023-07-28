@@ -1,5 +1,6 @@
 import json
 import os
+import re
 from flask import Flask, render_template, request, jsonify
 from math import log10, floor
 from numpy import ndarray, isnan, linspace, array
@@ -58,6 +59,10 @@ filename = os.path.join(app.static_folder, 'src/config', 'cosmoModule.js')
 with open(filename, 'r+', encoding="utf-8") as dataFile:
     data = dataFile.read()
     json_data = data[data.find('{') : data.rfind('}')+1]
+    json_data = json_data.replace("\'", "\"")
+    json_data = re.sub(r'([{\s,])(\w+):', r'\1"\2":', json_data)
+    json_data = re.sub(r',\s*}', '}', json_data)
+    json_data = re.sub(r',\s*]', ']', json_data)
     cosmoModule = json.loads(json_data)
 
 @app.route('/Basic', methods=['POST'])

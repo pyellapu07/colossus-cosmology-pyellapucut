@@ -164,7 +164,7 @@ button {
 .sidebar-model {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
   background: var(--white);
   border-bottom: var(--divider);
 }
@@ -215,7 +215,7 @@ button {
 }
 
 .expand-toggle[data-collapse]::before {
-  background-image: url(../../dist/chevron-up.svg);
+  background-image: url(../../dist/chevron-right.svg);
 }
 
 .expand-toggle:hover::before {
@@ -329,8 +329,8 @@ button {
 }
 
 .sidebar-body {
-  padding: 0 0 0 16px;
-  width: 100%;
+  display: table;
+  margin: 0 0 0 16px;
 }
 
 .sidebar-body .input-wrapper,
@@ -338,21 +338,56 @@ button {
   padding-bottom: 4px;
 }
 
+.sidebar-options {
+  margin-top: 4px;
+}
+
 .content .input-wrapper,
 .content .title-wrapper {
   padding-bottom: 8px;
 }
 
+.input-container {
+  display: table-row;
+}
+
 .input-container .title-wrapper {
   padding-right: 8px;
   vertical-align: top;
+  display: table-cell;
+}
+
+.input-container .title-wrapper {
+  display: table-cell;
 }
 
 .input-container .title,
-.advanced-expand-toggle {
+.advanced-toggle {
   font: var(--textSm);
   font-weight: 500;
   color: var(--gray700);
+}
+
+.advanced-title {
+  display: flex;
+  padding: 4px 8px;
+  user-select: none;
+}
+
+.advanced-toggle {
+  margin: 8px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-radius: 4px;
+  border: var(--divider);
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.advanced-title:hover {
+  background: var(--gray100);
 }
 
 label.tooltip:hover,
@@ -569,14 +604,12 @@ label.tooltip:focus-visible .tooltip-content {
   display: block;
   position: relative;
   border-bottom: var(--divider);
+  width: 100%;
 }
 
 #tab .content[data-collapse] {
   visibility: hidden;
   padding: 0;
-  border: none;
-  margin: 0;
-  height: 0;
 }
 
 #tab .input-container {
@@ -800,10 +833,6 @@ label.tooltip:focus-visible .tooltip-content {
   height: 32px;
 }
 
-.content[data-collapse] .tab-collapse {
-  visibility: visible;
-}
-
 .tab-collapse::before {
   background-image: url(../../dist/chevron-up.svg);
   width: 32px;
@@ -820,9 +849,11 @@ label.tooltip:focus-visible .tooltip-content {
   padding: 4px 0;
   border-top: var(--divider);
   width: 100%;
+  background: var(--gray900);
   justify-content: center;
 }
 
-#footer > * {
+#footer * {
   padding: 0 4px;
+  color: var(--gray50);
 }

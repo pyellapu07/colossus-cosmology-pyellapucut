@@ -1,138 +1,176 @@
 import { Model } from "../components/Model.js";
 import { Tooltip } from "../components/Tooltip.js";
 import cosmology from "../../config/cosmology.js";
+import cosmologyParams from "../../config/cosmologyParams.js";
 
 class SidebarModel {
   constructor(data, type) {
     this.data = data;
-    const model = (this.model = new Model(type, data));
+    this.model = new Model(type, data);
+    this.dom = this.createDom();
+  }
 
-    const dom = (this.dom = document.createElement("div"));
+  createDom() {
+    const dom = document.createElement("div");
     dom.classList.add("sidebar-model");
 
-    // header
+    const options = document.createElement("div");
+    options.classList.add("sidebar-options");
+
+    options.appendChild(this.createBody());
+
+    const advancedBody = this.createAdvancedBody();
+    const advancedToggle = this.createAdvancedToggle(advancedBody);
+    options.appendChild(advancedToggle);
+    advancedToggle.appendChild(advancedBody);
+
+    const header = this.createHeader(options);
+    dom.appendChild(header);
+    dom.appendChild(options);
+
+    return dom;
+  }
+
+  createHeader(options) {
     const header = document.createElement("div");
     header.classList.add("sidebar-header");
+    const expandToggle = this.createExpandToggle(header);
+    header.appendChild(expandToggle);
+    const headerTitle = this.createHeaderTitle();
+    header.appendChild(headerTitle);
+    const enabledToggle = this.createEnabledToggle();
+    header.appendChild(enabledToggle);
 
-    // header expand toggle
+    header.addEventListener("click", (e) => {
+      if (e.target == header || e.target.classList.contains("expand-toggle")) {
+        if (options.style.display === "none") {
+          options.style.display = "";
+          delete expandToggle.dataset.collapse;
+        } else {
+          options.style.display = "none";
+          expandToggle.dataset.collapse = true;
+        }
+      }
+    });
+
+    const trash = this.createTrash();
+    header.appendChild(trash);
+    return header;
+  }
+
+  createExpandToggle(header) {
     const expandToggle = document.createElement("div");
     expandToggle.classList.add("expand-toggle", "icon-button");
-    header.appendChild(expandToggle);
-
     const expandTooltip = new Tooltip(expandToggle, "Expand model");
+    return expandToggle;
+  }
 
-    // header title
+  createHeaderTitle() {
     const headerTitle = document.createElement("input");
-    headerTitle.value = this.addName(cosmology[type].longname);
+    headerTitle.value = this.addName(cosmology[this.model.type].longname);
     headerTitle.classList.add("model-name");
-
     headerTitle.addEventListener("input", this.resizeTitle);
     headerTitle.addEventListener("change", (e) => {
       if (e.target.value == "") e.target.value = this.addName("Model");
       else e.target.value = this.addName(e.target.value, headerTitle);
-
       this.resizeTitle.call(headerTitle);
-
-      data.needsUpdate();
+      this.data.needsUpdate();
     });
-
     this.resizeTitle.call(headerTitle);
+    return headerTitle;
+  }
 
-    header.appendChild(headerTitle);
-
-    // header enable toggle
+  createEnabledToggle() {
     const enabledToggle = document.createElement("div");
+    this.enabledToggle = enabledToggle;
     enabledToggle.classList.add("checkbox", "enable-toggle");
     enabledToggle.dataset.checked = "";
 
     enabledToggle.addEventListener("click", () => {
       if ("checked" in enabledToggle.dataset) {
         delete enabledToggle.dataset.checked;
-        data.disabled.push(this.model.params);
+        this.data.disabled.push(this.model.params);
       } else {
         enabledToggle.dataset.checked = "";
-        data.disabled.splice(data.disabled.indexOf(this.model.params), 1);
+        this.data.disabled.splice(
+          this.data.disabled.indexOf(this.model.params),
+          1
+        );
       }
-
-      data.needsUpdate();
+      this.data.needsUpdate();
     });
-
-    header.appendChild(enabledToggle);
-
     const enabledTooltip = new Tooltip(enabledToggle, "Show/hide in output");
 
-    let open = true;
+    return enabledToggle;
+  }
 
-    header.addEventListener("click", function (e) {
-      if (e.target == header || e.target == expandToggle) {
-        open = !open;
-
-        if (open) {
-          body.style.removeProperty("display");
-          delete expandToggle.dataset.collapse;
-        } else {
-          body.style.display = "none";
-          expandToggle.dataset.collapse = "";
-        }
-      }
-    });
-
-    // header delete
+  createTrash() {
     const trash = document.createElement("button");
     trash.classList.add("trash", "icon-button");
-    header.appendChild(trash);
-
     const trashTooltip = new Tooltip(trash, "Delete model");
 
     trash.addEventListener("click", () => {
-      data.models.splice(data.models.indexOf(this.model.params), 1);
-      if (data.disabled.indexOf(this.model.params) !== -1)
-        data.disabled.splice(data.disabled.indexOf(this.model.params), 1);
-      data.needsUpdate();
-
-      dom.remove();
+      this.data.models.splice(this.data.models.indexOf(this.model.params), 1);
+      if (this.data.disabled.indexOf(this.model.params) !== -1)
+        this.data.disabled.splice(
+          this.data.disabled.indexOf(this.model.params),
+          1
+        );
+      this.data.needsUpdate();
+      this.dom.remove();
     });
+    return trash;
+  }
 
-    dom.appendChild(header);
-
-    // body
-    const body = document.createElement("table");
+  createBody() {
+    const body = document.createElement("div");
     body.classList.add("sidebar-body");
+    for (const elem in this.model.elems) {
+      if (cosmologyParams[elem].advanced === true) continue;
 
-    for (const elem in model.elems) {
-      body.appendChild(model.elems[elem].container);
+      body.appendChild(this.model.elems[elem].container);
     }
+    return body;
+  }
 
-    // advanced options
-    const advancedExpandToggle = document.createElement("tr");
-    advancedExpandToggle.classList.add("advanced-expand-toggle", "icon-button");
-    advancedExpandToggle.innerText = "Advanced";
-    body.appendChild(advancedExpandToggle);
+  createAdvancedToggle(advancedBody) {
+    const advancedToggle = document.createElement("div");
+    advancedToggle.classList.add("advanced-toggle", "input-container");
 
-    const advancedExpandTooltip = new Tooltip(
-      advancedExpandToggle,
-      "Expand advanced options"
-    );
+    const title = document.createElement("div");
+    title.classList.add("advanced-title");
+    advancedToggle.appendChild(title);
 
-    let advancedOpen = false;
-    advancedExpandToggle.addEventListener("click", function (e) {
-      advancedOpen = !advancedOpen;
+    const icon = document.createElement("div");
+    icon.classList.add("expand-toggle", "icon-button");
+    icon.dataset.collapse = true;
+    title.appendChild(icon);
 
-      if (advancedOpen) {
-        advancedOptions.style.removeProperty("display");
-        delete advancedExpandToggle.dataset.collapse;
+    const text = document.createElement("span");
+    text.innerText = "Advanced";
+    title.appendChild(text);
+
+    title.addEventListener("click", () => {
+      if (advancedBody.style.display === "none") {
+        advancedBody.style.display = "";
+        delete icon.dataset.collapse;
       } else {
-        advancedOptions.style.display = "none";
-        advancedExpandToggle.dataset.collapse = "";
+        advancedBody.style.display = "none";
+        icon.dataset.collapse = true;
       }
     });
+    return advancedToggle;
+  }
 
-    // advanced settings
-    const advancedOptions = document.createElement("div");
-    advancedOptions.classList.add("advanced-options");
-    body.appendChild(advancedOptions);
-
-    dom.appendChild(body);
+  createAdvancedBody() {
+    const body = document.createElement("div");
+    body.style.display = "none";
+    body.classList.add("sidebar-body");
+    for (const elem in this.model.elems) {
+      if (cosmologyParams[elem].advanced === true)
+        body.appendChild(this.model.elems[elem].container);
+    }
+    return body;
   }
 
   resizeTitle() {

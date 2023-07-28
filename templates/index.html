@@ -1,14 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-38EPPXF17V"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-38EPPXF17V");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Colossus Web</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dist/normalize.css') }}"/>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='src/css/main.css') }}"/>
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='dist/favicon.ico') }}">
-</head>
-<body>
-    <script type="module" src="{{ url_for('static', filename='src/js/main.js') }}"></script>
-</body>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='dist/normalize.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='src/css/main.css') }}"
+    />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{ url_for('static', filename='dist/favicon.ico') }}"
+    />
+  </head>
+  <body>
+    <script
+      type="module"
+      src="{{ url_for('static', filename='src/js/main.js') }}"
+    ></script>
+  </body>
 </html>
