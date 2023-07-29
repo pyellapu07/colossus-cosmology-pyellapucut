@@ -55,7 +55,7 @@ export default {
       value: { default: false },
     },
   ],
-  Content: [
+  Density: [
     {
       label: "Plot as function of",
       type: "radio",

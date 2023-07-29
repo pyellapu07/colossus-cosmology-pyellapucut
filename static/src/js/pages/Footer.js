@@ -7,7 +7,7 @@ const infoContent = [
   ["Documentation", "https://bdiemer.bitbucket.io/colossus/"],
   ["Funded by the National Science Foundation", null],
   [
-    '© 2014-2023 <a href="http://www.benediktdiemer.com/" target="_blank">Benedikt Diemer</a>, <a href="https://www.echou.xyz" target="_blank">Erik Chou</a>',
+    '© 2014-2023 <a href="https://www.echou.xyz" target="_blank">Erik Chou</a>, <a href="http://www.benediktdiemer.com/" target="_blank">Benedikt Diemer</a>',
     null,
   ],
 ];

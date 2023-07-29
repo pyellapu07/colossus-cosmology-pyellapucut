@@ -90,7 +90,6 @@ class Input {
 
         break;
       case "radio":
-        console.log(value);
         for (const option of value) {
           const radioLabel = option.label;
           const radioValue =
@@ -102,7 +101,7 @@ class Input {
           const uniqueId = label + radioLabel + counter++;
 
           const secondaryLabel = document.createElement("label");
-          secondaryLabel.innerText = radioLabel;
+          secondaryLabel.innerHTML = radioLabel;
           secondaryLabel.htmlFor = uniqueId;
 
           const radio = document.createElement("input");

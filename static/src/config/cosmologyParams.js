@@ -1,9 +1,9 @@
 export default {
   flat: {
-    text: "flat",
+    text: "Flat",
     def: "If flat, there is no curvature, Ω<sub>k</sub> = 0, and the dark energy content of the universe is computed as Ω<sub>de</sub> = 1 − Ω<sub>m</sub> − Ω<sub>γ</sub> − Ω<sub>ν</sub> where Ω<sub>m</sub> is the density of matter (dark matter and baryons) in units of the critical density, Ω<sub>γ</sub> is the density of photons, and Ω<sub>ν</sub> the density of neutrinos.",
     type: "bool",
-    dependencies: { Ode0: false },
+    dependencies: { Ode0: [false] },
   },
   H0: {
     text: "H<sub>0</sub>",
@@ -65,17 +65,17 @@ export default {
     advanced: true,
   },
   relspecies: {
-    text: "relspecies",
+    text: "Relativistic species",
     def: "If relspecies == False, all relativistic contributions to the energy density of the universe (such as photons and neutrinos) are ignored.",
     type: "bool",
     advanced: true,
     dependencies: {
-      Tcmb0: true,
-      Neff: true,
+      Tcmb0: [true],
+      Neff: [true],
     },
   },
   Tcmb0: {
-    text: "Tcmb0",
+    text: "T<sub>CMB</sub> (K)",
     def: "The temperature of the CMB at z = 0 in Kelvin.",
     type: "float",
     advanced: true,
@@ -84,7 +84,7 @@ export default {
     },
   },
   Neff: {
-    text: "Neff",
+    text: "N<sub>eff</sub>",
     def: "The effective number of neutrino species.",
     type: "float",
     advanced: true,
@@ -93,27 +93,62 @@ export default {
     },
   },
   de_model: {
-    text: "de_model",
+    text: "Dark energy model",
     def: "An identifier indicating which dark energy equation of state is to be used. The DE equation of state can either be a cosmological constant (de_model = lambda), a constant w (de_model = w0, the w0 parameter must be set), a linear function of the scale factor according to the parameterization of Linder 2003 where (de_model = w0wa, the w0 and wa parameters must be set), or a function supplied by the user (de_model = user). In the latter case, the w(z) function must be passed using the wz_function parameter.",
     type: "radio",
     advanced: true,
     value: [
       {
-        label: "None",
-        value: "",
-      },
-      {
-        label: "Cosmological Constant",
+        label: "Cosmological constant (Λ)",
         value: "lambda",
       },
       {
-        label: "Constant DE EOS",
+        label: "Constant EOS (w<sub>0</sub>)",
         value: "w0",
       },
       {
-        label: "Varying DE EOS",
+        label: "Varying EOS (w<sub>0</sub>-w<sub>a</sub>)",
         value: "w0wa",
       },
     ],
+    dependencies: { w0: ["w0", "w0wa"], wa: ["w0wa"] },
+  },
+  w0: {
+    text: "w<sub>0</sub>",
+    def: "If de_model == w0, this variable gives the constant dark energy equation of state parameter w. If de_model == w0wa, this variable gives the constant component w (see de_model parameter).",
+    type: "float",
+    advanced: true,
+    value: {
+      default: -1.0,
+    },
+  },
+  wa: {
+    text: "w<sub>a</sub>",
+    def: "If de_model == w0wa, this variable gives the varying component of w, otherwise it is ignored (see de_model parameter).a",
+    type: "float",
+    advanced: true,
+    value: {
+      default: 0.0,
+    },
+  },
+  power_law: {
+    text: "Power law",
+    def: "Create a self-similar cosmology with a power-law matter power spectrum.",
+    type: "bool",
+    dependencies: { power_law_n: [true] },
+    advanced: true,
+    value: {
+      default: false,
+    },
+  },
+  power_law_n: {
+    text: "Power law n",
+    def: "See power_law.",
+    type: "float",
+    advanced: true,
+    value: {
+      default: -0.0001,
+      max: -0.0001,
+    },
   },
 };

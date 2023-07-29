@@ -601,10 +601,11 @@ label.tooltip:focus-visible .tooltip-content {
 
 #tab .content {
   padding: 16px 16px 8px;
-  display: block;
+  display: flex;
   position: relative;
   border-bottom: var(--divider);
   width: 100%;
+  gap: 32px;
 }
 
 #tab .content[data-collapse] {
@@ -613,15 +614,16 @@ label.tooltip:focus-visible .tooltip-content {
 }
 
 #tab .input-container {
-  visibility: collapse;
+  display: none;
 }
 
 #tab .content[data-collapse] .input-container {
-  visibility: collapse;
+  display: none;
 }
 
 #tab .input-container[data-selected] {
-  visibility: visible;
+  display: flex;
+  flex-direction: column;
 }
 
 #tab .header button {
@@ -738,9 +740,6 @@ label.tooltip:focus-visible .tooltip-content {
   font: var(--textSm);
 }
 
-#result tr td {
-}
-
 #result td,
 #result th {
   padding: 8px;
@@ -761,6 +760,7 @@ label.tooltip:focus-visible .tooltip-content {
 }
 
 #result tr:first-child td {
+  text-align: center;
   border-top: none;
   border: none;
   font: var(--textSm);
@@ -853,7 +853,10 @@ label.tooltip:focus-visible .tooltip-content {
   justify-content: center;
 }
 
-#footer * {
+#footer > * {
   padding: 0 4px;
+}
+
+#footer * {
   color: var(--gray50);
 }

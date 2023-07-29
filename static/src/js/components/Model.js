@@ -24,8 +24,21 @@ class Model {
     const dependencies = format.dependencies;
 
     const onChange = (event) => {
-      let newValue =
-        type == "bool" ? event.target.checked : parseFloat(event.target.value);
+      let newValue;
+
+      console.log(event.target.value);
+
+      switch (type) {
+        case "float":
+          newValue = parseFloat(event.target.value);
+          break;
+        case "bool":
+          newValue = event.target.checked;
+          break;
+        case "radio":
+          newValue = event.target.value;
+          break;
+      }
 
       if (newValue !== this.params[name]) {
         this.updateParams(name, newValue, dependencies);
@@ -56,11 +69,13 @@ class Model {
 
   updateParams(name, value, dependencies) {
     this.params[name] = value;
-
     if (dependencies != undefined) {
       for (const key in dependencies) {
-        this.elems[key].container.style.display =
-          dependencies[key] == value ? "" : "none";
+        this.elems[key].container.style.display = dependencies[key].includes(
+          value
+        )
+          ? ""
+          : "none";
       }
     }
   }

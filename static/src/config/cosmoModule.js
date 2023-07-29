@@ -12,10 +12,10 @@ export default {
       unit: "Gigayears",
       future: true,
     },
-    "Hubble parameter": {
+    "Hubble expansion rate": {
       function: "Hz",
       def: "The Hubble parameter as a function of redshift.",
-      unit: "H<sub>0</sub>",
+      unit: "km/s/Mpc",
       future: true,
     },
     "Linear growth factor": {
