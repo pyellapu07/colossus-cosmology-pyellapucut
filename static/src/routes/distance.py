@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from numpy import linspace, array, isnan
-from .utils import createCosmos, logify, process_cosmo_module
+from .utils import createCosmos, logify, process_cosmo_module, generateDomain
 
 bp = Blueprint('distance', __name__)
 
@@ -13,8 +13,7 @@ def distance():
     domain = data['tab']['inputs']['Redshift domain']
     log_plot = data['tab']['inputs']['Log scale']
 
-    num = 200
-    x = linspace(domain[0],domain[1],num).tolist()
+    x = generateDomain(domain, log_plot)
     np_x = array(x)
     plots = []
 

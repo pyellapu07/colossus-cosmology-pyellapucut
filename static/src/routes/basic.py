@@ -1,3 +1,4 @@
+import numbers
 from flask import Blueprint, request, jsonify
 from numpy import ndarray, isnan
 from .utils import createCosmos, sigfig, process_cosmo_module
@@ -39,19 +40,25 @@ def basic():
                 if (prop["future"] or redshift >= 0):
                     result = getattr(cosmo, prop["function"])(redshift)
 
-                    if isnan(result):
+                    # convert ndarray to numbers
+                    if type(result) is ndarray:
+                        result = result.tolist()
+
+                    # hardcoded to skip distance modulus for negative results 
+                    if prop["function"] == "distanceModulus" and result < 0: 
                         result = "—"
-                    else:
-                        if type(result) is ndarray:
-                            result = result.tolist()
-                        if result in [float("-inf"),float("inf")]:
-                            result = str(result)
-                        elif result < 0 and prop["function"] == "distanceModulus":
+                    # hardcoded to flip sign... Colossus bug?
+                    elif prop["function"] == "comovingDistance":
+                        result = result * -1
+                    # hardcoded to set to zero if result is very small
+                    elif (prop["function"] == "luminosityDistance" or prop["function"] == "angularDiameterDistance") and redshift == 0:
+                        result = 0
+                    
+                    # format numbers
+                    if isinstance(result, numbers.Number):
+                        if (isnan(result) == True):
                             result = "—"
                         else:
-                            if (prop["function"] == "comovingDistance"):
-                                result = result * -1 # hardcoded to flip sign... not sure why
-
                             result = sigfig(result)
                             if result != 0 and (abs(result) > 100 or abs(result) < 0.01):
                                 result = "{:0.3e}".format(result)

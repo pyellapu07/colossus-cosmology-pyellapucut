@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from numpy import linspace, array
-from .utils import createCosmos, logify, process_cosmo_module
+from .utils import createCosmos, logify, process_cosmo_module, generateDomain
 
 bp = Blueprint('density', __name__)
 
@@ -9,15 +9,14 @@ def density():
     cosmo_module = process_cosmo_module()
     data = request.json
     cosmos, names = createCosmos(data['models'])
-    function = data['tab']['inputs']['Plot as function of']['label']
+    function = data['tab']['inputs']['Plot as function of']
     domain = data['tab']['inputs']['Domain']
     contents = cosmo_module["Contents of the Universe"]
     contentKeys = list(contents.keys())
     combined = data['tab']['inputs']['Compare densities']
     log_plot = data['tab']['inputs']['Log scale']
 
-    num = 200
-    x = linspace(domain[0],domain[1],num).tolist()
+    x = generateDomain(domain, log_plot)
     if (function == 'Time (t)'):
         x = [a for a in x if a > 0 and a <= 120.869]
     elif (function == 'Scale factor (a)'):

@@ -1,76 +1,57 @@
-import { OutputTab } from './Output.Tab.js';
-import { OutputResult } from './Output.Result.js';
+import { OutputTab } from "./Output.Tab.js";
+import { OutputResult } from "./Output.Result.js";
 
 class Output {
+  constructor(main) {
+    this.data = main.data;
+    this.status = main.header.status;
 
-	constructor( main ) {
+    const dom = (this.dom = document.createElement("div"));
+    dom.id = "output";
 
-		this.data = main.data;
-		this.status = main.header.status;
+    const tab = new OutputTab(main.data);
+    dom.appendChild(tab.dom);
 
-		const dom = this.dom = document.createElement( 'div' );
-		dom.id = 'output';
+    const result = (this.result = new OutputResult());
+    dom.appendChild(result.dom);
+  }
 
-		const tab = new OutputTab( main.data );
-		dom.appendChild( tab.dom );
+  runModel() {
+    this.request(this.data, (response, status) => {
+      this.result.visualize(response, status);
 
-		const result = this.result = new OutputResult();
-		dom.appendChild( result.dom );
+      this.status.classList.remove("loading");
+      this.status.classList.add("up-to-date");
+      this.status.innerText = "Up to date";
+    });
+  }
 
-	}
+  request(data, func) {
+    if (data.models.length > 0) {
+      const url = data.tab.name;
 
-	runModel() {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "/" + url, true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.addEventListener("readystatechange", () => {
+        if (xhr.readyState == 4) {
+          let response = xhr.responseText;
 
-		this.request( this.data, ( response, status ) => {
+          if (xhr.status == 200) response = JSON.parse(response);
 
-			this.result.visualize( response, status );
+          func(response, xhr.status);
+        }
+      });
 
-			this.status.classList.remove( 'loading' );
-			this.status.classList.add( 'up-to-date' );
-			this.status.innerText = 'Up to date';
+      xhr.send(JSON.stringify(data));
 
-		} );
-
-	}
-
-	request( data, func ) {
-
-		if ( data.models.length > 0 ) {
-
-			const url = data.tab.name;
-
-			const xhr = new XMLHttpRequest();
-			xhr.open( 'POST', '/' + url, true );
-			xhr.setRequestHeader( 'Content-Type', 'application/json' );
-			xhr.addEventListener( 'readystatechange', () => {
-
-				if ( xhr.readyState == 4 ) {
-
-					let response = xhr.responseText;
-
-					if ( xhr.status == 200 )
-						response = JSON.parse( response );
-
-					func( response, xhr.status );
-
-				}
-
-			} );
-
-			xhr.send( JSON.stringify( data ) );
-
-			this.status.classList.remove( 'up-to-date' );
-			this.status.classList.add( 'loading' );
-			this.status.innerText = 'Loading...';
-
-		} else {
-
-			this.result.clear();
-
-		}
-
-	}
-
+      this.status.classList.remove("up-to-date");
+      this.status.classList.add("loading");
+      this.status.innerText = "Loading...";
+    } else {
+      this.result.clear();
+    }
+  }
 }
 
 export { Output };

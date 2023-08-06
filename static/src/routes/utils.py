@@ -4,6 +4,7 @@ import re
 from flask import current_app
 from math import log10, floor
 from colossus.cosmology import cosmology
+from numpy import logspace, linspace
 
 cosmo_module = None
 
@@ -28,15 +29,22 @@ def createCosmos(models):
         names.append(model['name'])
     return [cosmos, names]
 
-def logify( plots, xAxis=True, yAxis=True ):
+def logify(plots, xAxis=True, yAxis=True):
     for plot in plots:
-        if (xAxis):
-            plot['x'] = [log10(i) for i in plot['x'] if i > 0]
-            print(plot['xTitle'])
+        if xAxis:
+            plot['x'] = [log10(i) if i > 0 else None for i in plot['x']]
             plot['xTitle'] = 'log<sub>10</sub> ' + plot['xTitle']
-        if (yAxis):
-            plot['y'] = [[log10(i) for i in j if i > 0] for j in plot['y']]
+        if yAxis:
+            plot['y'] = [[log10(i) if i > 0 else None for i in j] for j in plot['y']]
             plot['yTitle'] = 'log<sub>10</sub> ' + plot['yTitle']
+
+
+def generateDomain(domain, log_plot=False):
+    if (log_plot):
+        # turn 0 into 1e-20 since log10 cant handle 0
+        domain[0] = domain[0] if domain[0] > 0 else 1e-20
+        return logspace(log10(domain[0]),log10(domain[1]), 1000).tolist()
+    return linspace(domain[0], domain[1], 1000).tolist()
 
 def process_cosmo_module():
     global cosmo_module

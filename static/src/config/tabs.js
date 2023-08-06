@@ -3,18 +3,16 @@ export default {
     {
       label: "Redshift (z)",
       type: "float",
-      value: {
-        default: 0,
-        min: -0.995,
-        max: 200,
-      },
+      default: 0,
+      min: -0.995,
+      max: 200,
     },
   ],
   Time: [
     {
       label: "Plot as function of",
       type: "radio",
-      value: [
+      options: [
         {
           label: "Redshift (z)",
         },
@@ -27,39 +25,35 @@ export default {
     {
       label: "Domain",
       type: "range",
-      value: {
-        default: [0, 10],
-        min: -0.995,
-        max: 200,
-      },
+      default: [0, 10],
+      min: -0.995,
+      max: 200,
     },
     {
       label: "Log scale",
       type: "bool",
-      value: { default: false },
+      default: false,
     },
   ],
   Distance: [
     {
       label: "Redshift domain",
       type: "range",
-      value: {
-        default: [0, 10],
-        min: 0,
-        max: 200,
-      },
+      default: [0.0001, 10],
+      min: 0.0001,
+      max: 200,
     },
     {
       label: "Log scale",
       type: "bool",
-      value: { default: false },
+      default: false,
     },
   ],
   Density: [
     {
       label: "Plot as function of",
       type: "radio",
-      value: [
+      options: [
         {
           label: "Redshift (z)",
         },
@@ -72,30 +66,26 @@ export default {
     {
       label: "Domain",
       type: "range",
-      value: {
-        default: [0, 10],
-        min: -0.995,
-        max: 200,
-      },
+      default: [0, 10],
+      min: -0.995,
+      max: 200,
     },
     {
       label: "Compare densities",
       type: "bool",
-      value: {
-        default: true,
-      },
+      default: true,
     },
     {
       label: "Log scale",
       type: "bool",
-      value: { default: false },
+      default: false,
     },
   ],
   "Power Spectrum": [
     {
       label: "Power spectrum model",
       type: "radio",
-      value: [
+      options: [
         {
           label: "Eisenstein & Hu 1998",
         },
@@ -111,25 +101,23 @@ export default {
       ],
     },
     {
-      label: "Wavenumber (k)",
+      label: "Scale",
       type: "range",
-      value: {
-        default: [0.001, 100],
-        min: 0.001,
-        max: "Infinity",
-      },
+      default: [0.001, 100],
+      min: 0.001,
+      max: "Infinity",
     },
     {
       label: "Log scale",
       type: "bool",
-      value: { default: true },
+      default: true,
     },
   ],
   Correlation: [
     {
-      label: "Correlation model",
+      label: "Power spectrum model",
       type: "radio",
-      value: [
+      options: [
         {
           label: "Eisenstein & Hu 1998",
         },
@@ -147,23 +135,21 @@ export default {
     {
       label: "Radius (R)",
       type: "range",
-      value: {
-        default: [0.1, 100],
-        min: 1.0e-3,
-        max: 5.0e2,
-      },
+      default: [0.1, 100],
+      min: 1.0e-3,
+      max: 5.0e2,
     },
     {
       label: "Log scale",
       type: "bool",
-      value: { default: true },
+      default: true,
     },
   ],
   "Peak Height": [
     {
-      label: "Peak height model",
+      label: "Power spectrum model",
       type: "radio",
-      value: [
+      options: [
         {
           label: "Eisenstein & Hu 1998",
         },
@@ -181,30 +167,26 @@ export default {
     {
       label: "Halo mass (M)",
       type: "range",
-      value: {
-        default: [10000000, 1e16],
-        min: 0,
-        max: "Infinity",
-      },
+      default: [10000000, 1e16],
+      min: 0,
+      max: "Infinity",
     },
     {
       label: "Redshift (z)",
       type: "float",
-      value: {
-        default: 0,
-        min: -0.995,
-        max: 200,
-      },
+      default: 0,
+      min: -0.995,
+      max: 200,
     },
     {
       label: "Combine plotting",
       type: "bool",
-      value: { default: true },
+      default: true,
     },
     {
       label: "Log scale",
       type: "bool",
-      value: { default: false },
+      default: false,
     },
   ],
 };

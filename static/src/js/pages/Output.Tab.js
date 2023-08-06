@@ -30,31 +30,36 @@ class OutputTab {
       header.appendChild(button);
 
       // content
-      for (const input of tabs[name]) {
-        const label = input.label;
-        const type = input.type;
-        const value = input.value;
+      for (const format of tabs[name]) {
+        const label = format.label;
+        const type = format.type;
 
         switch (type) {
           case "float":
-            tabContainer.data[label] = value.default;
+            tabContainer.data[label] = format.default;
             break;
           case "radio":
-            tabContainer.data[label] = value[0];
+            tabContainer.data[label] =
+              format.options[0].value !== undefined
+                ? format.options[0].value
+                : format.options[0].label;
             break;
           case "range":
-            tabContainer.data[label] = [value.default[0], value.default[1]];
+            tabContainer.data[label] = [format.default[0], format.default[1]];
             break;
           case "bool":
-            tabContainer.data[label] = value;
+            tabContainer.data[label] = format.default;
         }
 
-        const elem = new Input(label, type, value, "UNDEFINED", (event) => {
+        const elem = new Input(format, format.default, (event) => {
           let newValue;
 
           switch (type) {
             case "float":
               newValue = parseFloat(event.target.value);
+              break;
+            case "bool":
+              newValue = event.target.checked;
               break;
             case "radio":
               newValue = event.target.value;
@@ -65,8 +70,6 @@ class OutputTab {
                 event.target.value
               );
               break;
-            case "bool":
-              newValue = event.target.checked;
           }
 
           if (
@@ -77,6 +80,37 @@ class OutputTab {
           ) {
             tabContainer.data[label] = newValue;
             data.needsUpdate();
+          }
+
+          // hardcoded for "plot as a function of"
+          if (format.label === "Plot as function of") {
+            const domainDOM = elem.dom.nextElementSibling;
+            const min = domainDOM.querySelector("[data-type='min']");
+            const max = domainDOM.querySelector("[data-type='max']");
+            switch (newValue) {
+              case "Redshift (z)":
+                min.min = max.min = -0.995;
+                min.max = max.max = 200;
+                min.value = 0;
+                max.value = 10;
+                break;
+              case "Time (t)":
+                min.min = max.min = 0;
+                min.max = max.max = 100;
+                min.value = 0;
+                max.value = 14;
+                break;
+              case "Scale factor (a)":
+                min.min = max.min = 0.005;
+                min.max = max.max = 200;
+                min.value = 0;
+                max.value = 1;
+                break;
+            }
+
+            var changeEvent = new Event("change");
+            min.dispatchEvent(changeEvent);
+            max.dispatchEvent(changeEvent);
           }
         });
 

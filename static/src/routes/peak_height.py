@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from numpy import array, linspace
-from .utils import createCosmos, power_spectrum_models, logify
+from .utils import createCosmos, power_spectrum_models, logify, generateDomain
 from colossus.cosmology import cosmology
 from colossus.lss import peaks
 
@@ -10,14 +10,13 @@ bp = Blueprint('peak_height', __name__)
 def peakHeight():
     data = request.json
     cosmos, names = createCosmos(data['models'])
-    model = power_spectrum_models[data['tab']['inputs']['Peak height model']['label']]
+    model = power_spectrum_models[data['tab']['inputs']['Power spectrum model']]
     halo = data['tab']['inputs']['Halo mass (M)']
     redshift = data['tab']['inputs']['Redshift (z)']
     combined = data['tab']['inputs']['Combine plotting']
     log_plot = data['tab']['inputs']['Log scale']
 
-    num = 200
-    x = linspace(halo[0],halo[1],num).tolist()
+    x = generateDomain(halo, log_plot)
     np_x = array(x)
     plots = []
 
@@ -49,7 +48,7 @@ def peakHeight():
             }
             plots.append(plot)
 
-    logify(plots, True, log_plot)
+    logify(plots, log_plot, log_plot)
 
     return jsonify(plots)
 

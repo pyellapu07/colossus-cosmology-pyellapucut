@@ -115,11 +115,11 @@ class OutputResult {
       title: title,
       xaxis: {
         title: xTitle,
-        rangemode: "tozero",
+        // rangemode: "tozero",
       },
       yaxis: {
         title: yTitle,
-        rangemode: "tozero",
+        // rangemode: "tozero",
       },
     });
 

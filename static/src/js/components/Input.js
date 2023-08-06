@@ -3,7 +3,10 @@ import { Tooltip } from "./Tooltip.js";
 let counter = 0;
 
 class Input {
-  constructor(label, type, value, def, onChange) {
+  constructor(format, defaultValue, onChange) {
+    const type = format.type;
+    const label = format.label;
+
     const dom = (this.dom = document.createElement("div"));
     dom.classList.add("input-container");
 
@@ -16,7 +19,7 @@ class Input {
     title.innerHTML = label;
     titleWrapper.appendChild(title);
 
-    const tooltip = new Tooltip(title, def);
+    const tooltip = new Tooltip(title, format.def || "UNDEFINED");
 
     const input =
       type == "radio" || type == "range" ? [] : document.createElement("input");
@@ -29,18 +32,16 @@ class Input {
       case "bool":
         input.type = "checkbox";
         input.classList.add("checkbox");
-        input.checked = value.default;
+        input.checked = defaultValue;
         break;
       case "float":
         input.type = "number";
         input.classList.add("textbox");
         input.value =
-          value.default >= 10000
-            ? value.default.toExponential()
-            : value.default;
-        input.min = value.min;
-        input.max = value.max;
-        input.step = value.step;
+          defaultValue >= 10000 ? defaultparams.toExponential() : defaultValue;
+        input.min = format.min;
+        input.max = format.max;
+        input.step = format.step;
         break;
       case "range":
         const minFieldset = document.createElement("fieldset");
@@ -60,22 +61,22 @@ class Input {
         minBox.classList.add("textbox");
         minBox.dataset.type = "min";
         minBox.value =
-          value.default[0] >= 10000
-            ? value.default[0].toExponential()
-            : value.default[0];
-        minBox.min = value.min;
-        minBox.max = value.max;
+          defaultValue[0] >= 10000
+            ? defaultValue[0].toExponential()
+            : defaultValue[0];
+        minBox.min = format.min;
+        minBox.max = format.max;
 
         const maxBox = document.createElement("input");
         maxBox.type = "number";
         maxBox.classList.add("textbox");
         maxBox.dataset.type = "max";
         maxBox.value =
-          value.default[1] >= 10000
-            ? value.default[1].toExponential()
-            : value.default[1];
-        maxBox.min = value.min;
-        maxBox.max = value.max;
+          defaultValue[1] >= 10000
+            ? defaultValue[1].toExponential()
+            : defaultValue[1];
+        maxBox.min = format.min;
+        maxBox.max = format.max;
 
         input.push(minBox);
         input.push(maxBox);
@@ -90,7 +91,7 @@ class Input {
 
         break;
       case "radio":
-        for (const option of value) {
+        for (const option of format.options) {
           const radioLabel = option.label;
           const radioValue =
             option.value === undefined ? option.label : option.value;
@@ -123,7 +124,7 @@ class Input {
         break;
     }
 
-    function onChangeWrapper(e) {
+    function onChangeWrapper(event) {
       let newValue;
 
       if (type == "bool") {
@@ -148,7 +149,7 @@ class Input {
 
       event.target.value = newValue;
 
-      onChange(e);
+      onChange(event);
     }
 
     if (input instanceof Array) {

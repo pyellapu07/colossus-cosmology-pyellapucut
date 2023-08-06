@@ -26,8 +26,6 @@ class Model {
     const onChange = (event) => {
       let newValue;
 
-      console.log(event.target.value);
-
       switch (type) {
         case "float":
           newValue = parseFloat(event.target.value);
@@ -47,19 +45,11 @@ class Model {
     };
 
     const defaultValue = this.cosmo[name];
-    const formattedValue =
-      format.value !== undefined ? structuredClone(format.value) : {};
-    if (defaultValue !== undefined) formattedValue.default = defaultValue;
 
-    const container = new Input(
-      cosmologyFormat[name].text,
-      type,
-      formattedValue,
-      cosmologyFormat[name].def,
-      onChange
-    ).dom;
+    const container = new Input(format, defaultValue, onChange).dom;
 
-    this.params[name] = formattedValue.default;
+    this.params[name] =
+      defaultValue !== undefined ? defaultValue : format.default;
 
     this.elems[name] = {
       container,

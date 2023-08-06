@@ -1,18 +1,18 @@
 from flask import Blueprint, request, jsonify
 from numpy import array, linspace
-from .utils import createCosmos, power_spectrum_models, logify
+from .utils import createCosmos, power_spectrum_models, logify, generateDomain
 
 bp = Blueprint('correlation', __name__)
 
 correlationPlots = [
 {
-    'title': 'Correlation function',
-    'yTitle': 'Correlation',
+    'title': 'Correlation function (𝜉)',
+    'yTitle': 'abs(Correlation function)',
     'xTitle': 'Radius (Mpc/h)',
     'function': 'correlationFunction'
 },
 {
-    'title': 'RMS variance',
+    'title': 'Variance (σ)',
     'yTitle': 'Variance',
     'xTitle': 'Radius (Mpc/h)',
     'function': 'sigma'
@@ -22,12 +22,11 @@ correlationPlots = [
 def correlation():
     data = request.json
     cosmos, names = createCosmos(data['models'])
-    model = power_spectrum_models[data['tab']['inputs']['Correlation model']['label']]
+    model = power_spectrum_models[data['tab']['inputs']['Power spectrum model']]
     wave = data['tab']['inputs']['Radius (R)']
     log_plot = data['tab']['inputs']['Log scale']
 
-    num = 200
-    x = linspace(wave[0],wave[1],num).tolist()
+    x = generateDomain(wave, log_plot)
     np_x = array(x)
     y = []
 

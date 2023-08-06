@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
-from numpy import linspace, array
-from .utils import createCosmos, logify
+from numpy import array
+from .utils import createCosmos, logify, generateDomain
 
 bp = Blueprint('time', __name__)
 
@@ -18,14 +18,13 @@ timePlots = [
 def time():
     data = request.json
     cosmos, names = createCosmos(data['models'])
-    function = data['tab']['inputs']['Plot as function of']["label"]
+    function = data['tab']['inputs']['Plot as function of']
     domain = data['tab']['inputs']['Domain']
     log_plot = data['tab']['inputs']['Log scale']
 
-    num = 200
-    x = linspace(domain[0],domain[1],num).tolist()
+    x = generateDomain(domain, log_plot)
     if (function == 'Time (t)'):
-        x = [a for a in x if a > 0 and a <= 120.869]
+        x = [a for a in x if a > 0.002 and a <= 120.869]
     elif (function == 'Scale factor (a)'):
         x = [a for a in x if a > 0]
 
@@ -42,23 +41,26 @@ def time():
         plots.append(plot)
 
     for cosmo in cosmos:
-        x_copy = x.copy()
+        redshift = x
 
+        # plot 1
+
+        # converts the domain back to redshift
         if (function == 'Time (t)'):
-            for j in range(len(x_copy)):
-                x_copy[j] = cosmo.age(x[j], inverse = True)
+            redshift = cosmo.age(array(x), inverse = True)
         elif (function == 'Scale factor (a)'):
-            for j in range(len(x_copy)):
-                x_copy[j] = 1 / x[j] - 1
+            redshift = [1 / (x[j] + 1) for j in range(len(x))]
 
-        line = cosmo.Hz(array(x_copy)).tolist()
+        line = cosmo.Hz(array(redshift)).tolist()
         plots[1]['y'].append(line)
 
+        # plot 0
+
         if (function == 'Redshift (z)' or function == 'Scale factor (a)' ):
-            line = cosmo.age(array(x_copy)).tolist()
+            line = cosmo.age(array(redshift)).tolist()
         elif (function == 'Time (t)'):
-            line = x_copy
-            plots[0]['yTitle'] = 'Redshift (z)'
+            line = [1 / (1 + redshift[j]) for j in range(len(redshift))]
+            plots[0]['yTitle'] = 'Scale factor (a)'
         plots[0]['y'].append(line)
 
     if (log_plot):
