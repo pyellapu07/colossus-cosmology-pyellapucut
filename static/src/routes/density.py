@@ -18,7 +18,7 @@ def density():
 
     x = generateDomain(domain, log_plot)
     if (function == 'Time (t)'):
-        x = [a for a in x if a > 0 and a <= 120.869]
+        x = [a for a in x if a > 0.002 and a <= 120.869]
     elif (function == 'Scale factor (a)'):
         x = [a for a in x if a > 0]
 

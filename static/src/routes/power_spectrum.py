@@ -15,6 +15,7 @@ def powerSpectrum():
     x = generateDomain(domain, log_plot)
     y = []
     y2 = []
+    y3 = []
     matter_power_spectrum_plot = {
         'type': 'plot',
         'x': x,
@@ -33,12 +34,22 @@ def powerSpectrum():
         'yTitle': 'Linear growth factor (D<sub>+</sub>)',
         'names': names
     }
+    power_spectrum_slope_plot = {
+        'type': 'plot',
+        'x': x,
+        'y': y3,
+        'title': 'Power spectrum slope',
+        'xTitle': 'Wavenumber (Mpc/h)<sup>3</sup>',
+        'yTitle': 'Slope (d ln(P) / d ln(k))',
+        'names': names
+    }
 
-    plots = [matter_power_spectrum_plot, linear_growth_factor_plot]
+    plots = [matter_power_spectrum_plot, linear_growth_factor_plot, power_spectrum_slope_plot]
 
     for cosmo in cosmos:
         line = cosmo.matterPowerSpectrum(array(x), model=model).tolist()
         y.append(line)
+        y3.append(line)
 
         redshift = [1 / (x[j] + 1) for j in range(len(x))]
         print(redshift)
