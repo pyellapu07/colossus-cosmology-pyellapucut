@@ -12,7 +12,7 @@ def powerSpectrum():
     domain = data['tab']['inputs']['Scale']
     log_plot = data['tab']['inputs']['Log scale']
 
-    x = generateDomain(domain, log_plot)
+    x = generateDomain(domain, log_plot, 10000)
     y = []
     y2 = []
     y3 = []
@@ -49,12 +49,14 @@ def powerSpectrum():
     for cosmo in cosmos:
         line = cosmo.matterPowerSpectrum(array(x), model=model).tolist()
         y.append(line)
-        y3.append(line)
 
         redshift = [1 / (x[j] + 1) for j in range(len(x))]
         print(redshift)
         line = cosmo.growthFactor(array(redshift)).tolist()
         y2.append(line)
+
+        line = cosmo.matterPowerSpectrum(array(x), model=model, derivative=True).tolist()
+        y3.append(line)
 
     if (log_plot):
         logify(plots)

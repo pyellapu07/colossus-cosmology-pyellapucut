@@ -38,20 +38,26 @@ def basic():
                 result = "—"
 
                 if (prop["future"] or redshift >= 0):
-                    result = getattr(cosmo, prop["function"])(redshift)
+                    if (prop["function"] == "comovingDistance"):
+                        result = getattr(cosmo, prop["function"])(0, redshift)
+                    else:
+                        result = getattr(cosmo, prop["function"])(redshift)
 
                     # convert ndarray to numbers
                     if type(result) is ndarray:
                         result = result.tolist()
 
+                    # remove h units
+                    if (prop["unit"] == "Mpc"):
+                        result = result * cosmo.h
+                    elif (prop["unit"] == "M<sub>⊙</sub>/kpc<sup>3</sup>"):
+                        result = result / cosmo.h**2
+
                     # hardcoded to skip distance modulus for negative results 
                     if prop["function"] == "distanceModulus" and result < 0: 
                         result = "—"
-                    # hardcoded to flip sign... Colossus bug?
-                    elif prop["function"] == "comovingDistance":
-                        result = result * -1
                     # hardcoded to set to zero if result is very small
-                    elif (prop["function"] == "luminosityDistance" or prop["function"] == "angularDiameterDistance") and redshift == 0:
+                    elif (prop["function"] == "luminosityDistance" or prop["function"] == "angularDiameterDistance" or prop["function"] == "lookbackTime") and redshift == 0:
                         result = 0
                     
                     # format numbers

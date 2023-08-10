@@ -26,7 +26,7 @@ export default {
     type: "float",
     min: 0,
     max: 1,
-    step: 0.1,
+    step: 0.01,
   },
   Ode0: {
     label: "Ω<sub>de</sub>",
@@ -68,6 +68,7 @@ export default {
     type: "float",
     advanced: true,
     default: 2.7255,
+    step: 0.1,
   },
   Neff: {
     label: "N<sub>eff</sub>",
@@ -112,19 +113,20 @@ export default {
     default: 0.0,
   },
   power_law: {
-    label: "Power law",
+    label: "Self-similar power spectrum",
     def: "Create a self-similar cosmology with a power-law matter power spectrum.",
     type: "bool",
     dependencies: { power_law_n: [true] },
     advanced: true,
     default: false,
+    step: 0.1,
   },
   power_law_n: {
-    label: "Power law n",
+    label: "PS slope",
     def: "See power_law.",
     type: "float",
     advanced: true,
-    default: -0.0001,
+    default: -2.0,
     max: -0.0001,
   },
 };

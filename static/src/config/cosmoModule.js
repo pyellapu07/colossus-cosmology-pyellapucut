@@ -29,19 +29,19 @@ export default {
     "Comoving distance": {
       function: "comovingDistance",
       def: "The transverse or line-of-sight comoving distance.",
-      unit: "Mpc/h",
+      unit: "Mpc",
       future: true,
     },
     "Luminosity distance": {
       function: "luminosityDistance",
       def: "The luminosity distance to redshift z.",
-      unit: "Mpc/h",
+      unit: "Mpc",
       future: false,
     },
     "Angular diameter distance": {
       function: "angularDiameterDistance",
       def: "The angular diameter distance is the transverse distance that, at redshift z, corresponds to an angle of one radian.",
-      unit: "Mpc/h",
+      unit: "Mpc",
       future: false,
     },
     "Distance modulus": {
@@ -55,43 +55,43 @@ export default {
     "Critical density": {
       function: "rho_c",
       def: "The critical density of the universe at redshift z.",
-      unit: "M<sub>⊙</sub>h<sup>2</sup>/kpc<sup>3</sup>",
+      unit: "M<sub>⊙</sub>/kpc<sup>3</sup>",
       future: true,
     },
     "Matter density": {
       function: "rho_m",
       def: "The matter density of the universe at redshift z.",
-      unit: "M<sub>⊙</sub>h<sup>2</sup>/kpc<sup>3</sup>",
+      unit: "M<sub>⊙</sub>/kpc<sup>3</sup>",
       future: true,
     },
     "Baryon density": {
       function: "rho_b",
       def: "The baryon density of the universe at redshift z.",
-      unit: "M<sub>⊙</sub>h<sup>2</sup>/kpc<sup>3</sup>",
+      unit: "M<sub>⊙</sub>/kpc<sup>3</sup>",
       future: true,
     },
     "Dark energy density": {
       function: "rho_de",
       def: "The dark energy density of the universe at redshift z.",
-      unit: "M<sub>⊙</sub>h<sup>2</sup>/kpc<sup>3</sup>",
+      unit: "M<sub>⊙</sub>/kpc<sup>3</sup>",
       future: true,
     },
     "Relativistic density": {
       function: "rho_r",
       def: "The density of relativistic species in the universe at redshift z. This density is the sum of the photon and neutrino densities.",
-      unit: "M<sub>⊙</sub>h<sup>2</sup>/kpc<sup>3</sup>",
+      unit: "M<sub>⊙</sub>/kpc<sup>3</sup>",
       future: true,
     },
     "Neutrino density": {
       function: "rho_nu",
       def: "The neutrino density of the universe at redshift z.",
-      unit: "M<sub>⊙</sub>h<sup>2</sup>/kpc<sup>3</sup>",
+      unit: "M<sub>⊙</sub>/kpc<sup>3</sup>",
       future: true,
     },
     "Photon density": {
       function: "rho_gamma",
       def: "The photon density of the universe at redshift z.",
-      unit: "M<sub>⊙</sub>h<sup>2</sup>/kpc<sup>3</sup>",
+      unit: "M<sub>⊙</sub>/kpc<sup>3</sup>",
       future: true,
     },
     "Fractional matter density": {

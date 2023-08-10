@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from numpy import linspace, array, isnan
+from numpy import array, isnan, zeros
 from .utils import createCosmos, logify, process_cosmo_module, generateDomain
 
 bp = Blueprint('distance', __name__)
@@ -21,7 +21,14 @@ def distance():
         y = []
         x_copy = x.copy()
         for i, cosmo in enumerate(cosmos):
-            line = getattr(cosmo, distances[key]['function'])(np_x).tolist()
+            if (key == 'Comoving distance'):
+                line = getattr(cosmo, distances[key]['function'])(zeros(len(np_x)), np_x).tolist()
+            else:
+                line = getattr(cosmo, distances[key]['function'])(np_x).tolist()
+
+            # remove h units
+            if (distances[key]['unit'] == "Mpc"):
+                line = [i * cosmo.h for i in line]
 
             for j, value in enumerate(line):
                 if isnan(value):

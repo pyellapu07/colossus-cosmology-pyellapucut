@@ -44,12 +44,13 @@ class Model {
       }
     };
 
-    const defaultValue = this.cosmo[name];
+    let defaultValue = this.cosmo[name];
+
+    if (defaultValue === undefined) defaultValue = format.default;
 
     const container = new Input(format, defaultValue, onChange).dom;
 
-    this.params[name] =
-      defaultValue !== undefined ? defaultValue : format.default;
+    this.params[name] = defaultValue;
 
     this.elems[name] = {
       container,

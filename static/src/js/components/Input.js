@@ -66,6 +66,7 @@ class Input {
             : defaultValue[0];
         minBox.min = format.min;
         minBox.max = format.max;
+        minBox.step = format.step;
 
         const maxBox = document.createElement("input");
         maxBox.type = "number";
@@ -77,6 +78,7 @@ class Input {
             : defaultValue[1];
         maxBox.min = format.min;
         maxBox.max = format.max;
+        maxBox.step = format.step;
 
         input.push(minBox);
         input.push(maxBox);

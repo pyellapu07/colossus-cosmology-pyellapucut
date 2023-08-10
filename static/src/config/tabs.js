@@ -4,8 +4,9 @@ export default {
       label: "Redshift (z)",
       type: "float",
       default: 0,
-      min: -0.995,
+      min: -0.998,
       max: 200,
+      step: 1,
     },
   ],
   Time: [
@@ -26,7 +27,7 @@ export default {
       label: "Domain",
       type: "range",
       default: [0, 10],
-      min: -0.995,
+      min: -0.998,
       max: 200,
     },
     {
@@ -67,7 +68,7 @@ export default {
       label: "Domain",
       type: "range",
       default: [0, 10],
-      min: -0.995,
+      min: -0.998,
       max: 200,
     },
     {
@@ -106,6 +107,7 @@ export default {
       default: [0.001, 100],
       min: 0.001,
       max: "Infinity",
+      step: 1,
     },
     {
       label: "Log scale",
@@ -135,9 +137,10 @@ export default {
     {
       label: "Radius (R)",
       type: "range",
-      default: [0.1, 100],
+      default: [0.1, 50],
       min: 1.0e-3,
-      max: 5.0e2,
+      max: 50,
+      step: 0.001,
     },
     {
       label: "Log scale",
@@ -175,7 +178,7 @@ export default {
       label: "Redshift (z)",
       type: "float",
       default: 0,
-      min: -0.995,
+      min: -0.998,
       max: 200,
     },
     {

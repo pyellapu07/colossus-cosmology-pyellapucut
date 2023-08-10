@@ -34,7 +34,7 @@ def density():
                 'y': [],
                 'title': 'Densities (' + names[i] + ' cosmology)',
                 'xTitle': function,
-                'yTitle': 'Density (M<sub>⊙</sub>h<sup>2</sup>/kpc<sup>3</sup>)',
+                'yTitle': 'Density (M<sub>⊙</sub>/kpc<sup>3</sup>)',
                 'names': rho_names
             }
             omega_plot = {
@@ -58,6 +58,8 @@ def density():
 
             for key in rho_names:
                 line = getattr(cosmo, contents[key]['function'])(array(x_copy)).tolist()
+                # remove h units
+                line = [i / cosmo.h**2 for i in line]
                 rho_plot['y'].append(line)
 
             for key in omega_names:

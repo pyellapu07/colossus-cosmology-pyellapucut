@@ -67,7 +67,7 @@ class SidebarModel {
 
   createHeaderTitle() {
     const headerTitle = document.createElement("input");
-    headerTitle.value = this.addName(cosmology[this.model.type].longname);
+    headerTitle.value = this.addName(cosmology[this.model.type].shortname);
     headerTitle.classList.add("model-name");
     headerTitle.addEventListener("input", this.resizeTitle);
     headerTitle.addEventListener("change", (e) => {
