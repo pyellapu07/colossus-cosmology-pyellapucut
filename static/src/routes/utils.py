@@ -32,7 +32,10 @@ def createCosmos(models):
 def logify(plots, xAxis=True, yAxis=True):
     for plot in plots:
         if xAxis:
-            plot['x'] = [log10(i) if i > 0 else None for i in plot['x']]
+            if (isinstance(plot['x'][0], list)):
+                plot['x'] = [[log10(i) if i > 0 else None for i in j] for j in plot['x']]
+            else:
+                plot['x'] = [log10(i) if i > 0 else None for i in plot['x']]
             plot['xTitle'] = 'log<sub>10</sub> ' + plot['xTitle']
         if yAxis:
             plot['y'] = [[log10(i) if i > 0 else None for i in j] for j in plot['y']]

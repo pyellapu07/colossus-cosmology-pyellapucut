@@ -128,5 +128,6 @@ export default {
     advanced: true,
     default: -2.0,
     max: -0.0001,
+    step: 0.1,
   },
 };

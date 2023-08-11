@@ -12,22 +12,21 @@ def powerSpectrum():
     domain = data['tab']['inputs']['Scale']
     log_plot = data['tab']['inputs']['Log scale']
 
-    x = generateDomain(domain, log_plot, 10000)
-    y = []
-    y2 = []
-    y3 = []
+    domain = generateDomain(domain, log_plot, 10000)
+    y, y2, y3 = [], [], []
+    x, x2 = [], [1 / (domain[j] + 1) for j in range(len(domain))]
     matter_power_spectrum_plot = {
         'type': 'plot',
         'x': x,
         'y': y,
         'title': 'Matter power spectrum',
-        'xTitle': 'Wavenumber (Mpc/h)<sup>3</sup>',
-        'yTitle': 'Matter power spectrum (Mpc/h)<sup>3</sup>',
+        'xTitle': 'Wavenumber (Mpc)<sup>3</sup>',
+        'yTitle': 'Matter power spectrum (Mpc)<sup>3</sup>',
         'names': names
     }
     linear_growth_factor_plot = {
         'type': 'plot',
-        'x': x,
+        'x': x2,
         'y': y2,
         'title': 'Linear growth factor',
         'xTitle': 'Scale factor (a)',
@@ -39,7 +38,7 @@ def powerSpectrum():
         'x': x,
         'y': y3,
         'title': 'Power spectrum slope',
-        'xTitle': 'Wavenumber (Mpc/h)<sup>3</sup>',
+        'xTitle': 'Wavenumber (Mpc)<sup>3</sup>',
         'yTitle': 'Slope (d ln(P) / d ln(k))',
         'names': names
     }
@@ -47,15 +46,20 @@ def powerSpectrum():
     plots = [matter_power_spectrum_plot, linear_growth_factor_plot, power_spectrum_slope_plot]
 
     for cosmo in cosmos:
-        line = cosmo.matterPowerSpectrum(array(x), model=model).tolist()
+        # remove h units
+        cosmo_x = [i / cosmo.h ** 3 for i in domain]
+        x.append(cosmo_x)
+
+        line = cosmo.matterPowerSpectrum(array(cosmo_x), model=model).tolist()
+        # remove h units
+        line = [i / cosmo.h ** 3 for i in line]
+
         y.append(line)
 
-        redshift = [1 / (x[j] + 1) for j in range(len(x))]
-        print(redshift)
-        line = cosmo.growthFactor(array(redshift)).tolist()
+        line = cosmo.growthFactor(array(x2)).tolist()
         y2.append(line)
 
-        line = cosmo.matterPowerSpectrum(array(x), model=model, derivative=True).tolist()
+        line = cosmo.matterPowerSpectrum(array(cosmo_x), model=model, derivative=True).tolist()
         y3.append(line)
 
     if (log_plot):

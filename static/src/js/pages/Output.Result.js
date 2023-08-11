@@ -101,12 +101,15 @@ class OutputResult {
     plot.classList.add("plot");
 
     // x is an array where y is a 2d array
+    if (!Array.isArray(x[0])) {
+      x = Array(y.length).fill(x);
+    }
 
     const lines = [];
 
     for (let i = 0; i < y.length; i++)
       lines.push({
-        x: x,
+        x: x[i],
         y: y[i],
         name: names[i],
       });

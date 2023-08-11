@@ -59,7 +59,7 @@ def density():
             for key in rho_names:
                 line = getattr(cosmo, contents[key]['function'])(array(x_copy)).tolist()
                 # remove h units
-                line = [i / cosmo.h**2 for i in line]
+                line = [i * cosmo.h**2 for i in line]
                 rho_plot['y'].append(line)
 
             for key in omega_names:

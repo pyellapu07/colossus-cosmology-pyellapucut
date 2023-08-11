@@ -49,9 +49,9 @@ def basic():
 
                     # remove h units
                     if (prop["unit"] == "Mpc"):
-                        result = result * cosmo.h
+                        result = result / cosmo.h
                     elif (prop["unit"] == "M<sub>⊙</sub>/kpc<sup>3</sup>"):
-                        result = result / cosmo.h**2
+                        result = result * cosmo.h**2
 
                     # hardcoded to skip distance modulus for negative results 
                     if prop["function"] == "distanceModulus" and result < 0: 

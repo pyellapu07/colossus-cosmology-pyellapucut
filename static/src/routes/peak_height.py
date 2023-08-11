@@ -11,44 +11,32 @@ def peakHeight():
     data = request.json
     cosmos, names = createCosmos(data['models'])
     model = power_spectrum_models[data['tab']['inputs']['Power spectrum model']]
-    halo = data['tab']['inputs']['Halo mass (M)']
+    halo = data['tab']['inputs']['Halo mass (M) [10<sup>x</sup>]']
     redshift = data['tab']['inputs']['Redshift (z)']
-    combined = data['tab']['inputs']['Combine plotting']
-    log_plot = data['tab']['inputs']['Log scale']
 
-    x = generateDomain(halo, log_plot)
-    np_x = array(x)
-    plots = []
-
-    if (combined):
-        plots.append({
-            'type': 'plot',
-            'x': x,
-            'y': [],
-            'title': 'Peak height',
-            'xTitle': 'Halo mass (M<sub>⊙</sub>/h)',
-            'yTitle': 'Peak height',
-            'names': names
-        })
+    domain = generateDomain([10 ** halo[0], 10 ** halo[1]], True)
+    plot = {
+        'type': 'plot',
+        'x': [],
+        'y': [],
+        'title': 'Peak height',
+        'xTitle': 'Halo mass (M<sub>⊙</sub>)',
+        'yTitle': 'Peak height',
+        'names': names
+    }
+    plots = [plot]
 
     for i, cosmo in enumerate(cosmos):
         cosmology.setCurrent(cosmo)
-        line = peaks.peakHeight(np_x, redshift, ps_args={'model': model, 'path': None}).tolist()
-        if (combined):
-            plots[0]['y'].append(line)
-        else:
-            plot = {
-                'type': 'plot',
-                'x': x,
-                'y': [line],
-                'title': 'Peak height (' + names[i] + ' cosmology)',
-                'xTitle': 'Halo mass (M<sub>⊙</sub>/h)',
-                'yTitle': 'Peak height',
-                'names': names[i]
-            }
-            plots.append(plot)
 
-    logify(plots, log_plot, log_plot)
+        # remove h units
+        cosmo_x = [i / cosmo.h for i in domain]
+        plot['x'].append(cosmo_x)
 
+        line = peaks.peakHeight(array(cosmo_x), redshift, ps_args={'model': model, 'path': None}).tolist()
+        plot['y'].append(line)
+
+    logify(plots, True, False)
+    
     return jsonify(plots)
 

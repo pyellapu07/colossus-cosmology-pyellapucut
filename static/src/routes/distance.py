@@ -28,7 +28,7 @@ def distance():
 
             # remove h units
             if (distances[key]['unit'] == "Mpc"):
-                line = [i * cosmo.h for i in line]
+                line = [i / cosmo.h for i in line]
 
             for j, value in enumerate(line):
                 if isnan(value):

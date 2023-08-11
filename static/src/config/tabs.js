@@ -29,6 +29,7 @@ export default {
       default: [0, 10],
       min: -0.998,
       max: 200,
+      step: 0.1,
     },
     {
       label: "Log scale",
@@ -168,11 +169,12 @@ export default {
       ],
     },
     {
-      label: "Halo mass (M)",
+      label: "Halo mass (M) [10<sup>x</sup>]",
       type: "range",
-      default: [10000000, 1e16],
+      default: [7, 16],
       min: 0,
       max: "Infinity",
+      step: 1,
     },
     {
       label: "Redshift (z)",
@@ -180,16 +182,6 @@ export default {
       default: 0,
       min: -0.998,
       max: 200,
-    },
-    {
-      label: "Combine plotting",
-      type: "bool",
-      default: true,
-    },
-    {
-      label: "Log scale",
-      type: "bool",
-      default: false,
     },
   ],
 };

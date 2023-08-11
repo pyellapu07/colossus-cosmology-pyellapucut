@@ -28,6 +28,10 @@ class Input {
 
     const groupId = label + counter++;
 
+    const step = format.step || 1;
+    const min = format.min || 0;
+    const max = format.max || Infinity;
+
     switch (type) {
       case "bool":
         input.type = "checkbox";
@@ -39,9 +43,9 @@ class Input {
         input.classList.add("textbox");
         input.value =
           defaultValue >= 10000 ? defaultparams.toExponential() : defaultValue;
-        input.min = format.min;
-        input.max = format.max;
-        input.step = format.step;
+        input.min = min;
+        input.max = max;
+        input.step = step;
         break;
       case "range":
         const minFieldset = document.createElement("fieldset");
@@ -64,9 +68,9 @@ class Input {
           defaultValue[0] >= 10000
             ? defaultValue[0].toExponential()
             : defaultValue[0];
-        minBox.min = format.min;
-        minBox.max = format.max;
-        minBox.step = format.step;
+        minBox.min = min;
+        minBox.max = max;
+        minBox.step = step;
 
         const maxBox = document.createElement("input");
         maxBox.type = "number";
@@ -76,9 +80,9 @@ class Input {
           defaultValue[1] >= 10000
             ? defaultValue[1].toExponential()
             : defaultValue[1];
-        maxBox.min = format.min;
-        maxBox.max = format.max;
-        maxBox.step = format.step;
+        maxBox.min = min;
+        maxBox.max = max;
+        maxBox.step = step;
 
         input.push(minBox);
         input.push(maxBox);
@@ -129,24 +133,43 @@ class Input {
     function onChangeWrapper(event) {
       let newValue;
 
-      if (type == "bool") {
-        newValue = event.target.checked;
-      } else if (type === "float" || type === "range") {
-        newValue = parseFloat(event.target.value);
-        if (newValue >= 10000) newValue = newValue.toExponential();
+      switch (type) {
+        case "bool":
+          newValue = event.target.checked;
+          break;
+        case "float":
+        case "range":
+          newValue = parseFloat(event.target.value);
+          if (newValue >= 10000) newValue = newValue.toExponential();
 
-        if (
-          event.target.min !== undefined &&
-          newValue < parseFloat(event.target.min)
-        )
-          newValue = parseFloat(event.target.min);
-        if (
-          event.target.max !== undefined &&
-          newValue > parseFloat(event.target.max)
-        )
-          newValue = parseFloat(event.target.max);
-      } else {
-        newValue = event.target.value;
+          if (
+            event.target.min !== undefined &&
+            newValue < parseFloat(event.target.min)
+          )
+            newValue = parseFloat(event.target.min);
+          if (
+            event.target.max !== undefined &&
+            newValue > parseFloat(event.target.max)
+          )
+            newValue = parseFloat(event.target.max);
+        case "range":
+          const minBox = dom.querySelector("[data-type='min']");
+          const maxBox = dom.querySelector("[data-type='max']");
+          if (event.target.dataset.type === "min" && newValue > maxBox.value) {
+            console.log(event.target.step);
+            newValue = maxBox.value - event.target.step;
+          } else if (
+            event.target.dataset.type === "max" &&
+            newValue < minBox.value
+          ) {
+            newValue = minBox.value + event.target.step;
+          }
+          break;
+        case "float":
+          break;
+        default:
+          newValue = event.target.value;
+          break;
       }
 
       event.target.value = newValue;
