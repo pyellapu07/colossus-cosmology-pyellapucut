@@ -13,3 +13,8 @@ bash script.sh
 ```bash
 script.bat
 ```
+
+# Running on Astro Server
+
+Run 'module load icc/latest' before running pip. That will put xiar, ifort,
+etc. in your $PATH. Hopefully it will compile then.
