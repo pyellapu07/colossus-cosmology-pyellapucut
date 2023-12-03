@@ -12,6 +12,12 @@ export default {
       unit: "Gigayears",
       future: true,
     },
+    "Hubble time": {
+      function: "hubbleTime",
+      def: "The Hubble time is the inverse of the Hubble parameter.",
+      unit: "Gigayears",
+      future: true,
+    },
     "Hubble expansion rate": {
       function: "Hz",
       def: "The Hubble parameter as a function of redshift.",

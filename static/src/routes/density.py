@@ -91,6 +91,7 @@ def density():
                         x_copy[j] = 1 / x[j] - 1
 
                 line = getattr(cosmo, contents[key]['function'])(array(x_copy)).tolist()
+                line = [i * cosmo.h**2 for i in line]
                 plot['y'].append(line)
 
             plots.append(plot)

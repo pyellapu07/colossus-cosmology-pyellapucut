@@ -118,7 +118,7 @@ export default {
     type: "bool",
     dependencies: { power_law_n: [true] },
     advanced: true,
-    default: false,
+    default: true,
     step: 0.1,
   },
   power_law_n: {
@@ -127,6 +127,7 @@ export default {
     type: "float",
     advanced: true,
     default: -2.0,
+    min: Number.NEGATIVE_INFINITY,
     max: -0.0001,
     step: 0.1,
   },

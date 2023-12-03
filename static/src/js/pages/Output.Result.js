@@ -114,31 +114,52 @@ class OutputResult {
         name: names[i],
       });
 
-    Plotly.newPlot(plot, lines, {
-      title: title,
-      xaxis: {
-        title: xTitle,
-        // rangemode: "tozero",
+    Plotly.newPlot(
+      plot,
+      lines,
+      {
+        title: title,
+        xaxis: {
+          title: xTitle,
+          // rangemode: "tozero",
+        },
+        yaxis: {
+          title: yTitle,
+          // rangemode: "tozero",
+        },
       },
-      yaxis: {
-        title: yTitle,
-        // rangemode: "tozero",
-      },
-    });
+      {
+        toImageButtonOptions: {
+          format: "png", // one of png, svg, jpeg, webp
+          filename: title,
+          scale: 5, // scaled resolution (x5); now 3500 × 2250 pixels
+        },
+      }
+    );
 
+    // download as CSV
     const modebarGroup = plot.getElementsByClassName("modebar-group")[0];
 
-    const rows = [x, ...y];
-    const columns = rows[0].map((_, colIndex) =>
-      rows.map((row) => row[colIndex])
-    );
-    columns.unshift([xTitle, ...names]);
+    // create csv content as rows of x and y
+    const columns = [];
+    columns.push([xTitle, ...names]);
+
+    for (const i in x[0]) {
+      const row = [x[0][i]];
+
+      for (const j of y) {
+        row.push(j[i]);
+      }
+
+      columns.push(row);
+    }
 
     const csvContent =
       "data:text/csv;charset=utf-8," +
       columns.map((e) => e.join(",")).join("\n");
     const encodedUri = encodeURI(csvContent);
 
+    // create download link
     const downloadCSV = document.createElement("a");
     downloadCSV.setAttribute("rel", "tooltip");
     downloadCSV.setAttribute("download", title + ".csv");
