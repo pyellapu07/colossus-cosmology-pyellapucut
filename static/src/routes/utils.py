@@ -41,7 +41,6 @@ def logify(plots, xAxis=True, yAxis=True):
             plot['y'] = [[log10(i) if i > 0 else None for i in j] for j in plot['y']]
             plot['yTitle'] = 'log<sub>10</sub> ' + plot['yTitle']
 
-
 def generateDomain(domain, log_plot=False, bins=1000):
     if (log_plot):
         # turn 0 into 1e-20 since log10 cant handle 0

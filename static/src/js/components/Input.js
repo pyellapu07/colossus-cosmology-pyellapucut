@@ -48,6 +48,7 @@ class Input {
         input.step = step;
         break;
       case "range":
+        if (step instanceof Number) step = [step, step];
         const minFieldset = document.createElement("fieldset");
         minFieldset.classList.add("fieldset");
 
@@ -70,7 +71,7 @@ class Input {
             : defaultValue[0];
         minBox.min = min;
         minBox.max = max;
-        minBox.step = step;
+        minBox.step = step[0];
 
         const maxBox = document.createElement("input");
         maxBox.type = "number";
@@ -82,7 +83,7 @@ class Input {
             : defaultValue[1];
         maxBox.min = min;
         maxBox.max = max;
-        maxBox.step = step;
+        maxBox.step = step[1];
 
         input.push(minBox);
         input.push(maxBox);

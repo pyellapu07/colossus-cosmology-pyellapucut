@@ -63,6 +63,7 @@ def powerSpectrum():
         y3.append(line)
 
     if (log_plot):
-        logify(plots, xAxis=True, yAxis=False)
+        logify(plots[:-1], xAxis=True, yAxis=True)
+        logify([plots[-1]], xAxis=True, yAxis=False)
 
     return jsonify(plots)

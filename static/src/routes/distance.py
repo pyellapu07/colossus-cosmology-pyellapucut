@@ -42,12 +42,13 @@ def distance():
             'y': y,
             'title': key,
             'xTitle': 'Redshift (z)',
-            'yTitle': 'Distance ' + ('(' + distances[key]['unit'] + ')' if distances[key]['unit'] != '' else ''),
+            'yTitle': 'Distance ' + ('(' + distances[key]['unit'] + ')' if distances[key]['unit'] != '' else 'modulus'),
             'names': names
         }
         plots.append(plot)
 
     if (log_plot):
-        logify(plots, xAxis=True, yAxis=False)
+        logify(plots[:-1], xAxis=True, yAxis=True)
+        logify([plots[-1]], xAxis=True, yAxis=False)
 
     return jsonify(plots)

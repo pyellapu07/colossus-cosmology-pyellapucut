@@ -108,7 +108,7 @@ export default {
       default: [0.001, 100],
       min: 0.001,
       max: "Infinity",
-      step: 1,
+      step: [0.1, 10],
     },
     {
       label: "Log scale",
@@ -141,7 +141,7 @@ export default {
       default: [0.1, 50],
       min: 1.0e-3,
       max: 50,
-      step: 0.001,
+      step: [0.01, 1],
     },
     {
       label: "Log scale",
