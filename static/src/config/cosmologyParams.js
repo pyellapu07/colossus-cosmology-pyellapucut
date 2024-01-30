@@ -126,7 +126,7 @@ export default {
     def: "See power_law.",
     type: "float",
     advanced: true,
-    default: -2.0,
+    default: 0.0,
     min: Number.NEGATIVE_INFINITY,
     max: -0.0001,
     step: 0.1,
