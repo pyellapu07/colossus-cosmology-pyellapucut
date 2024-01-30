@@ -29,9 +29,10 @@ def peakHeight():
     for i, cosmo in enumerate(cosmos):
         cosmology.setCurrent(cosmo)
 
-        # remove h units
+        plot['x'].append(domain)
+
+        # multiply Msun by cosmo.h
         cosmo_x = [i * cosmo.h for i in domain]
-        plot['x'].append(cosmo_x)
 
         line = peaks.peakHeight(array(cosmo_x), redshift, ps_args={'model': model, 'path': None}).tolist()
         plot['y'].append(line)
