@@ -11,7 +11,7 @@ timePlots = [
 },
 {
     'title': 'Hubble expansion rate',
-    'yTitle': 'Hubble parameter (H)',
+    'yTitle': 'Hubble rate (km/s/Mpc)',
 }]
 
 @bp.route('/Time', methods=['POST'])

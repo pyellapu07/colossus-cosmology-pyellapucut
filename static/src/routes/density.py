@@ -15,6 +15,12 @@ def density():
     contentKeys = list(contents.keys())
     combined = data['tab']['inputs']['Compare densities']
     log_plot = data['tab']['inputs']['Log scale']
+    zPlusOne = log_plot and function == 'Redshift (z)'
+
+    if zPlusOne:
+        function = "Redshift (z + 1)"
+        domain[0] = domain[0] + 1
+        domain[1] = domain[1] + 1
 
     x = generateDomain(domain, log_plot)
     if (function == 'Time (t)'):
