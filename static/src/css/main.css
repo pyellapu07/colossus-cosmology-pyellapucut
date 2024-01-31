@@ -21,17 +21,17 @@
   --gray800: #1d2939;
   --gray900: #101828;
 
-  --primary25: #fcfaff;
-  --primary50: #f9f5ff;
-  --primary100: #f4ebff;
-  --primary200: #e9d7fe;
-  --primary300: #d6bbfb;
-  --primary400: #b692f6;
-  --primary500: #9e77ed;
-  --primary600: #7f56d9;
-  --primary700: #6941c6;
-  --primary800: #53389e;
-  --primary900: #42307d;
+  --primary25: #E3F2FD;
+  --primary50: #E3F2FD;
+  --primary100: #BBDEFB;
+  --primary200: #90CAF9;
+  --primary300: #64B5F6;
+  --primary400: #42A5F5;
+  --primary500: #2196F3;
+  --primary600: #1E88E5;
+  --primary700: #1976D2;
+  --primary800: #1565C0;
+  --primary900: #0D47A1;
 
   --error25: #fffbfa;
   --error50: #fef3f2;
@@ -491,7 +491,7 @@ label.tooltip:focus-visible .tooltip-content {
   height: 42px;
   width: 100%;
   border-bottom: var(--divider);
-  background: var(--gray900);
+  background: var(--primary900);
   color: var(--gray100);
   align-items: center;
   justify-content: left;
@@ -849,7 +849,7 @@ label.tooltip:focus-visible .tooltip-content {
   padding: 4px 0;
   border-top: var(--divider);
   width: 100%;
-  background: var(--gray900);
+  background: var(--primary900);
   justify-content: center;
 }
 

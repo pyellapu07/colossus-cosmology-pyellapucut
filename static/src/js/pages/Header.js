@@ -9,7 +9,7 @@ class Header {
     dom.appendChild(logo);
 
     const title = document.createElement("h2");
-    title.innerText = "Colossus Web Calculator";
+    title.innerText = "Colossus Cosmology Calculator";
     dom.appendChild(title);
 
     // right side
