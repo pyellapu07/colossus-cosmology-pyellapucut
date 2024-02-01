@@ -491,7 +491,7 @@ label.tooltip:focus-visible .tooltip-content {
   height: 42px;
   width: 100%;
   border-bottom: var(--divider);
-  background: var(--primary900);
+  background: var(--gray900);
   color: var(--gray100);
   align-items: center;
   justify-content: left;
@@ -849,7 +849,7 @@ label.tooltip:focus-visible .tooltip-content {
   padding: 4px 0;
   border-top: var(--divider);
   width: 100%;
-  background: var(--primary900);
+  background: var(--gray900);
   justify-content: center;
 }
 
