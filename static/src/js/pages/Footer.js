@@ -5,7 +5,7 @@ const infoContent = [
   ["Paper", "https://ui.adsabs.harvard.edu/abs/2018ApJS..239...35D/abstract"],
   ["Cite", "https://ui.adsabs.harvard.edu/abs/2018ApJS..239...35D/exportcitation"],
   ["•", null],
-  ['Web calculator © 2023-2024 <a href="https://www.echou.xyz" target="_blank">Erik Chou</a> & <a href="http://www.benediktdiemer.com/" target="_blank">Benedikt Diemer</a>', null],
+  ['Web calculator © 2023-2024 by <a href="https://www.echou.xyz" target="_blank">Erik Chou</a> & <a href="http://www.benediktdiemer.com/" target="_blank">Benedikt Diemer</a>', null],
   ["•", null],
   ["Funded by the National Science Foundation", null],
 ];
