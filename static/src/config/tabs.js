@@ -13,6 +13,7 @@ export default {
   Time: [
     {
       label: "Plot as function of",
+      def: "",
       type: "radio",
       options: [
         {
