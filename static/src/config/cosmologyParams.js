@@ -14,7 +14,7 @@ export default {
   },
   Om0: {
     label: "Ω<sub>m</sub>",
-    def: "Ω<sub>m</sub>, the matter density in units of the critical density at z = 0 (includes all non-relativistic matter, i.e., dark matter and baryons but not neutrinos).",
+    def: "The matter density in units of the critical density at z = 0 (includes all non-relativistic matter, i.e., dark matter and baryons but not neutrinos).",
     type: "float",
     min: 0,
     max: 0.9999,
@@ -22,7 +22,7 @@ export default {
   },
   Ob0: {
     label: "Ω<sub>b</sub>",
-    def: "Ω<sub>b</sub>, the baryon density in units of the critical density at z = 0.",
+    def: "The baryon density in units of the critical density at z = 0.",
     type: "float",
     min: 0,
     max: 1,
@@ -30,7 +30,7 @@ export default {
   },
   Ode0: {
     label: "Ω<sub>de</sub>",
-    def: "Ω<sub>de</sub>, the dark energy density in units of the critical density at z = 0.",
+    def: "The dark energy density in units of the critical density at z = 0.",
     type: "float",
     min: 0,
     max: 1,
@@ -54,7 +54,7 @@ export default {
   },
   relspecies: {
     label: "Relativistic species",
-    def: "If relspecies == False, all relativistic contributions to the energy density of the universe (such as photons and neutrinos) are ignored.",
+    def: "If set, relativistic contributions to the energy density of the universe (such as photons and neutrinos) are calculated basd on T<sub>CMB</sub> and N<sub>eff</sub>. Otherwise, relativistic species are ignored.",
     type: "bool",
     advanced: true,
     dependencies: {
@@ -79,7 +79,7 @@ export default {
   },
   de_model: {
     label: "Dark energy model",
-    def: "An identifier indicating which dark energy equation of state is to be used. The DE equation of state can either be a cosmological constant (de_model = lambda), a constant w (de_model = w0, the w0 parameter must be set), a linear function of the scale factor according to the parameterization of Linder 2003 where (de_model = w0wa, the w0 and wa parameters must be set), or a function supplied by the user (de_model = user). In the latter case, the w(z) function must be passed using the wz_function parameter.",
+    def: "The DE equation of state can either be a cosmological constant (Λ), a constant w = w<sub>0</sub> (where Λ corresponds to w<sub>0</sub> = -1), or a linear function of redshift (where w = w<sub>0</sub> + w<sub>a</sub> z / (1 + z)).",
     type: "radio",
     advanced: true,
     options: [
@@ -100,21 +100,21 @@ export default {
   },
   w0: {
     label: "w<sub>0</sub>",
-    def: "If de_model == w0, this variable gives the constant dark energy equation of state parameter w. If de_model == w0wa, this variable gives the constant component w (see de_model parameter).",
+    def: "See the description of the different dark energy models.",
     type: "float",
     advanced: true,
     default: -1.0,
   },
   wa: {
     label: "w<sub>a</sub>",
-    def: "If de_model == w0wa, this variable gives the varying component of w, otherwise it is ignored (see de_model parameter).a",
+    def: "See the description of the different dark energy models.",
     type: "float",
     advanced: true,
     default: 0.0,
   },
   power_law: {
     label: "Self-similar power spectrum",
-    def: "Create a self-similar cosmology with a power-law matter power spectrum.",
+    def: "Create a self-similar cosmology with a power-law matter power spectrum. To create a fully self-similar cosmology, this option should be implemented in a flat Universe with Ω<sub>m</sub> = 1.",
     type: "bool",
     dependencies: { power_law_n: [true] },
     advanced: true,
@@ -123,11 +123,11 @@ export default {
   },
   power_law_n: {
     label: "PS slope",
-    def: "See power_law.",
+    def: "The slope of the power-law matter power spectrum. The slope must be greater than -3 because below that slope, there is increasingly more variance on large than on small scales, which is not physically possible.",
     type: "float",
     advanced: true,
     default: -2.0,
-    min: Number.NEGATIVE_INFINITY,
+    min: -2.9999,
     max: -0.0001,
     step: 0.1,
   },
