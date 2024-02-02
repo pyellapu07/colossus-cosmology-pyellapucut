@@ -2,6 +2,7 @@ export default {
   Basic: [
     {
       label: "Redshift (z)",
+      def: "Redshift",
       type: "float",
       default: 0,
       min: -0.998,

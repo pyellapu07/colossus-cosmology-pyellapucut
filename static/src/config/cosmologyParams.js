@@ -79,7 +79,7 @@ export default {
   },
   de_model: {
     label: "Dark energy model",
-    def: "The DE equation of state can either be a cosmological constant (Λ), a constant w = w<sub>0</sub> (where Λ corresponds to w<sub>0</sub> = -1), or a linear function of redshift (where w = w<sub>0</sub> + w<sub>a</sub> z / (1 + z)).",
+    def: "The DE equation of state can either be a cosmological constant (Λ), a constant w = w<sub>0</sub> (where Λ corresponds to w<sub>0</sub> = -1), or a linear function of redshift (where w = w<sub>0</sub> + w<sub>a</sub> z/[1 + z]).",
     type: "radio",
     advanced: true,
     options: [
