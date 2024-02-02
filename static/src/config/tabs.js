@@ -96,7 +96,7 @@ export default {
   "Power Spectrum": [
     {
       label: "Power spectrum model",
-      def: "By default, Colossus approximates the linear matter power spectrum using the accurate formulae of Eisenstein & Hu 1998 (with or without the baryon acoustic oscillation wiggles), but you can also choose the older model of Sugiyama 1995 or the Boltzmann code CAMB. The latter is more accurate but, if a new cosmology is generated, might take a few seconds to run in the background.",
+      def: "Colossus can approximate the linear matter power spectrum using the formulae of Eisenstein & Hu 1998 (with or without the BAO wiggles) or Sugiyama 1995. The Boltzmann code CAMB is more accurate but, if a new cosmology is generated, might take a few seconds to run in the background.",
       type: "radio",
       options: [
         {
@@ -132,7 +132,7 @@ export default {
   Correlation: [
     {
       label: "Power spectrum model",
-      def: "By default, Colossus approximates the linear matter power spectrum using the accurate formulae of Eisenstein & Hu 1998 (with or without the baryon acoustic oscillation wiggles), but you can also choose the older model of Sugiyama 1995 or the Boltzmann code CAMB. The latter is more accurate but, if a new cosmology is generated, might take a few seconds to run in the background.",
+      def: "Colossus can approximate the linear matter power spectrum using the formulae of Eisenstein & Hu 1998 (with or without the BAO wiggles) or Sugiyama 1995. The Boltzmann code CAMB is more accurate but, if a new cosmology is generated, might take a few seconds to run in the background.",
       type: "radio",
       options: [
         {
@@ -168,7 +168,7 @@ export default {
   "Peak Height": [
     {
       label: "Power spectrum model",
-      def: "By default, Colossus approximates the linear matter power spectrum using the accurate formulae of Eisenstein & Hu 1998 (with or without the baryon acoustic oscillation wiggles), but you can also choose the older model of Sugiyama 1995 or the Boltzmann code CAMB. The latter is more accurate but, if a new cosmology is generated, might take a few seconds to run in the background.",
+      def: "Colossus can approximate the linear matter power spectrum using the formulae of Eisenstein & Hu 1998 (with or without the BAO wiggles) or Sugiyama 1995. The Boltzmann code CAMB is more accurate but, if a new cosmology is generated, might take a few seconds to run in the background.",
       type: "radio",
       options: [
         {
@@ -187,7 +187,7 @@ export default {
     },
     {
       label: "Halo mass (M) [10<sup>x</sup>]",
-      def: "Range of logarithmic halo mass",
+      def: "Range of halo mass in log<sup>10</sup>M<sub>⊙</sub>",
       type: "range",
       default: [7, 16],
       min: 0,
