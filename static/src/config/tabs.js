@@ -2,7 +2,7 @@ export default {
   Basic: [
     {
       label: "Redshift (z)",
-      def: "Redshift",
+      def: "In Colossus, redshift can range from -0.998 (a = 500) to 200 (a = 0.005)",
       type: "float",
       default: 0,
       min: -0.998,
@@ -13,7 +13,7 @@ export default {
   Time: [
     {
       label: "Plot as function of",
-      def: "",
+      def: "Plot as a function of redshift (which can range from -0.998 to 200), time, or scale factor",
       type: "radio",
       options: [
         {
@@ -27,6 +27,7 @@ export default {
     },
     {
       label: "Domain",
+      def: "Range of redshift, time, or scale factor plotted",
       type: "range",
       default: [0, 10],
       min: -0.998,
@@ -35,6 +36,7 @@ export default {
     },
     {
       label: "Log scale",
+      def: "Log or linear plots",
       type: "bool",
       default: false,
     },
@@ -42,6 +44,7 @@ export default {
   Distance: [
     {
       label: "Redshift domain",
+      def: "Distances can only be computed for positive redshifts up to 200 (a = 0.005)",
       type: "range",
       default: [0.0001, 10],
       min: 0.0001,
@@ -49,6 +52,7 @@ export default {
     },
     {
       label: "Log scale",
+      def: "Log or linear plots (except for distance modulus, which is intrinsically a logarithmic measure)",
       type: "bool",
       default: false,
     },
@@ -56,6 +60,7 @@ export default {
   Density: [
     {
       label: "Plot as function of",
+      def: "Plot as a function of redshift (which can range from -0.998 to 200), time, or scale factor",
       type: "radio",
       options: [
         {
@@ -69,6 +74,7 @@ export default {
     },
     {
       label: "Domain",
+      def: "Range of redshift, time, or scale factor plotted",
       type: "range",
       default: [0, 10],
       min: -0.998,
@@ -76,11 +82,13 @@ export default {
     },
     {
       label: "Compare densities",
+      def: "If set, plot the densities of all species and the corresponding fractional densities (Ω<sub>X</sub>) in two panels for each cosmology. If not set, plot separate panels for the density and fractional density of each species, comparing cosmologies within each panel.",
       type: "bool",
       default: true,
     },
     {
       label: "Log scale",
+      def: "Log or linear plots",
       type: "bool",
       default: false,
     },
@@ -88,6 +96,7 @@ export default {
   "Power Spectrum": [
     {
       label: "Power spectrum model",
+      def: "By default, Colossus approximates the linear matter power spectrum using the accurate formulae of Eisenstein & Hu 1998 (with or without the baryon acoustic oscillation wiggles), but you can also choose the older model of Sugiyama 1995 or the Boltzmann code CAMB. The latter is more accurate but, if a new cosmology is generated, might take a few seconds to run in the background.",
       type: "radio",
       options: [
         {
@@ -106,6 +115,7 @@ export default {
     },
     {
       label: "Scale",
+      def: "The plotted range of the wavenumber k (in 1/Mpc)",
       type: "range",
       default: [0.001, 100],
       min: 0.001,
@@ -114,6 +124,7 @@ export default {
     },
     {
       label: "Log scale",
+      def: "Log or linear scale (log scale is strongly recommended for power spectrum plots)",
       type: "bool",
       default: true,
     },
@@ -121,6 +132,7 @@ export default {
   Correlation: [
     {
       label: "Power spectrum model",
+      def: "By default, Colossus approximates the linear matter power spectrum using the accurate formulae of Eisenstein & Hu 1998 (with or without the baryon acoustic oscillation wiggles), but you can also choose the older model of Sugiyama 1995 or the Boltzmann code CAMB. The latter is more accurate but, if a new cosmology is generated, might take a few seconds to run in the background.",
       type: "radio",
       options: [
         {
@@ -139,6 +151,7 @@ export default {
     },
     {
       label: "Radius (R)",
+      def: "Radius range in Mpc",
       type: "range",
       default: [0.1, 50],
       min: 1.0e-3,
@@ -147,6 +160,7 @@ export default {
     },
     {
       label: "Log scale",
+      def: "Log or linear scale (log scale is strongly recommended)",
       type: "bool",
       default: true,
     },
@@ -154,6 +168,7 @@ export default {
   "Peak Height": [
     {
       label: "Power spectrum model",
+      def: "By default, Colossus approximates the linear matter power spectrum using the accurate formulae of Eisenstein & Hu 1998 (with or without the baryon acoustic oscillation wiggles), but you can also choose the older model of Sugiyama 1995 or the Boltzmann code CAMB. The latter is more accurate but, if a new cosmology is generated, might take a few seconds to run in the background.",
       type: "radio",
       options: [
         {
@@ -172,6 +187,7 @@ export default {
     },
     {
       label: "Halo mass (M) [10<sup>x</sup>]",
+      def: "Range of logarithmic halo mass",
       type: "range",
       default: [7, 16],
       min: 0,
@@ -180,6 +196,7 @@ export default {
     },
     {
       label: "Redshift (z)",
+      def: "In Colossus, redshift can range from -0.998 (a = 500) to 200 (a = 0.005)",
       type: "float",
       default: 0,
       min: -0.998,

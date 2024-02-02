@@ -20,8 +20,8 @@ def powerSpectrum():
         'x': x,
         'y': y,
         'title': 'Matter power spectrum',
-        'xTitle': 'Wavenumber (Mpc)<sup>3</sup>',
-        'yTitle': 'Matter power spectrum (Mpc)<sup>3</sup>',
+        'xTitle': 'Wavenumber k (Mpc)<sup>-1</sup>',
+        'yTitle': 'Matter power spectrum P (Mpc)<sup>3</sup>',
         'names': names
     }
     linear_growth_factor_plot = {
@@ -38,7 +38,7 @@ def powerSpectrum():
         'x': x,
         'y': y3,
         'title': 'Power spectrum slope',
-        'xTitle': 'Wavenumber (Mpc)<sup>3</sup>',
+        'xTitle': 'Wavenumber k (Mpc)<sup>-1</sup>',
         'yTitle': 'Slope (d ln(P) / d ln(k))',
         'names': names
     }

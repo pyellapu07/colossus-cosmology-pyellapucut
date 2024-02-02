@@ -70,9 +70,7 @@ class Model {
           : "none";
 
         // HARDCODE
-        // comment: When I remove the “Flat” check, the Ode field shows 0 instead of 1 - Om - O_relativistic etc.
-        // The way to fix this would be to evaluate Ode(0) for the previous, flat cosmology and use that value (if that’s not too difficult?).
-        // To be clear, Ode = 0 is a valid cosmology, just a very strange one and probably not what the user wants.
+        // When “Flat” check removed, evaluate Ode(0) for the previous, flat cosmology and use that value
         if (key === "Ode0") {
           this.params[key] = 1 - this.params["Om0"];
           this.params[key] = parseFloat(this.params[key].toFixed(3));

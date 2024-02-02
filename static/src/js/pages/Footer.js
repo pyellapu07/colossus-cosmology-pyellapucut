@@ -1,7 +1,7 @@
 const infoContent = [
   ["Colossus", null],
-  ["Repository", "https://bitbucket.org/bdiemer/colossus"],
   ["Documentation", "https://bdiemer.bitbucket.io/colossus/"],
+  ["Code", "https://bitbucket.org/bdiemer/colossus"],
   ["Paper", "https://ui.adsabs.harvard.edu/abs/2018ApJS..239...35D/abstract"],
   ["Cite", "https://ui.adsabs.harvard.edu/abs/2018ApJS..239...35D/exportcitation"],
   ["•", null],
