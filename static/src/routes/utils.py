@@ -1,10 +1,11 @@
+import numpy as np
 import os
 import json
 import re
-from flask import current_app
 from math import log10, floor
+from flask import current_app
+
 from colossus.cosmology import cosmology
-from numpy import logspace, linspace
 
 cosmo_module = None
 
@@ -45,8 +46,8 @@ def generateDomain(domain, log_plot=False, bins=1000):
     if (log_plot):
         # turn 0 into 1e-20 since log10 cant handle 0
         domain[0] = domain[0] if domain[0] > 0 else 1e-20
-        return logspace(log10(domain[0]),log10(domain[1]), bins).tolist()
-    return linspace(domain[0], domain[1], bins).tolist()
+        return np.logspace(log10(domain[0]),log10(domain[1]), bins).tolist()
+    return np.linspace(domain[0], domain[1], bins).tolist()
 
 def process_cosmo_module():
     global cosmo_module

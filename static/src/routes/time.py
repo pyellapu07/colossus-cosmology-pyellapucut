@@ -1,5 +1,6 @@
+import numpy as np
 from flask import Blueprint, request, jsonify
-from numpy import array
+
 from .utils import createCosmos, logify, generateDomain
 
 bp = Blueprint('time', __name__)
@@ -7,7 +8,7 @@ bp = Blueprint('time', __name__)
 timePlots = [
 {
     'title': 'Age of the Universe',
-    'yTitle': 'Age (Gigayears)',
+    'yTitle': 'Age (Gyr)',
 },
 {
     'title': 'Hubble expansion rate',
@@ -23,23 +24,26 @@ def time():
     log_plot = data['tab']['inputs']['Log scale']
     zPlusOne = log_plot and function == 'Redshift (z)'
 
+    x_eval = generateDomain(domain, log_plot)
+    if (function == 'Time (t)'):
+        x_eval = [a for a in x_eval if a > 0.002 and a <= 120.869]
+    elif (function == 'Scale factor (a)'):
+        x_eval = [a for a in x_eval if a > 0]
+
     if zPlusOne:
         function = "Redshift (z + 1)"
         domain[0] = domain[0] + 1
         domain[1] = domain[1] + 1
-
-    x = generateDomain(domain, log_plot)
-    if (function == 'Time (t)'):
-        x = [a for a in x if a > 0.002 and a <= 120.869]
-    elif (function == 'Scale factor (a)'):
-        x = [a for a in x if a > 0]
+        x_plot = [x_ + 1.0 for x_ in x_eval]
+    else:
+        x_plot = x_eval
 
     plots = []
     for plotTemp in timePlots:
         plot = plotTemp.copy()
         plot.update({
             'type': 'plot',
-            'x': x,
+            'x': x_plot,
             'y': [],
             'xTitle': function,
             'names': names
@@ -47,23 +51,23 @@ def time():
         plots.append(plot)
 
     for cosmo in cosmos:
-        redshift = x
+        redshift = x_eval
 
         # plot 1
 
         # converts the domain back to redshift
         if (function == 'Time (t)'):
-            redshift = cosmo.age(array(x), inverse = True)
+            redshift = cosmo.age(np.array(x_plot), inverse = True)
         elif (function == 'Scale factor (a)'):
-            redshift = [1 / (x[j] + 1) for j in range(len(x))]
+            redshift = [1 / (x_plot[j] + 1) for j in range(len(x_plot))]
 
-        line = cosmo.Hz(array(redshift)).tolist()
+        line = cosmo.Hz(np.array(redshift)).tolist()
         plots[1]['y'].append(line)
 
         # plot 0
 
         if (function == 'Redshift (z)' or function == 'Scale factor (a)' ):
-            line = cosmo.age(array(redshift)).tolist()
+            line = cosmo.age(np.array(redshift)).tolist()
         elif (function == 'Time (t)'):
             line = [1 / (1 + redshift[j]) for j in range(len(redshift))]
             plots[0]['yTitle'] = 'Scale factor (a)'

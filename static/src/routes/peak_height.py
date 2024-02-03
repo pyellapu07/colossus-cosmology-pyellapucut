@@ -1,8 +1,10 @@
+import numpy as np
 from flask import Blueprint, request, jsonify
-from numpy import array, linspace
-from .utils import createCosmos, power_spectrum_models, logify, generateDomain
+
 from colossus.cosmology import cosmology
 from colossus.lss import peaks
+
+from .utils import createCosmos, power_spectrum_models, logify, generateDomain
 
 bp = Blueprint('peak_height', __name__)
 
@@ -34,7 +36,7 @@ def peakHeight():
         # multiply Msun by cosmo.h
         cosmo_x = [i * cosmo.h for i in domain]
 
-        line = peaks.peakHeight(array(cosmo_x), redshift, ps_args={'model': model, 'path': None}).tolist()
+        line = peaks.peakHeight(np.array(cosmo_x), redshift, ps_args={'model': model, 'path': None}).tolist()
         plot['y'].append(line)
 
     logify(plots, True, False)

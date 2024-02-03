@@ -1,5 +1,6 @@
+import numpy as np
 from flask import Blueprint, request, jsonify
-from numpy import array
+
 from .utils import createCosmos, generateDomain, logify, power_spectrum_models
 
 bp = Blueprint('power_spectrum', __name__)
@@ -20,8 +21,8 @@ def powerSpectrum():
         'x': x,
         'y': y,
         'title': 'Matter power spectrum',
-        'xTitle': 'Wavenumber k (Mpc)<sup>-1</sup>',
-        'yTitle': 'Matter power spectrum P (Mpc)<sup>3</sup>',
+        'xTitle': 'Wavenumber k (Mpc<sup>-1</sup>)',
+        'yTitle': 'P (Mpc<sup>3</sup>)',
         'names': names
     }
     linear_growth_factor_plot = {
@@ -38,7 +39,7 @@ def powerSpectrum():
         'x': x,
         'y': y3,
         'title': 'Power spectrum slope',
-        'xTitle': 'Wavenumber k (Mpc)<sup>-1</sup>',
+        'xTitle': 'Wavenumber k (Mpc<sup>-1</sup>)',
         'yTitle': 'Slope (d ln(P) / d ln(k))',
         'names': names
     }
@@ -47,19 +48,19 @@ def powerSpectrum():
 
     for cosmo in cosmos:
         # remove h units
-        cosmo_x = [i / cosmo.h ** 3 for i in domain]
+        cosmo_x = [i * cosmo.h for i in domain]
         x.append(cosmo_x)
 
-        line = cosmo.matterPowerSpectrum(array(cosmo_x), model=model).tolist()
+        line = cosmo.matterPowerSpectrum(np.array(cosmo_x), model=model).tolist()
         # remove h units
-        line = [i / cosmo.h ** 3 for i in line]
+        line = [i / cosmo.h**3 for i in line]
 
         y.append(line)
 
-        line = cosmo.growthFactor(array(x2)).tolist()
+        line = cosmo.growthFactor(np.array(x2)).tolist()
         y2.append(line)
 
-        line = cosmo.matterPowerSpectrum(array(cosmo_x), model=model, derivative=True).tolist()
+        line = cosmo.matterPowerSpectrum(np.array(cosmo_x), model=model, derivative=True).tolist()
         y3.append(line)
 
     if (log_plot):

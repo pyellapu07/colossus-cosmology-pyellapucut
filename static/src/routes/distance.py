@@ -1,5 +1,6 @@
+import numpy as np
 from flask import Blueprint, request, jsonify
-from numpy import array, isnan, zeros
+
 from .utils import createCosmos, logify, process_cosmo_module, generateDomain
 
 bp = Blueprint('distance', __name__)
@@ -14,7 +15,7 @@ def distance():
     log_plot = data['tab']['inputs']['Log scale']
 
     x = generateDomain(domain, log_plot)
-    np_x = array(x)
+    np_x = np.array(x)
     plots = []
 
     for key in distances:
@@ -22,7 +23,7 @@ def distance():
         x_copy = x.copy()
         for i, cosmo in enumerate(cosmos):
             if (key == 'Comoving distance'):
-                line = getattr(cosmo, distances[key]['function'])(zeros(len(np_x)), np_x).tolist()
+                line = getattr(cosmo, distances[key]['function'])(np.zeros(len(np_x)), np_x).tolist()
             else:
                 line = getattr(cosmo, distances[key]['function'])(np_x).tolist()
 
@@ -31,7 +32,7 @@ def distance():
                 line = [i / cosmo.h for i in line]
 
             for j, value in enumerate(line):
-                if isnan(value):
+                if np.isnan(value):
                     del line[j]
                     del x_copy[j]
 

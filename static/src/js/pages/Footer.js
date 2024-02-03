@@ -1,13 +1,14 @@
 const infoContent = [
   ["Colossus", null],
-  ["Documentation", "https://bdiemer.bitbucket.io/colossus/"],
+  ["Docs", "https://bdiemer.bitbucket.io/colossus/"],
   ["Code", "https://bitbucket.org/bdiemer/colossus"],
   ["Paper", "https://ui.adsabs.harvard.edu/abs/2018ApJS..239...35D/abstract"],
   ["Cite", "https://ui.adsabs.harvard.edu/abs/2018ApJS..239...35D/exportcitation"],
   ["•", null],
   ['Web calculator © 2023-2024 by <a href="https://www.echou.xyz" target="_blank">Erik Chou</a> & <a href="http://www.benediktdiemer.com/" target="_blank">Benedikt Diemer</a>', null],
   ["•", null],
-  ["Funded by the National Science Foundation", null],
+  ["Funded by the", null],
+  ["National Science Foundation", "https://www.nsf.gov/"],
 ];
 
 class Footer {

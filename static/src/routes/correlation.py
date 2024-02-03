@@ -1,5 +1,6 @@
+import numpy as np
 from flask import Blueprint, request, jsonify
-from numpy import array, linspace
+
 from .utils import createCosmos, power_spectrum_models, logify, generateDomain
 
 bp = Blueprint('correlation', __name__)
@@ -27,8 +28,8 @@ def correlation():
     log_plot = data['tab']['inputs']['Log scale']
 
     x = generateDomain(wave, log_plot)
-    np_x = array(x)
-    y = []
+    np_x = np.array(x)
+    #y = []
 
     plots = []
     for plotTemp in correlationPlots:

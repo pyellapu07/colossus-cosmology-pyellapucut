@@ -1,8 +1,8 @@
 import numbers
+import numpy as np
 from flask import Blueprint, request, jsonify
-from numpy import ndarray, isnan
-from .utils import createCosmos, sigfig, process_cosmo_module
 
+from .utils import createCosmos, sigfig, process_cosmo_module
 
 bp = Blueprint('basic', __name__)
 
@@ -44,7 +44,7 @@ def basic():
                         result = getattr(cosmo, prop["function"])(redshift)
 
                     # convert ndarray to numbers
-                    if type(result) is ndarray:
+                    if type(result) is np.ndarray:
                         result = result.tolist()
 
                     # remove h units
@@ -62,7 +62,7 @@ def basic():
                     
                     # format numbers
                     if isinstance(result, numbers.Number):
-                        if (isnan(result) == True):
+                        if (np.isnan(result) == True):
                             result = "—"
                         else:
                             result = sigfig(result)
