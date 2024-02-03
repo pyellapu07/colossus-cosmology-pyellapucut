@@ -2,16 +2,20 @@ import numbers
 import numpy as np
 from flask import Blueprint, request, jsonify
 
-from .utils import createCosmos, sigfig, process_cosmo_module
+from static.src.routes import utils
+
+###################################################################################################
 
 bp = Blueprint('basic', __name__)
 
+###################################################################################################
+
 @bp.route('/Basic', methods=['POST'])
 def basic():
-    cosmo_module = process_cosmo_module()
-
+    
+    cosmo_module = utils.process_cosmo_module()
     data = request.json
-    cosmos, names = createCosmos(data['models'])
+    cosmos, names = utils.createCosmos(data['models'])
     redshift = data['tab']['inputs']['Redshift (z)']
 
     csv = []
@@ -65,7 +69,7 @@ def basic():
                         if (np.isnan(result) == True):
                             result = "—"
                         else:
-                            result = sigfig(result)
+                            result = utils.sigfig(result)
                             if result != 0 and (abs(result) > 100 or abs(result) < 0.01):
                                 result = "{:0.3e}".format(result)
 

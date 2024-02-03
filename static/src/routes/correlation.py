@@ -1,7 +1,9 @@
 import numpy as np
 from flask import Blueprint, request, jsonify
 
-from .utils import createCosmos, power_spectrum_models, logify, generateDomain
+from static.src.routes import utils
+
+###################################################################################################
 
 bp = Blueprint('correlation', __name__)
 
@@ -19,15 +21,18 @@ correlationPlots = [
     'function': 'sigma'
 }]
 
+###################################################################################################
+
 @bp.route('/Correlation', methods=['POST'])
 def correlation():
+    
     data = request.json
-    cosmos, names = createCosmos(data['models'])
-    model = power_spectrum_models[data['tab']['inputs']['Power spectrum model']]
+    cosmos, names = utils.createCosmos(data['models'])
+    model = utils.power_spectrum_models[data['tab']['inputs']['Power spectrum model']]
     wave = data['tab']['inputs']['Radius (R)']
     log_plot = data['tab']['inputs']['Log scale']
 
-    x = generateDomain(wave, log_plot)
+    x = list(utils.generateDomain(wave, log_plot))
     np_x = np.array(x)
     #y = []
 
@@ -53,6 +58,6 @@ def correlation():
         del plot['function']
 
     if (log_plot):
-        logify(plots)
+        utils.logify(plots)
 
     return jsonify(plots)

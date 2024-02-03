@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template
+
 from static.src.routes import basic, time, distance, density, power_spectrum, correlation, peak_height
 
 '''

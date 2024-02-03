@@ -1,19 +1,24 @@
 import numpy as np
 from flask import Blueprint, request, jsonify
 
-from .utils import createCosmos, generateDomain, logify, power_spectrum_models
+from static.src.routes import utils
+
+###################################################################################################
 
 bp = Blueprint('power_spectrum', __name__)
 
+###################################################################################################
+
 @bp.route('/Power Spectrum', methods=['POST'])
 def powerSpectrum():
+    
     data = request.json
-    cosmos, names = createCosmos(data['models'])
-    model = power_spectrum_models[data['tab']['inputs']['Power spectrum model']]
+    cosmos, names = utils.createCosmos(data['models'])
+    model = utils.power_spectrum_models[data['tab']['inputs']['Power spectrum model']]
     domain = data['tab']['inputs']['Scale']
     log_plot = data['tab']['inputs']['Log scale']
 
-    domain = generateDomain(domain, log_plot, 10000)
+    domain = utils.generateDomain(domain, log_plot, 10000)
     y, y2, y3 = [], [], []
     x, x2 = [], [1 / (domain[j] + 1) for j in range(len(domain))]
     matter_power_spectrum_plot = {
@@ -64,7 +69,7 @@ def powerSpectrum():
         y3.append(line)
 
     if (log_plot):
-        logify(plots[:-1], xAxis=True, yAxis=True)
-        logify([plots[-1]], xAxis=True, yAxis=False)
+        utils.logify(plots[:-1], xAxis=True, yAxis=True)
+        utils.logify([plots[-1]], xAxis=True, yAxis=False)
 
     return jsonify(plots)

@@ -1,36 +1,27 @@
-import numpy as np
 from flask import Blueprint, request, jsonify
 
-from .utils import createCosmos, logify, process_cosmo_module, generateDomain
+from static.src.routes import utils
+
+###################################################################################################
 
 bp = Blueprint('density', __name__)
 
+###################################################################################################
+
 @bp.route('/Density', methods=['POST'])
 def density():
-    cosmo_module = process_cosmo_module()
+    
+    cosmo_module = utils.process_cosmo_module()
     data = request.json
-    cosmos, names = createCosmos(data['models'])
+    cosmos, names = utils.createCosmos(data['models'])
     function = data['tab']['inputs']['Plot as function of']
     domain = data['tab']['inputs']['Domain']
     contents = cosmo_module["Contents of the Universe"]
     contentKeys = list(contents.keys())
     combined = data['tab']['inputs']['Compare densities']
     log_plot = data['tab']['inputs']['Log scale']
-    zPlusOne = (log_plot and function == 'Redshift (z)')
-
-    x_eval = generateDomain(domain, log_plot)
-    if (function == 'Time (t)'):
-        x_eval = [a for a in x_eval if a > 0.002 and a <= 120.869]
-    elif (function == 'Scale factor (a)'):
-        x_eval = [a for a in x_eval if a > 0]
-
-    if zPlusOne:
-        function = "Redshift (z + 1)"
-        domain[0] = domain[0] + 1
-        domain[1] = domain[1] + 1
-        x_plot = [x + 1.0 for x in x_eval]
-    else:
-        x_plot = x_eval
+    
+    x_plot, z_eval = utils.createTimeAxis(cosmos, function, domain, log_plot)
 
     plots = []
 
@@ -40,7 +31,7 @@ def density():
         for i, cosmo in enumerate(cosmos):
             rho_plot = {
                 'type': 'plot',
-                'x': x_plot,
+                'x': list(x_plot),
                 'y': [],
                 'title': 'Densities (' + names[i] + ' cosmology)',
                 'xTitle': function,
@@ -49,7 +40,7 @@ def density():
             }
             omega_plot = {
                 'type': 'plot',
-                'x': x_plot,
+                'x': list(x_plot),
                 'y': [],
                 'title': 'Fractional densities (' + names[i] + ' cosmology)',
                 'xTitle': function,
@@ -57,24 +48,14 @@ def density():
                 'names': omega_names
             }
 
-            x_copy = x_eval.copy()
-
-            if (function == 'Time (t)'):
-                for j in range(len(x_copy)):
-                    x_copy[j] = cosmo.age(x_plot[j], inverse = True)
-            elif (function == 'Scale factor (a)'):
-                for j in range(len(x_copy)):
-                    x_copy[j] = 1 / x_plot[j] - 1
-
             for key in rho_names:
-                line = getattr(cosmo, contents[key]['function'])(np.array(x_copy)).tolist()
-                # remove h units
-                line = [i * cosmo.h**2 for i in line]
-                rho_plot['y'].append(line)
+                line = getattr(cosmo, contents[key]['function'])(z_eval[i])
+                line *= cosmo.h**2
+                rho_plot['y'].append(line.tolist())
 
             for key in omega_names:
-                line = getattr(cosmo, contents[key]['function'])(np.array(x_copy)).tolist()
-                omega_plot['y'].append(line)
+                line = getattr(cosmo, contents[key]['function'])(z_eval[i])
+                omega_plot['y'].append(line.tolist())
 
             plots.append(rho_plot)
             plots.append(omega_plot)
@@ -82,7 +63,7 @@ def density():
         for key in contentKeys:
             plot = {
                 'type': 'plot',
-                'x': x_plot,
+                'x': list(x_plot),
                 'y': [],
                 'title': key,
                 'xTitle': function,
@@ -91,22 +72,13 @@ def density():
             }
             for i, cosmo in enumerate(cosmos):
 
-                x_copy = x_eval.copy()
-
-                if (function == 'Time (t)'):
-                    for j in range(len(x_copy)):
-                        x_copy[j] = cosmo.age(x_eval[j], inverse = True)
-                elif (function == 'Scale factor (a)'):
-                    for j in range(len(x_copy)):
-                        x_copy[j] = 1 / x_eval[j] - 1
-
-                line = getattr(cosmo, contents[key]['function'])(np.array(x_copy)).tolist()
-                line = [i * cosmo.h**2 for i in line]
-                plot['y'].append(line)
+                line = getattr(cosmo, contents[key]['function'])(z_eval[i])
+                line *= cosmo.h**2
+                plot['y'].append(line.tolist())
 
             plots.append(plot)
 
     if (log_plot):
-        logify(plots)
+        utils.logify(plots)
 
     return jsonify(plots)
