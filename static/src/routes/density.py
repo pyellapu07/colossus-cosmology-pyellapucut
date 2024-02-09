@@ -1,10 +1,10 @@
-from flask import Blueprint, request, jsonify
+import flask
 
 from static.src.routes import utils
 
 ###################################################################################################
 
-bp = Blueprint('density', __name__)
+bp = flask.Blueprint('density', __name__)
 
 ###################################################################################################
 
@@ -12,7 +12,7 @@ bp = Blueprint('density', __name__)
 def density():
     
     cosmo_module = utils.process_cosmo_module()
-    data = request.json
+    data = flask.request.json
     cosmos, names = utils.createCosmos(data['models'])
     function = data['tab']['inputs']['Plot as function of']
     domain = data['tab']['inputs']['Domain']
@@ -59,6 +59,7 @@ def density():
 
             plots.append(rho_plot)
             plots.append(omega_plot)
+    
     else:
         for key in contentKeys:
             plot = {
@@ -71,15 +72,15 @@ def density():
                 'names': names
             }
             for i, cosmo in enumerate(cosmos):
-
                 line = getattr(cosmo, contents[key]['function'])(z_eval[i])
                 line *= cosmo.h**2
                 plot['y'].append(line)
-
             plots.append(plot)
 
     if (log_plot):
         utils.logify(plots)
     utils.prepareJSON(plots)
     
-    return jsonify(plots)
+    return flask.jsonify(plots)
+
+###################################################################################################

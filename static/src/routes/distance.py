@@ -1,11 +1,11 @@
 import numpy as np
-from flask import Blueprint, request, jsonify
+import flask
 
 from static.src.routes import utils
 
 ###################################################################################################
 
-bp = Blueprint('distance', __name__)
+bp = flask.Blueprint('distance', __name__)
 
 ###################################################################################################
 
@@ -14,7 +14,7 @@ def distance():
     
     distances = utils.process_cosmo_module()['Distances']
 
-    data = request.json
+    data = flask.request.json
     cosmos, names = utils.createCosmos(data['models'])
     domain = data['tab']['inputs']['Redshift domain']
     log_plot = data['tab']['inputs']['Log scale']
@@ -52,8 +52,10 @@ def distance():
         plots.append(plot)
 
     if (log_plot):
-        utils.logify(plots[:-1], xAxis=True, yAxis=True)
-        utils.logify([plots[-1]], xAxis=True, yAxis=False)
+        utils.logify(plots[:-1])
+        utils.logify([plots[-1]], x_axis = True, y_axis = False)
     utils.prepareJSON(plots)
     
-    return jsonify(plots)
+    return flask.jsonify(plots)
+
+###################################################################################################

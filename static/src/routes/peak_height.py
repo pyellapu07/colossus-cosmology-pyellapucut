@@ -1,5 +1,4 @@
-#import numpy as np
-from flask import Blueprint, request, jsonify
+import flask
 
 from colossus.cosmology import cosmology
 from colossus.lss import peaks
@@ -8,19 +7,21 @@ from static.src.routes import utils
 
 ###################################################################################################
 
-bp = Blueprint('peak_height', __name__)
+bp = flask.Blueprint('peak_height', __name__)
 
 ###################################################################################################
 
 @bp.route('/Peak Height', methods=['POST'])
 def peakHeight():
-    data = request.json
+    
+    data = flask.request.json
     cosmos, names = utils.createCosmos(data['models'])
     model = utils.power_spectrum_models[data['tab']['inputs']['Power spectrum model']]
-    halo = data['tab']['inputs']['Halo mass (M) [10<sup>x</sup>]']
-    redshift = data['tab']['inputs']['Redshift (z)']
+    range_logm = data['tab']['inputs']['Halo mass (M) [10<sup>x</sup>]']
+    z = data['tab']['inputs']['Redshift (z)']
 
-    x = list(utils.generateDomain([10 ** halo[0], 10 ** halo[1]], True))
+    x = utils.generateDomain([10**range_logm[0], 10**range_logm[1]], True)
+    
     plot = {
         'type': 'plot',
         'x': x,
@@ -32,12 +33,14 @@ def peakHeight():
     }
     plots = [plot]
 
-    for cosmo in enumerate(cosmos):
+    for cosmo in cosmos:
         cosmology.setCurrent(cosmo)
-        line = peaks.peakHeight(x * cosmo.h, redshift, ps_args={'model': model, 'path': None})
+        line = peaks.peakHeight(x * cosmo.h, z, ps_args = {'model': model, 'path': None})
         plot['y'].append(line)
 
     utils.logify(plots, True, False)
     utils.prepareJSON(plots)
     
-    return jsonify(plots)
+    return flask.jsonify(plots)
+
+###################################################################################################

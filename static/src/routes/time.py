@@ -1,11 +1,11 @@
 import numpy as np
-from flask import Blueprint, request, jsonify
+import flask
 
 from static.src.routes import utils
 
 ###################################################################################################
 
-bp = Blueprint('time', __name__)
+bp = flask.Blueprint('time', __name__)
 
 timePlots = [
 {
@@ -22,18 +22,13 @@ timePlots = [
 @bp.route('/Time', methods=['POST'])
 def time():
     
-    data = request.json
+    data = flask.request.json
     cosmos, names = utils.createCosmos(data['models'])
     function = data['tab']['inputs']['Plot as function of']
     domain = data['tab']['inputs']['Domain']
     log_plot = data['tab']['inputs']['Log scale']
     
     x_plot, z_eval, function = utils.createTimeAxis(cosmos, function, domain, log_plot)
-    print('--------------------------')
-    print(function)
-    print(domain)
-    #print(x_plot)
-    #print(z_eval)
  
     plots = []
     for plotTemp in timePlots:
@@ -47,12 +42,12 @@ def time():
         })
         plots.append(plot)
 
-    for i in range(len(cosmos)):
+    for i, cosmo in enumerate(cosmos):
 
         # Plot age of Universe, t. If the x-axis is t, we plot a(t)
         if function in ['Redshift (z)', 'Scale factor (a)', '(z + 1)']:
-            line = cosmos[i].age(z_eval[i])
-        elif (function == 'Time (t)'):
+            line = cosmo.age(z_eval[i])
+        elif function == 'Time (t)':
             line = 1.0 / (1.0 + z_eval[i])
             plots[0]['yTitle'] = 'Scale factor (a)'
         else:
@@ -60,11 +55,13 @@ def time():
         plots[0]['y'].append(line)
  
         # Plot Hubble rate H(z)
-        line = cosmos[i].Hz(np.array(z_eval[i]))
+        line = cosmo.Hz(np.array(z_eval[i]))
         plots[1]['y'].append(line)
         
     if (log_plot):
         utils.logify(plots)
     utils.prepareJSON(plots)
     
-    return jsonify(plots)
+    return flask.jsonify(plots)
+
+###################################################################################################

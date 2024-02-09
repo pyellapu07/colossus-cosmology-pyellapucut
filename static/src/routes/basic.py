@@ -1,12 +1,12 @@
 import numbers
 import numpy as np
-from flask import Blueprint, request, jsonify
+import flask
 
 from static.src.routes import utils
 
 ###################################################################################################
 
-bp = Blueprint('basic', __name__)
+bp = flask.Blueprint('basic', __name__)
 
 ###################################################################################################
 
@@ -14,9 +14,9 @@ bp = Blueprint('basic', __name__)
 def basic():
     
     cosmo_module = utils.process_cosmo_module()
-    data = request.json
+    data = flask.request.json
     cosmos, names = utils.createCosmos(data['models'])
-    redshift = data['tab']['inputs']['Redshift (z)']
+    z = data['tab']['inputs']['Redshift (z)']
 
     csv = []
     table = {
@@ -41,11 +41,11 @@ def basic():
             for cosmo in cosmos:
                 result = "—"
 
-                if (prop["future"] or redshift >= 0):
+                if (prop["future"] or z >= 0):
                     if (prop["function"] == "comovingDistance"):
-                        result = getattr(cosmo, prop["function"])(0, redshift)
+                        result = getattr(cosmo, prop["function"])(0, z)
                     else:
-                        result = getattr(cosmo, prop["function"])(redshift)
+                        result = getattr(cosmo, prop["function"])(z)
 
                     # convert ndarray to numbers
                     if type(result) is np.ndarray:
@@ -61,7 +61,9 @@ def basic():
                     if prop["function"] == "distanceModulus" and result < 0: 
                         result = "—"
                     # hardcoded to set to zero if result is very small
-                    elif (prop["function"] == "luminosityDistance" or prop["function"] == "angularDiameterDistance" or prop["function"] == "lookbackTime") and redshift == 0:
+                    elif (z == 0) and (prop["function"] == "luminosityDistance" \
+                          or prop["function"] == "angularDiameterDistance" \
+                          or prop["function"] == "lookbackTime"):
                         result = 0
                     
                     # format numbers
@@ -77,4 +79,6 @@ def basic():
 
             csv.append(row)
 
-    return jsonify([table])
+    return flask.jsonify([table])
+
+###################################################################################################

@@ -3,7 +3,7 @@ import os
 import json
 import re
 import math
-from flask import current_app
+import flask
 
 from colossus.cosmology import cosmology
 
@@ -23,7 +23,7 @@ power_spectrum_models = {
 
 ###################################################################################################
 
-def sigfig(x, sig=4):
+def sigfig(x, sig = 4):
     
     if (x == 0):
         return 0
@@ -45,23 +45,19 @@ def createCosmos(models):
 
 ###################################################################################################
 
-def logify(plots, xAxis=True, yAxis=True):
+def logify(plots, x_axis = True, y_axis = True):
     
     for plot in plots:
-        if xAxis:
+        if x_axis:
             if (isinstance(plot['x'][0], list)):
                 raise Exception('X axis should be only one list')
-            #    plot['x'] = [[math.log10(i) if i > 0 else None for i in j] for j in plot['x']]
-            #else:
-            #    plot['x'] = [math.log10(i) if i > 0 else None for i in plot['x']]
             plot['x'][plot['x'] <= 0.0] = def_log_zero
             plot['x'] = np.log10(plot['x'])
             plot['xTitle'] = 'log<sub>10</sub> ' + plot['xTitle']
-        if yAxis:
+        if y_axis:
             for i in range(len(plot['y'])):
                 plot['y'][i][plot['y'][i] <= 0.0] = def_log_zero
                 plot['y'][i] = np.log10(plot['y'][i])
-            #plot['y'] = [[math.log10(i) if i > 0 else None for i in j] for j in plot['y']]
             plot['yTitle'] = 'log<sub>10</sub> ' + plot['yTitle']
     
     return
@@ -97,7 +93,7 @@ def process_cosmo_module():
     
     global cosmo_module
     if (cosmo_module == None):
-        filename = os.path.join(current_app.static_folder, 'src/config', 'cosmoModule.js')
+        filename = os.path.join(flask.current_app.static_folder, 'src/config', 'cosmoModule.js')
 
         with open(filename, 'r+', encoding="utf-8") as dataFile:
             data = dataFile.read()
@@ -123,17 +119,21 @@ def createTimeAxis(cosmos, function, domain, log_plot):
         domain[1] += 1.0
         function = '(z + 1)'
     
-    x_plot = generateDomain(domain, log_plot, bins = 50)
+    x_plot = generateDomain(domain, log_plot, bins = 500)
 
-    # For time and scale factor we need to limit the arrays
+    # For time and scale factor we need to limit the arrays because there are values that cannot
+    # be converted to redshift without errors.
     if function == 'Time (t)':
-        x_plot = x_plot[(x_plot >= 0.002) & (x_plot <= 120.869)]
+        x_plot = x_plot[(x_plot >= 0.002) & (x_plot <= 100.0)]
     elif (function == 'Scale factor (a)'):
-        x_plot = x_plot[(x_plot > 0.0)]
+        x_plot = x_plot[x_plot > 0.0]
 
-    # Prepare array of redshifts for evaluation; this may depend on cosmology
+    # Prepare array of redshifts for evaluation; this may depend on cosmology. We also need to 
+    # create a mask of valid x-bins, which may be influenced differently by different 
+    # cosmologies.
     z_eval = []
-    for i in range(len(cosmos)):
+    mask = np.ones_like(x_plot, bool)
+    for i, cosmo in enumerate(cosmos):
         
         if function == 'Redshift (z)':
             z_eval.append(x_plot)
@@ -142,7 +142,7 @@ def createTimeAxis(cosmos, function, domain, log_plot):
             z_eval.append(x_plot - 1.0)
             
         elif function == 'Time (t)':
-            z_eval.append(cosmos[i].age(x_plot, inverse = True))
+            z_eval.append(cosmo.age(x_plot, inverse = True))
             
         elif (function == 'Scale factor (a)'):
             z_eval.append(1.0 / x_plot - 1.0)
@@ -150,4 +150,13 @@ def createTimeAxis(cosmos, function, domain, log_plot):
         else:
             raise Exception('Unknown function, %s.' % function)
     
+        mask &= (z_eval[i] > cosmo.z_min) & (z_eval[i] < cosmo.z_max)
+
+    # Now limit arrays for all cosmologies
+    x_plot = x_plot[mask]
+    for i in range(len(cosmos)):
+        z_eval[i] = z_eval[i][mask]
+    
     return x_plot, z_eval, function
+
+###################################################################################################

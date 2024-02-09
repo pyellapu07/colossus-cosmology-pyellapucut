@@ -1,18 +1,17 @@
-#import numpy as np
-from flask import Blueprint, request, jsonify
+import flask
 
 from static.src.routes import utils
 
 ###################################################################################################
 
-bp = Blueprint('power_spectrum', __name__)
+bp = flask.Blueprint('power_spectrum', __name__)
 
 ###################################################################################################
 
 @bp.route('/Power Spectrum', methods=['POST'])
 def powerSpectrum():
     
-    data = request.json
+    data = flask.request.json
     cosmos, names = utils.createCosmos(data['models'])
     model = utils.power_spectrum_models[data['tab']['inputs']['Power spectrum model']]
     domain = data['tab']['inputs']['Scale']
@@ -67,8 +66,10 @@ def powerSpectrum():
         y3.append(line)
 
     if (log_plot):
-        utils.logify(plots[:-1], xAxis=True, yAxis=True)
-        utils.logify([plots[-1]], xAxis=True, yAxis=False)
+        utils.logify(plots[:-1])
+        utils.logify([plots[-1]], x_axis = True, y_axis = False)
     utils.prepareJSON(plots)
     
-    return jsonify(plots)
+    return flask.jsonify(plots)
+
+###################################################################################################
