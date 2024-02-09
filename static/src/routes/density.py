@@ -21,7 +21,7 @@ def density():
     combined = data['tab']['inputs']['Compare densities']
     log_plot = data['tab']['inputs']['Log scale']
     
-    x_plot, z_eval = utils.createTimeAxis(cosmos, function, domain, log_plot)
+    x_plot, z_eval, function = utils.createTimeAxis(cosmos, function, domain, log_plot)
 
     plots = []
 
@@ -31,7 +31,7 @@ def density():
         for i, cosmo in enumerate(cosmos):
             rho_plot = {
                 'type': 'plot',
-                'x': list(x_plot),
+                'x': x_plot,
                 'y': [],
                 'title': 'Densities (' + names[i] + ' cosmology)',
                 'xTitle': function,
@@ -40,7 +40,7 @@ def density():
             }
             omega_plot = {
                 'type': 'plot',
-                'x': list(x_plot),
+                'x': x_plot,
                 'y': [],
                 'title': 'Fractional densities (' + names[i] + ' cosmology)',
                 'xTitle': function,
@@ -51,11 +51,11 @@ def density():
             for key in rho_names:
                 line = getattr(cosmo, contents[key]['function'])(z_eval[i])
                 line *= cosmo.h**2
-                rho_plot['y'].append(line.tolist())
+                rho_plot['y'].append(line)
 
             for key in omega_names:
                 line = getattr(cosmo, contents[key]['function'])(z_eval[i])
-                omega_plot['y'].append(line.tolist())
+                omega_plot['y'].append(line)
 
             plots.append(rho_plot)
             plots.append(omega_plot)
@@ -63,7 +63,7 @@ def density():
         for key in contentKeys:
             plot = {
                 'type': 'plot',
-                'x': list(x_plot),
+                'x': x_plot,
                 'y': [],
                 'title': key,
                 'xTitle': function,
@@ -74,11 +74,12 @@ def density():
 
                 line = getattr(cosmo, contents[key]['function'])(z_eval[i])
                 line *= cosmo.h**2
-                plot['y'].append(line.tolist())
+                plot['y'].append(line)
 
             plots.append(plot)
 
     if (log_plot):
         utils.logify(plots)
-
+    utils.prepareJSON(plots)
+    
     return jsonify(plots)

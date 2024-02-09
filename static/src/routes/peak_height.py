@@ -1,4 +1,4 @@
-import numpy as np
+#import numpy as np
 from flask import Blueprint, request, jsonify
 
 from colossus.cosmology import cosmology
@@ -20,10 +20,10 @@ def peakHeight():
     halo = data['tab']['inputs']['Halo mass (M) [10<sup>x</sup>]']
     redshift = data['tab']['inputs']['Redshift (z)']
 
-    domain = list(utils.generateDomain([10 ** halo[0], 10 ** halo[1]], True))
+    x = list(utils.generateDomain([10 ** halo[0], 10 ** halo[1]], True))
     plot = {
         'type': 'plot',
-        'x': [],
+        'x': x,
         'y': [],
         'title': 'Peak height',
         'xTitle': 'Halo mass (M<sub>⊙</sub>)',
@@ -32,18 +32,12 @@ def peakHeight():
     }
     plots = [plot]
 
-    for i, cosmo in enumerate(cosmos):
+    for cosmo in enumerate(cosmos):
         cosmology.setCurrent(cosmo)
-
-        plot['x'].append(domain)
-
-        # multiply Msun by cosmo.h
-        cosmo_x = [i * cosmo.h for i in domain]
-
-        line = peaks.peakHeight(np.array(cosmo_x), redshift, ps_args={'model': model, 'path': None}).tolist()
+        line = peaks.peakHeight(x * cosmo.h, redshift, ps_args={'model': model, 'path': None})
         plot['y'].append(line)
 
     utils.logify(plots, True, False)
+    utils.prepareJSON(plots)
     
     return jsonify(plots)
-

@@ -19,23 +19,21 @@ def distance():
     domain = data['tab']['inputs']['Redshift domain']
     log_plot = data['tab']['inputs']['Log scale']
 
-    np_x = utils.generateDomain(domain, log_plot)
-    x = list(np_x)
+    x = utils.generateDomain(domain, log_plot)
     plots = []
 
     for key in distances:
         y = []
-        x_copy = x.copy()
-        for i, cosmo in enumerate(cosmos):
+        x_copy = np.array(x)
+        for cosmo in cosmos:
             if (key == 'Comoving distance'):
-                line = getattr(cosmo, distances[key]['function'])(np.zeros(len(np_x)), np_x).tolist()
+                line = getattr(cosmo, distances[key]['function'])(np.zeros_like(x_copy), x_copy)
             else:
-                line = getattr(cosmo, distances[key]['function'])(np_x).tolist()
-
-            # remove h units
+                line = getattr(cosmo, distances[key]['function'])(x_copy)
             if (distances[key]['unit'] == "Mpc"):
-                line = [i / cosmo.h for i in line]
+                line /= cosmo.h
 
+            # TODO
             for j, value in enumerate(line):
                 if np.isnan(value):
                     del line[j]
@@ -56,5 +54,6 @@ def distance():
     if (log_plot):
         utils.logify(plots[:-1], xAxis=True, yAxis=True)
         utils.logify([plots[-1]], xAxis=True, yAxis=False)
-
+    utils.prepareJSON(plots)
+    
     return jsonify(plots)

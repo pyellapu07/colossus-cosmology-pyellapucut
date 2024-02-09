@@ -32,9 +32,7 @@ def correlation():
     wave = data['tab']['inputs']['Radius (R)']
     log_plot = data['tab']['inputs']['Log scale']
 
-    x = list(utils.generateDomain(wave, log_plot))
-    np_x = np.array(x)
-    #y = []
+    x = utils.generateDomain(wave, log_plot)
 
     plots = []
     for plotTemp in correlationPlots:
@@ -49,9 +47,9 @@ def correlation():
 
     for plot in plots:
         for cosmo in cosmos:
-            line = getattr(cosmo, plot['function'])(np_x, ps_args={'model': model, 'path': None}).tolist()
+            line = getattr(cosmo, plot['function'])(x, ps_args={'model': model, 'path': None})
             if (log_plot):
-                line = [abs(number) for number in line]
+                line = np.abs(line)
             plot['y'].append(line)
 
     for plot in plots:
@@ -59,5 +57,6 @@ def correlation():
 
     if (log_plot):
         utils.logify(plots)
+    utils.prepareJSON(plots)
 
     return jsonify(plots)

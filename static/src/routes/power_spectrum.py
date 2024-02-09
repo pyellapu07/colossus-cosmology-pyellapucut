@@ -1,4 +1,4 @@
-import numpy as np
+#import numpy as np
 from flask import Blueprint, request, jsonify
 
 from static.src.routes import utils
@@ -18,13 +18,15 @@ def powerSpectrum():
     domain = data['tab']['inputs']['Scale']
     log_plot = data['tab']['inputs']['Log scale']
 
-    domain = utils.generateDomain(domain, log_plot, 10000)
-    y, y2, y3 = [], [], []
-    x, x2 = [], [1 / (domain[j] + 1) for j in range(len(domain))]
+    k = utils.generateDomain(domain, log_plot, 10000)
+    z = utils.generateDomain([-0.5, 10.0], False, 200)
+    a = 1.0 / (1.0 + z)
+    
+    y1, y2, y3 = [], [], []
     matter_power_spectrum_plot = {
         'type': 'plot',
-        'x': x,
-        'y': y,
+        'x': k,
+        'y': y1,
         'title': 'Matter power spectrum',
         'xTitle': 'Wavenumber k (Mpc<sup>-1</sup>)',
         'yTitle': 'P (Mpc<sup>3</sup>)',
@@ -32,7 +34,7 @@ def powerSpectrum():
     }
     linear_growth_factor_plot = {
         'type': 'plot',
-        'x': x2,
+        'x': a,
         'y': y2,
         'title': 'Linear growth factor',
         'xTitle': 'Scale factor (a)',
@@ -41,7 +43,7 @@ def powerSpectrum():
     }
     power_spectrum_slope_plot = {
         'type': 'plot',
-        'x': x,
+        'x': k,
         'y': y3,
         'title': 'Power spectrum slope',
         'xTitle': 'Wavenumber k (Mpc<sup>-1</sup>)',
@@ -52,24 +54,21 @@ def powerSpectrum():
     plots = [matter_power_spectrum_plot, linear_growth_factor_plot, power_spectrum_slope_plot]
 
     for cosmo in cosmos:
-        # remove h units
-        cosmo_x = [i * cosmo.h for i in domain]
-        x.append(cosmo_x)
+        cosmo_k = k * cosmo.h
 
-        line = cosmo.matterPowerSpectrum(np.array(cosmo_x), model=model).tolist()
-        # remove h units
-        line = [i / cosmo.h**3 for i in line]
+        line = cosmo.matterPowerSpectrum(cosmo_k, model=model)
+        line /= cosmo.h**3
+        y1.append(line)
 
-        y.append(line)
-
-        line = cosmo.growthFactor(np.array(x2)).tolist()
+        line = cosmo.growthFactor(z)
         y2.append(line)
 
-        line = cosmo.matterPowerSpectrum(np.array(cosmo_x), model=model, derivative=True).tolist()
+        line = cosmo.matterPowerSpectrum(cosmo_k, model=model, derivative=True)
         y3.append(line)
 
     if (log_plot):
         utils.logify(plots[:-1], xAxis=True, yAxis=True)
         utils.logify([plots[-1]], xAxis=True, yAxis=False)
-
+    utils.prepareJSON(plots)
+    
     return jsonify(plots)

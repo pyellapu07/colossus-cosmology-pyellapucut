@@ -28,7 +28,7 @@ def sigfig(x, sig=4):
     if (x == 0):
         return 0
     
-    return round(x, sig-int(math.floor(math.log10(abs(x))))-1)
+    return round(x, sig - int(math.floor(math.log10(abs(x)))) - 1)
 
 ###################################################################################################
 
@@ -50,14 +50,33 @@ def logify(plots, xAxis=True, yAxis=True):
     for plot in plots:
         if xAxis:
             if (isinstance(plot['x'][0], list)):
-                plot['x'] = [[math.log10(i) if i > 0 else None for i in j] for j in plot['x']]
-            else:
-                plot['x'] = [math.log10(i) if i > 0 else None for i in plot['x']]
+                raise Exception('X axis should be only one list')
+            #    plot['x'] = [[math.log10(i) if i > 0 else None for i in j] for j in plot['x']]
+            #else:
+            #    plot['x'] = [math.log10(i) if i > 0 else None for i in plot['x']]
+            plot['x'][plot['x'] <= 0.0] = def_log_zero
+            plot['x'] = np.log10(plot['x'])
             plot['xTitle'] = 'log<sub>10</sub> ' + plot['xTitle']
         if yAxis:
-            plot['y'] = [[math.log10(i) if i > 0 else None for i in j] for j in plot['y']]
+            for i in range(len(plot['y'])):
+                plot['y'][i][plot['y'][i] <= 0.0] = def_log_zero
+                plot['y'][i] = np.log10(plot['y'][i])
+            #plot['y'] = [[math.log10(i) if i > 0 else None for i in j] for j in plot['y']]
             plot['yTitle'] = 'log<sub>10</sub> ' + plot['yTitle']
     
+    return
+
+###################################################################################################
+
+# JSON cannot handle numpy arrays, so we need to convert all of those to lists
+
+def prepareJSON(plots):
+    
+    for plot in plots:
+        plot['x'] = list(plot['x'])
+        for i in range(len(plot['y'])):
+            plot['y'][i] = list(plot['y'][i])
+        
     return
 
 ###################################################################################################
@@ -104,7 +123,7 @@ def createTimeAxis(cosmos, function, domain, log_plot):
         domain[1] += 1.0
         function = '(z + 1)'
     
-    x_plot = generateDomain(domain, log_plot)
+    x_plot = generateDomain(domain, log_plot, bins = 50)
 
     # For time and scale factor we need to limit the arrays
     if function == 'Time (t)':
@@ -123,7 +142,7 @@ def createTimeAxis(cosmos, function, domain, log_plot):
             z_eval.append(x_plot - 1.0)
             
         elif function == 'Time (t)':
-            z_eval.append(cosmos[i].age(np.array(x_plot), inverse = True))
+            z_eval.append(cosmos[i].age(x_plot, inverse = True))
             
         elif (function == 'Scale factor (a)'):
             z_eval.append(1.0 / x_plot - 1.0)
@@ -131,4 +150,4 @@ def createTimeAxis(cosmos, function, domain, log_plot):
         else:
             raise Exception('Unknown function, %s.' % function)
     
-    return x_plot, z_eval
+    return x_plot, z_eval, function
