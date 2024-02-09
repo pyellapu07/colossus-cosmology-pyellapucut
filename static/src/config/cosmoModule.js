@@ -58,12 +58,6 @@ export default {
     },
   },
   "Contents of the Universe": {
-    "Critical density": {
-      function: "rho_c",
-      def: "The critical density of the universe at redshift z.",
-      unit: "M<sub>⊙</sub>/kpc<sup>3</sup>",
-      future: true,
-    },
     "Matter density": {
       function: "rho_m",
       def: "The matter density of the universe at redshift z.",
@@ -100,6 +94,18 @@ export default {
       unit: "M<sub>⊙</sub>/kpc<sup>3</sup>",
       future: true,
     },
+    "Curvature density": {
+      function: "rho_k",
+      def: "The density equivalent of curvature in the universe at redshift z.",
+      unit: "M<sub>⊙</sub>/kpc<sup>3</sup>",
+      future: true,
+    },
+    "Critical density": {
+      function: "rho_c",
+      def: "The critical density of the universe at redshift z.",
+      unit: "M<sub>⊙</sub>/kpc<sup>3</sup>",
+      future: true,
+    },
     "Fractional matter density": {
       function: "Om",
       def: "The matter density of the universe, in units of the critical density.",
@@ -118,19 +124,13 @@ export default {
       unit: "",
       future: true,
     },
-    "Fractional curvature density": {
-      function: "Ok",
-      def: "The curvature density of the universe in units of the critical density.",
-      unit: "",
-      future: true,
-    },
     "Fractional relativistic density": {
       function: "Or",
       def: "The density of relativistic species, in units of the critical density. This function returns the sum of the densities of photons and neutrinos.",
       unit: "",
       future: true,
     },
-    "Fractional neutrinos density": {
+    "Fractional neutrino density": {
       function: "Onu",
       def: "The density of neutrinos in the universe, in units of the critical density.",
       unit: "",
@@ -139,6 +139,12 @@ export default {
     "Fractional photon density": {
       function: "Ogamma",
       def: "The density of photons in the universe, in units of the critical density.",
+      unit: "",
+      future: true,
+    },
+    "Fractional curvature density": {
+      function: "Ok",
+      def: "The curvature density of the universe in units of the critical density.",
       unit: "",
       future: true,
     },

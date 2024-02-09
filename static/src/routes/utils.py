@@ -10,6 +10,8 @@ from colossus.cosmology import cosmology
 ###################################################################################################
 
 def_n_bins = 1000
+n_bins_time = 500
+
 def_log_zero = 1E-20
 
 cosmo_module = None
@@ -77,7 +79,12 @@ def prepareJSON(plots):
 
 ###################################################################################################
 
-def generateDomain(domain, log_plot=False, bins=def_n_bins):
+def generateDomain(domain, log_plot = False, bins = def_n_bins):
+    
+    if domain[0] is None:
+        raise Exception('Lower limit must be set.')
+    if domain[1] is None:
+        raise Exception('Upper limit must be set.')
     
     if (log_plot):
         if domain[0] <= 0.0:
@@ -92,6 +99,7 @@ def generateDomain(domain, log_plot=False, bins=def_n_bins):
 def process_cosmo_module():
     
     global cosmo_module
+    
     if (cosmo_module == None):
         filename = os.path.join(flask.current_app.static_folder, 'src/config', 'cosmoModule.js')
 
@@ -119,7 +127,7 @@ def createTimeAxis(cosmos, function, domain, log_plot):
         domain[1] += 1.0
         function = '(z + 1)'
     
-    x_plot = generateDomain(domain, log_plot, bins = 500)
+    x_plot = generateDomain(domain, log_plot, bins = n_bins_time)
 
     # For time and scale factor we need to limit the arrays because there are values that cannot
     # be converted to redshift without errors.

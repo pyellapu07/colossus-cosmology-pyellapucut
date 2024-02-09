@@ -90,7 +90,7 @@ export default {
       label: "Log scale",
       def: "Log or linear plots",
       type: "bool",
-      default: false,
+      default: true,
     },
   ],
   "Power Spectrum": [
