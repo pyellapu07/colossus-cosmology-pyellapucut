@@ -20,11 +20,11 @@ def peakHeight():
     range_logm = data['tab']['inputs']['Halo mass (M) [10<sup>x</sup>]']
     z = data['tab']['inputs']['Redshift (z)']
 
-    x = utils.generateDomain([10**range_logm[0], 10**range_logm[1]], True)
+    M = utils.generateDomain([10**range_logm[0], 10**range_logm[1]], True, 200)
     
     plot = {
         'type': 'plot',
-        'x': x,
+        'x': M,
         'y': [],
         'title': 'Peak height',
         'xTitle': 'Halo mass (M<sub>⊙</sub>)',
@@ -35,7 +35,7 @@ def peakHeight():
 
     for cosmo in cosmos:
         cosmology.setCurrent(cosmo)
-        line = peaks.peakHeight(x * cosmo.h, z, ps_args = {'model': model, 'path': None})
+        line = peaks.peakHeight(M * cosmo.h, z, ps_args = {'model': model})
         plot['y'].append(line)
 
     utils.logify(plots, True, False)

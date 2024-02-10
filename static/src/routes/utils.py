@@ -34,14 +34,19 @@ def sigfig(x, sig = 4):
 
 ###################################################################################################
 
+# In the cosmology object itself, we set a generic name for all cosmologies. This means that the 
+# name is not taken into account when generating the temp files, which is good since the same
+# cosmology under different (possibly user-generated) names should not trigger re-computation.
+
 def createCosmos(models):
     
     cosmos = []
     names = []
     for model in models:
+        names.append(model['name'])
+        model.update(dict(name = 'web'))
         cosmo = cosmology.Cosmology(**model)
         cosmos.append(cosmo)
-        names.append(model['name'])
     
     return [cosmos, names]
 

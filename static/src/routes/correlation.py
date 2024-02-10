@@ -7,7 +7,7 @@ from static.src.routes import utils
 
 bp = flask.Blueprint('correlation', __name__)
 
-correlationPlots = [
+correlation_plots = [
 {
     'title': 'Correlation function (𝜉)',
     'yTitle': 'abs(Correlation function)',
@@ -32,11 +32,11 @@ def correlation():
     range_r = data['tab']['inputs']['Radius (R)']
     log_plot = data['tab']['inputs']['Log scale']
 
-    R = utils.generateDomain(range_r, log_plot)
+    R = utils.generateDomain(range_r, log_plot, bins = 1000)
 
     plots = []
-    for plotTemp in correlationPlots:
-        plot = plotTemp.copy()
+    for tmp in correlation_plots:
+        plot = tmp.copy()
         plot.update({
             'type': 'plot',
             'x': R,
@@ -51,8 +51,6 @@ def correlation():
             if (log_plot):
                 line = np.abs(line)
             plot['y'].append(line)
-
-    for plot in plots:
         del plot['function']
 
     if (log_plot):

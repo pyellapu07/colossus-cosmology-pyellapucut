@@ -153,9 +153,9 @@ export default {
       label: "Radius (R)",
       def: "Radius range in Mpc",
       type: "range",
-      default: [0.1, 50],
-      min: 1.0e-3,
-      max: 50,
+      default: [1.0, 500],
+      min: 5e-3,
+      max: 600,
       step: [0.01, 1],
     },
     {
@@ -190,8 +190,8 @@ export default {
       def: "Range of halo mass in log<sup>10</sup>M<sub>⊙</sub>",
       type: "range",
       default: [7, 16],
-      min: 0,
-      max: "Infinity",
+      min: -20,
+      max: 19,
       step: 1,
     },
     {
