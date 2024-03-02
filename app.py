@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+import flask
 
 from static.src.routes import basic, time, distance, density, power_spectrum, correlation, peak_height
 
@@ -19,7 +19,7 @@ plot data structure:
 }
 '''
 
-app = Flask(__name__, static_folder='static')
+app = flask.Flask(__name__, static_folder='static')
 
 # Each of your routes would be a blueprint that you imported
 app.register_blueprint(basic.bp)
@@ -32,7 +32,7 @@ app.register_blueprint(peak_height.bp)
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    return flask.render_template('index.html')
 
 if __name__ == '__main__':
     app.run()
