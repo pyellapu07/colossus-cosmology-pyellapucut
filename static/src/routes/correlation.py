@@ -47,7 +47,8 @@ def correlation():
 
     for plot in plots:
         for cosmo in cosmos:
-            line = getattr(cosmo, plot['function'])(R * cosmo.h, ps_args = {'model': model, 'path': None})
+            model_use = utils.getPowerSpectrumModel(cosmo, model)
+            line = getattr(cosmo, plot['function'])(R * cosmo.h, ps_args = {'model': model_use})
             if (log_plot):
                 line = np.abs(line)
             plot['y'].append(line)

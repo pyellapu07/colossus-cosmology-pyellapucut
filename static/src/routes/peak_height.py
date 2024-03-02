@@ -35,7 +35,8 @@ def peakHeight():
 
     for cosmo in cosmos:
         cosmology.setCurrent(cosmo)
-        line = peaks.peakHeight(M * cosmo.h, z, ps_args = {'model': model})
+        model_use = utils.getPowerSpectrumModel(cosmo, model)
+        line = peaks.peakHeight(M * cosmo.h, z, ps_args = {'model': model_use})
         plot['y'].append(line)
 
     utils.logify(plots, True, False)

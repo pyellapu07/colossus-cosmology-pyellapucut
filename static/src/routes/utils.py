@@ -173,3 +173,23 @@ def createTimeAxis(cosmos, function, domain, log_plot):
     return x_plot, z_eval, function
 
 ###################################################################################################
+
+# Some cosmologies cause crashes when using CAMB, namely when Ob << 1
+
+def getPowerSpectrumModel(cosmo, desired_model):
+
+    model = desired_model
+    
+    if desired_model == 'camb':
+        if cosmo.Ob0 < 0.0001:
+            model = 'eisenstein98_zb'
+        elif cosmo.Ob0 < 0.02:
+            model = 'eisenstein98'
+    
+    elif desired_model == 'eisenstein98':
+        if cosmo.Ob0 < 0.0001:
+            model = 'eisenstein98_zb'
+
+    return model
+
+###################################################################################################

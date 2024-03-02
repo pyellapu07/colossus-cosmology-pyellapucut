@@ -28,10 +28,11 @@ def powerSpectrum():
 
     for cosmo in cosmos:
         cosmo_k = k / cosmo.h
-        line = cosmo.matterPowerSpectrum(cosmo_k, model = model)
+        model_use = utils.getPowerSpectrumModel(cosmo, model)
+        line = cosmo.matterPowerSpectrum(cosmo_k, model = model_use)
         line /= cosmo.h**3
         y_P.append(line)
-        line = cosmo.matterPowerSpectrum(cosmo_k, model = model, derivative = True)
+        line = cosmo.matterPowerSpectrum(cosmo_k, model = model_use, derivative = True)
         y_slope.append(line)
         line = cosmo.growthFactor(z)
         y_D.append(line)
