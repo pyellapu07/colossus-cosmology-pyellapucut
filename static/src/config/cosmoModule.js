@@ -50,6 +50,12 @@ export default {
       unit: "Mpc",
       future: false,
     },
+    "Size per arcsec": {
+      function: "kpcPerArcsec",
+      def: "The size of an object that subtends one arcsec at redshift z in physical kpc.",
+      unit: "kpc",
+      future: false,
+    },
     "Distance modulus": {
       function: "distanceModulus",
       def: "The distance modulus to redshift z in magnitudes.",

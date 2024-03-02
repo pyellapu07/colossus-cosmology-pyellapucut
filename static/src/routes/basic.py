@@ -29,12 +29,13 @@ def basic():
     csv.append(names)
 
     for section_name in cosmo_module:
+
         section_header = [section_name]
         csv.append(section_header)
-
         section = cosmo_module[section_name]
 
         for key in section:
+        
             row = [key]
             prop = section[key]
 
@@ -63,7 +64,9 @@ def basic():
                     # hardcoded to set to zero if result is very small
                     elif (z == 0) and (prop["function"] == "luminosityDistance" \
                           or prop["function"] == "angularDiameterDistance" \
-                          or prop["function"] == "lookbackTime"):
+                          or prop["function"] == "lookbackTime" \
+                          or prop["function"] == "distanceModulus" \
+                          or prop["function"] == "kpcPerArcsec"):
                         result = 0
                     
                     # format numbers
