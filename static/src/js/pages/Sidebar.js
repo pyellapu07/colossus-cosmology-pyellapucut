@@ -1,54 +1,49 @@
-import { SidebarModel } from './Sidebar.Model.js';
-import cosmology from '../../config/cosmology.js';
+import { SidebarModel } from "./Sidebar.Model.js";
+import cosmology from "../../config/cosmology.js";
 
 class Sidebar {
+  constructor(main) {
+    const dom = (this.dom = document.createElement("div"));
+    dom.id = "sidebar";
 
-	constructor( main ) {
+    const data = main.data;
 
-		const dom = this.dom = document.createElement( 'div' );
-		dom.id = 'sidebar';
+    const selectModel = document.createElement("select");
+    selectModel.classList.add("select");
+    for (const model in cosmology) {
+      const option = document.createElement("option");
+      option.value = model;
+      option.text = cosmology[model].longname;
+      selectModel.appendChild(option);
+    }
 
-		const data = main.data;
+    dom.appendChild(selectModel);
 
-		const selectModel = document.createElement( 'select' );
-		selectModel.classList.add( 'select' );
-		for ( const model in cosmology ) {
+    const addButton = document.createElement("button");
+    addButton.id = "test";
+    addButton.classList.add("add-model");
+    addButton.innerText = "Add cosmology";
 
-			const option = document.createElement( 'option' );
-			option.value = model;
-			option.text = cosmology[model].longname;
-			selectModel.appendChild( option );
+    dom.appendChild(addButton);
 
-		}
+    const modelContainer = document.createElement("div");
+    modelContainer.classList.add("model-container");
+    dom.appendChild(modelContainer);
 
-		dom.appendChild( selectModel );
+    // add sidebar model
+    addButton.addEventListener("click", () => {
+      const sidebarModel = new SidebarModel(data, selectModel.value);
+      const params = sidebarModel.model.params;
 
-		const addButton = document.createElement( 'button' );
-		addButton.id = 'test';
-		addButton.classList.add( 'add-model' );
-		addButton.innerText = 'Add cosmology';
+      data.models.push(params);
+      data.needsUpdate();
 
-		dom.appendChild( addButton );
+      modelContainer.appendChild(sidebarModel.dom);
+    });
 
-		const modelContainer = document.createElement( 'div' );
-		modelContainer.classList.add( 'model-container' );
-		dom.appendChild( modelContainer );
-
-		// add sidebar model
-		addButton.addEventListener( 'click', () => {
-
-			const sidebarModel = new SidebarModel( data, selectModel.value );
-			const params = sidebarModel.model.params;
-
-			data.models.push( params );
-			data.needsUpdate();
-
-			modelContainer.appendChild( sidebarModel.dom );
-
-		} );
-
-	}
-
+    // add one default model
+    addButton.click();
+  }
 }
 
 export { Sidebar };
