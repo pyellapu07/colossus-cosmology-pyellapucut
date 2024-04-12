@@ -29,3 +29,5 @@ mainContainer.appendChild(output.dom);
 
 const footer = (main.footer = new Footer());
 dom.appendChild(footer.dom);
+
+sidebar.dom.querySelector(".add-model").click();

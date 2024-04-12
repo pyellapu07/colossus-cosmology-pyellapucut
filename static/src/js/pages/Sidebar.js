@@ -40,9 +40,6 @@ class Sidebar {
 
       modelContainer.appendChild(sidebarModel.dom);
     });
-
-    // add one default model
-    addButton.click();
   }
 }
 
