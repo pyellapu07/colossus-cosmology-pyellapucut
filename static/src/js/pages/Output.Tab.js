@@ -1,5 +1,6 @@
 import tabs from "../../config/tabs.js";
 import { Input } from "../components/Input.js";
+import { CompositionRenderer } from "./CompositionRenderer.js";
 
 class OutputTab {
   constructor(data) {
@@ -10,11 +11,13 @@ class OutputTab {
     header.classList.add("header");
     tab.appendChild(header);
 
-    const content = document.createElement("div");
-    content.classList.add("content");
-    tab.appendChild(content);
+    this.content = document.createElement("div");
+    this.content.classList.add("content");
+    tab.appendChild(this.content);
 
     let activeTab;
+    this.compositionRenderer = null;
+    let compositionDiv = null;  // Store composition div globally inside the class
 
     for (const name in tabs) {
       const tabContainer = {
@@ -23,13 +26,11 @@ class OutputTab {
         data: {},
       };
 
-      // header tabs
       const button = document.createElement("button");
       button.innerText = name;
       tabContainer.button = button;
       header.appendChild(button);
 
-      // content
       for (const format of tabs[name]) {
         const label = format.label;
         const type = format.type;
@@ -82,7 +83,6 @@ class OutputTab {
             data.needsUpdate();
           }
 
-          // hardcoded for "plot as a function of"
           if (format.label === "Plot as function of") {
             const domainDOM = elem.dom.nextElementSibling;
             const min = domainDOM.querySelector("[data-type='min']");
@@ -107,21 +107,18 @@ class OutputTab {
                 max.value = 1;
                 break;
             }
-
             var changeEvent = new Event("change");
             min.dispatchEvent(changeEvent);
             max.dispatchEvent(changeEvent);
           }
         });
 
-        content.appendChild(elem.dom);
         tabContainer.inputs.push(elem.dom);
       }
 
-      function onTabSwitch() {
-        if (activeTab != undefined) {
+      const onTabSwitch = () => {
+        if (activeTab !== undefined) {
           delete activeTab.button.dataset.selected;
-
           for (const input of activeTab.inputs) {
             delete input.dataset.selected;
           }
@@ -130,34 +127,58 @@ class OutputTab {
         button.dataset.selected = "";
         activeTab = tabContainer;
 
-        for (const input of tabContainer.inputs) {
-          input.dataset.selected = "";
+        this.content.innerHTML = ""; // 🧹 Clear old content
+
+        if (name !== "Composition") {
+          for (const input of tabContainer.inputs) {
+            input.dataset.selected = "";
+            this.content.appendChild(input);
+          }
+        }
+
+        // Create or show CompositionRenderer
+        if (name === "Composition") {
+          if (!compositionDiv) {
+            compositionDiv = document.createElement("div");
+            compositionDiv.id = "composition-container";
+            compositionDiv.style.marginTop = "20px";
+            this.content.appendChild(compositionDiv);
+
+            this.compositionRenderer = new CompositionRenderer(compositionDiv);
+          } else {
+            this.content.appendChild(compositionDiv);
+          }
+          compositionDiv.style.display = ""; // show
+        } else if (compositionDiv) {
+          compositionDiv.style.display = "none"; // hide
         }
 
         data.tab = {
           name: name,
           inputs: tabContainer.data,
         };
-      }
 
-      // switching tabs
+        data.needsUpdate();
+      };
+
       button.addEventListener("click", () => {
         onTabSwitch();
         data.needsUpdate();
       });
 
-      if (name == "Basic") onTabSwitch();
+      if (name === "Basic") button.click(); // open Basic by default
     }
 
-    // collapse
     const collapse = document.createElement("div");
     collapse.classList.add("tab-collapse", "icon-button");
-    content.appendChild(collapse);
+    this.content.appendChild(collapse);
 
     collapse.addEventListener("click", () => {
-      if ("collapse" in content.dataset) {
-        delete content.dataset.collapse;
-      } else content.dataset.collapse = "";
+      if ("collapse" in this.content.dataset) {
+        delete this.content.dataset.collapse;
+      } else {
+        this.content.dataset.collapse = "";
+      }
     });
   }
 }

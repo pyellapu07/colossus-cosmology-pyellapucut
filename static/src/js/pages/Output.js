@@ -1,5 +1,7 @@
 import { OutputTab } from "./Output.Tab.js";
 import { OutputResult } from "./Output.Result.js";
+import { CompositionRenderer } from "./CompositionRenderer.js";
+
 
 class Output {
   constructor(main) {

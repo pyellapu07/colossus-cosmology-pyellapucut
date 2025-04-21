@@ -203,4 +203,16 @@ export default {
       max: 200,
     },
   ],
+Composition: [
+    {
+      label: "Scale Factor (a)",
+      def: "Adjust the expansion scale factor of the universe. a=1 today, a<1 in the past.",
+      type: "range",
+      default: [0.01, 2],
+      min: 0.01,
+      max: 10,
+      step: 0.01
+    }
+]
+
 };
