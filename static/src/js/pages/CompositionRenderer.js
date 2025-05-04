@@ -13,8 +13,8 @@ class CompositionRenderer {
 
     this.canvas = document.createElement("canvas");
     this.canvas.style.flex = "1";
-    this.canvas.style.width = "400px";   // fixed width
-    this.canvas.style.height = "400px";  // match height
+    this.canvas.style.width = "400px";
+    this.canvas.style.height = "400px";
     this.canvas.style.border = "1px solid #ccc";
     this.wrapper.appendChild(this.canvas);
 
@@ -108,6 +108,7 @@ class CompositionRenderer {
       const distance = Math.random() * 100 + 40;
       const dx = Math.cos(angle);
       const dy = Math.sin(angle);
+      const type = this.randomType();
 
       this.particles.push({
         baseX: this.expansionCenter.x + distance * dx,
@@ -117,31 +118,41 @@ class CompositionRenderer {
         dx: (Math.random() - 0.5) * 0.5,
         dy: (Math.random() - 0.5) * 0.5,
         radius: Math.random() * 2 + 1,
-        type: this.randomType()
+        type
       });
     }
   }
 
   randomType() {
     const r = Math.random();
-    if (r < 0.25) return "darkMatter";
-    if (r < 0.30) return "normalMatter";
-    if (r < 0.40) return "photons";
-    return "darkEnergy";
+    if (r < 0.25) return "matter";
+    if (r < 0.35) return "baryon";
+    if (r < 0.55) return "darkEnergy";
+    if (r < 0.65) return "relativistic";
+    if (r < 0.75) return "neutrino";
+    return "photon"; // photon count exaggerated
   }
 
   getColor(type) {
-    if (type === "photons") {
-      const z = (1 / this.scaleFactor) - 1;
-      const t = Math.max(0, Math.min(z / 10, 1));
-      const g = 255;
-      const b = Math.floor(255 * (1 - t));
-      return `rgb(0, ${g}, ${b})`;
-    }
-    if (type === "darkMatter") return "#5c6bc0";
-    if (type === "normalMatter") return "#ffb74d";
-    if (type === "darkEnergy") return "#ef5350";
-    return "#ffffff";
+  if (type === "photon") {
+    const minA = 0.1;
+    const maxA = 1.5;
+
+    let t = (this.scaleFactor - minA) / (maxA - minA);
+    t = Math.max(0, Math.min(t, 1)); // Clamp t between 0 and 1
+
+    // Cyan → Brown
+    const r = Math.floor(0 + (140 - 0) * t);
+    const g = Math.floor(255 + (84 - 255) * t);
+    const b = Math.floor(255 + (75 - 255) * t);
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+    if (type === "matter") return "#1f77b4";        // blue
+    if (type === "baryon") return "#ff7f0e";        // orange
+    if (type === "darkEnergy") return "#2ca02c";    // green
+    if (type === "relativistic") return "#d62728";  // red
+    if (type === "neutrino") return "#9467bd";      // purple
+    return "#ccc";
   }
 
   animate() {
@@ -174,7 +185,7 @@ class CompositionRenderer {
     }
 
     this.scaleFactor = a;
-    this.scaleText.innerText = `Current a: ${a.toFixed(2)} - Universe is ${a.toFixed(2)}x bigger than at a = 1`; // ✅ fixed backticks
+    this.scaleText.innerText = `Current a: ${a.toFixed(2)} - Universe is ${a.toFixed(2)}x bigger than at a = 1`;
     this.updatePieChart(a);
   }
 
@@ -182,24 +193,35 @@ class CompositionRenderer {
     const data = this.calculateDensities(1.0);
 
     const pieData = [{
-      values: [data.darkMatter, data.normalMatter, data.photons, data.darkEnergy],
+      values: [
+        data.matter,
+        data.baryon,
+        data.darkEnergy,
+        data.relativistic,
+        data.neutrino,
+        data.photon
+      ],
       labels: [
-        "Dark Matter",
-        "Normal Matter",
-        "Photons (exaggerated count for visibility)",
-        "Dark Energy"
+        "Matter",
+        "Baryon",
+        "Dark Energy",
+        "Relativistic",
+        "Neutrino",
+        "Photon (count exaggerated for visibility)"
       ],
       type: 'pie',
       marker: {
-        colors: ["#5c6bc0", "#ffb74d", "#4dd0e1", "#ef5350"]
+        colors: [
+          "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b"
+        ]
       }
     }];
 
     Plotly.newPlot(this.pieDiv, pieData, {
       title: 'Composition of the Universe',
-      height: 300,
+      height: 400,
       width: 700,
-      margin: { t: 40, b: 20, l: 20, r: 150 },
+      margin: { t: 80, b: 60, l: 60, r: 100 },
       legend: {
         orientation: "v",
         x: 1.1,
@@ -209,47 +231,61 @@ class CompositionRenderer {
 
     const gradientLabel = document.createElement("div");
     gradientLabel.innerText = "Photon color transition with redshift";
-    gradientLabel.style.marginTop = "8px";
+    gradientLabel.style.marginTop = "10px";
     gradientLabel.style.fontSize = "12px";
     gradientLabel.style.textAlign = "center";
     this.pieDiv.appendChild(gradientLabel);
 
     const gradientBar = document.createElement("div");
-    gradientBar.style.width = "150px";
-    gradientBar.style.height = "10px";
-    gradientBar.style.margin = "4px auto";
-    gradientBar.style.background = "linear-gradient(to right, rgb(0,255,0), rgb(0,255,255))";
-    gradientBar.style.border = "1px solid #aaa";
+    gradientBar.style.width = "200px";
+    gradientBar.style.height = "12px";
+    gradientBar.style.margin = "4px auto 10px auto";
+    gradientBar.style.background = "linear-gradient(to right, #00ffff, #8c564b)";
+    gradientBar.style.border = "1px solid #999";
+    gradientBar.style.borderRadius = "3px";
     this.pieDiv.appendChild(gradientBar);
   }
 
   updatePieChart(a) {
     const data = this.calculateDensities(a);
     Plotly.restyle(this.pieDiv, {
-      values: [[data.darkMatter, data.normalMatter, data.photons, data.darkEnergy]]
+      values: [[
+        data.matter,
+        data.baryon,
+        data.darkEnergy,
+        data.relativistic,
+        data.neutrino,
+        data.photon
+      ]]
     });
   }
 
   calculateDensities(a) {
     const initial = {
+      matter: 0.27,
+      baryon: 0.05,
       darkEnergy: 0.68,
-      darkMatter: 0.27,
-      normalMatter: 0.05,
-      photons: 0.0001
+      relativistic: 0.0001,
+      neutrino: 0.0001,
+      photon: 0.0002
     };
 
-    const darkMatterDensity = initial.darkMatter / Math.pow(a, 3);
-    const normalMatterDensity = initial.normalMatter / Math.pow(a, 3);
-    const photonDensity = initial.photons / Math.pow(a, 4);
-    const darkEnergyDensity = initial.darkEnergy;
+    const matter = initial.matter / Math.pow(a, 3);
+    const baryon = initial.baryon / Math.pow(a, 3);
+    const darkEnergy = initial.darkEnergy;
+    const relativistic = initial.relativistic / Math.pow(a, 4);
+    const neutrino = initial.neutrino / Math.pow(a, 4);
+    const photon = initial.photon / Math.pow(a, 4);
 
-    const total = darkMatterDensity + normalMatterDensity + photonDensity + darkEnergyDensity;
+    const total = matter + baryon + darkEnergy + relativistic + neutrino + photon;
 
     return {
-      darkMatter: (darkMatterDensity / total) * 100,
-      normalMatter: (normalMatterDensity / total) * 100,
-      photons: (photonDensity / total) * 100,
-      darkEnergy: (darkEnergyDensity / total) * 100
+      matter: (matter / total) * 100,
+      baryon: (baryon / total) * 100,
+      darkEnergy: (darkEnergy / total) * 100,
+      relativistic: (relativistic / total) * 100,
+      neutrino: (neutrino / total) * 100,
+      photon: (photon / total) * 100
     };
   }
 }
