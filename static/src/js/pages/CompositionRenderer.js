@@ -2,20 +2,19 @@ class CompositionRenderer {
   constructor(container) {
     this.container = container;
 
-    // Create wrapper div
+    // UI Setup
     this.wrapper = document.createElement("div");
     this.wrapper.style.display = "flex";
     this.wrapper.style.justifyContent = "space-around";
     this.wrapper.style.alignItems = "center";
-    this.wrapper.style.flexWrap = "wrap"; // Mobile-friendly
+    this.wrapper.style.flexWrap = "wrap";
     this.wrapper.style.gap = "20px";
     container.appendChild(this.wrapper);
 
-    // Create canvas for particle animation
     this.canvas = document.createElement("canvas");
     this.canvas.style.flex = "1";
-    this.canvas.style.minWidth = "300px";
-    this.canvas.style.height = "300px";
+    this.canvas.style.width = "400px";   // fixed width
+    this.canvas.style.height = "400px";  // match height
     this.canvas.style.border = "1px solid #ccc";
     this.wrapper.appendChild(this.canvas);
 
@@ -23,16 +22,14 @@ class CompositionRenderer {
     this.particles = [];
     this.scaleFactor = 1.0;
     this.expansionCenter = { x: 0, y: 0 };
-    this.useLogScale = false; // << NEW
 
-    // Create pie chart container
     this.pieDiv = document.createElement("div");
     this.pieDiv.id = "composition-piechart";
     this.pieDiv.style.flex = "1";
-    this.pieDiv.style.minWidth = "300px";
+    this.pieDiv.style.width = "500px";
     this.wrapper.appendChild(this.pieDiv);
 
-    // Create slider and log scale checkbox
+    // Slider UI
     this.sliderContainer = document.createElement("div");
     this.sliderContainer.style.width = "80%";
     this.sliderContainer.style.margin = "20px auto";
@@ -44,6 +41,11 @@ class CompositionRenderer {
     this.sliderLabel.style.marginBottom = "5px";
     this.sliderContainer.appendChild(this.sliderLabel);
 
+    this.scaleText = document.createElement("div");
+    this.scaleText.style.marginTop = "10px";
+    this.scaleText.style.fontSize = "14px";
+    this.sliderContainer.appendChild(this.scaleText);
+
     const sliderBox = document.createElement("div");
     sliderBox.style.display = "flex";
     sliderBox.style.alignItems = "center";
@@ -53,8 +55,8 @@ class CompositionRenderer {
 
     this.slider = document.createElement("input");
     this.slider.type = "range";
-    this.slider.min = 0.01;
-    this.slider.max = 5;
+    this.slider.min = 0.1;
+    this.slider.max = 3;
     this.slider.step = 0.01;
     this.slider.value = 1;
     this.slider.style.width = "400px";
@@ -68,14 +70,28 @@ class CompositionRenderer {
     logLabel.innerText = "Log scale";
     sliderBox.appendChild(logLabel);
 
+    this.resetButton = document.createElement("button");
+    this.resetButton.innerText = "Reset to Default (a = 1)";
+    this.resetButton.style.marginTop = "10px";
+    this.resetButton.style.padding = "6px 12px";
+    this.resetButton.style.cursor = "pointer";
+    this.sliderContainer.appendChild(this.resetButton);
+
+    this.resetButton.addEventListener("click", () => {
+      this.slider.value = 1;
+      this.logCheckbox.checked = false;
+      this.handleSliderInput();
+    });
+
     this.slider.addEventListener("input", () => this.handleSliderInput());
     this.logCheckbox.addEventListener("change", () => this.handleSliderInput());
 
+    // Init
     this.resize();
     window.addEventListener("resize", () => this.resize());
-
-    this.createParticles(200);
+    this.createParticles(400);
     this.createPieChart();
+    this.handleSliderInput();
     this.animate();
   }
 
@@ -88,29 +104,44 @@ class CompositionRenderer {
   createParticles(count) {
     this.particles = [];
     for (let i = 0; i < count; i++) {
+      const angle = Math.random() * 2 * Math.PI;
+      const distance = Math.random() * 100 + 40;
+      const dx = Math.cos(angle);
+      const dy = Math.sin(angle);
+
       this.particles.push({
-        x: Math.random() * this.canvas.width,
-        y: Math.random() * this.canvas.height,
-        radius: Math.random() * 2 + 1,
+        baseX: this.expansionCenter.x + distance * dx,
+        baseY: this.expansionCenter.y + distance * dy,
+        offsetX: 0,
+        offsetY: 0,
         dx: (Math.random() - 0.5) * 0.5,
         dy: (Math.random() - 0.5) * 0.5,
+        radius: Math.random() * 2 + 1,
         type: this.randomType()
       });
     }
   }
 
   randomType() {
-    const types = ["darkMatter", "normalMatter", "photons"];
-    return types[Math.floor(Math.random() * types.length)];
+    const r = Math.random();
+    if (r < 0.25) return "darkMatter";
+    if (r < 0.30) return "normalMatter";
+    if (r < 0.40) return "photons";
+    return "darkEnergy";
   }
 
   getColor(type) {
-    switch (type) {
-      case "darkMatter": return "#5c6bc0";
-      case "normalMatter": return "#ffb74d";
-      case "photons": return "#4dd0e1";
-      default: return "#ffffff";
+    if (type === "photons") {
+      const z = (1 / this.scaleFactor) - 1;
+      const t = Math.max(0, Math.min(z / 10, 1));
+      const g = 255;
+      const b = Math.floor(255 * (1 - t));
+      return `rgb(0, ${g}, ${b})`;
     }
+    if (type === "darkMatter") return "#5c6bc0";
+    if (type === "normalMatter") return "#ffb74d";
+    if (type === "darkEnergy") return "#ef5350";
+    return "#ffffff";
   }
 
   animate() {
@@ -118,14 +149,15 @@ class CompositionRenderer {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     for (const p of this.particles) {
-      p.x += p.dx;
-      p.y += p.dy;
+      p.offsetX += p.dx * 0.1;
+      p.offsetY += p.dy * 0.1;
 
-      if (p.x < 0 || p.x > this.canvas.width) p.dx = -p.dx;
-      if (p.y < 0 || p.y > this.canvas.height) p.dy = -p.dy;
+      const zoom = Math.max(this.scaleFactor, 0.2);
+      const x = (p.baseX + p.offsetX - this.expansionCenter.x) * zoom + this.expansionCenter.x;
+      const y = (p.baseY + p.offsetY - this.expansionCenter.y) * zoom + this.expansionCenter.y;
 
       this.ctx.beginPath();
-      this.ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      this.ctx.arc(x, y, p.radius, 0, Math.PI * 2);
       this.ctx.fillStyle = this.getColor(p.type);
       this.ctx.fill();
       this.ctx.closePath();
@@ -134,26 +166,15 @@ class CompositionRenderer {
 
   handleSliderInput() {
     let a = parseFloat(this.slider.value);
-
     if (this.logCheckbox.checked) {
-      const logMin = Math.log(0.01);
-      const logMax = Math.log(5);
-      const sliderFraction = (a - 0.01) / (5 - 0.01);
+      const logMin = Math.log(0.1);
+      const logMax = Math.log(3);
+      const sliderFraction = (a - 0.1) / (3 - 0.1);
       a = Math.exp(logMin + sliderFraction * (logMax - logMin));
     }
 
-    this.updateScale(a);
-  }
-
-  updateScale(a) {
     this.scaleFactor = a;
-
-    const baseCount = 300;
-    let adjustedCount = Math.floor(baseCount / Math.pow(a, 3));
-
-    adjustedCount = Math.max(20, Math.min(adjustedCount, 500)); 
-
-    this.createParticles(adjustedCount);
+    this.scaleText.innerText = `Current a: ${a.toFixed(2)} - Universe is ${a.toFixed(2)}x bigger than at a = 1`; // ✅ fixed backticks
     this.updatePieChart(a);
   }
 
@@ -162,22 +183,48 @@ class CompositionRenderer {
 
     const pieData = [{
       values: [data.darkMatter, data.normalMatter, data.photons, data.darkEnergy],
-      labels: ["Dark Matter", "Normal Matter", "Photons", "Dark Energy"],
-      type: 'pie'
+      labels: [
+        "Dark Matter",
+        "Normal Matter",
+        "Photons (exaggerated count for visibility)",
+        "Dark Energy"
+      ],
+      type: 'pie',
+      marker: {
+        colors: ["#5c6bc0", "#ffb74d", "#4dd0e1", "#ef5350"]
+      }
     }];
 
-    const layout = {
+    Plotly.newPlot(this.pieDiv, pieData, {
       title: 'Composition of the Universe',
       height: 300,
-      width: 400
-    };
+      width: 700,
+      margin: { t: 40, b: 20, l: 20, r: 150 },
+      legend: {
+        orientation: "v",
+        x: 1.1,
+        y: 0.5
+      }
+    });
 
-    Plotly.newPlot(this.pieDiv, pieData, layout);
+    const gradientLabel = document.createElement("div");
+    gradientLabel.innerText = "Photon color transition with redshift";
+    gradientLabel.style.marginTop = "8px";
+    gradientLabel.style.fontSize = "12px";
+    gradientLabel.style.textAlign = "center";
+    this.pieDiv.appendChild(gradientLabel);
+
+    const gradientBar = document.createElement("div");
+    gradientBar.style.width = "150px";
+    gradientBar.style.height = "10px";
+    gradientBar.style.margin = "4px auto";
+    gradientBar.style.background = "linear-gradient(to right, rgb(0,255,0), rgb(0,255,255))";
+    gradientBar.style.border = "1px solid #aaa";
+    this.pieDiv.appendChild(gradientBar);
   }
 
   updatePieChart(a) {
     const data = this.calculateDensities(a);
-
     Plotly.restyle(this.pieDiv, {
       values: [[data.darkMatter, data.normalMatter, data.photons, data.darkEnergy]]
     });
